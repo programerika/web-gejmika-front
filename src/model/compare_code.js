@@ -16,7 +16,8 @@
 //   return outcome;
 // };
 
-const compare_code = (attempt, combination) => {
+const compare_code = (attempt, combination_org) => {
+  var combination = [...combination_org];
   let outcome = [];
   console.log("This is attempt: " + attempt);
   console.log("This is combination: " + combination);
@@ -43,7 +44,6 @@ const compare_code = (attempt, combination) => {
   console.log(
     "This is outcome after second for loop: " + JSON.stringify(outcome)
   );
-
   return outcome;
 };
 
