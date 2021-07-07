@@ -23,10 +23,10 @@ const compare_code = (attempt, combination_org) => {
   console.log("This is combination: " + combination);
   for (let index = 0; index < attempt.length; index++) {
     if (attempt[index] == combination[index]) {
-      outcome[index] = "I";
+      outcome[index] = 2;
       combination[index] = "";
     } else {
-      outcome[index] = " ";
+      outcome[index] = -1;
     }
   }
   console.log(
@@ -34,12 +34,12 @@ const compare_code = (attempt, combination_org) => {
   );
 
   for (let index = 0; index < attempt.length; index++) {
-    if (outcome[index] != " ") continue;
+    if (outcome[index] != -1) continue;
     if (combination.indexOf(attempt[index]) != -1) {
-      outcome[index] = "G";
+      outcome[index] = 1;
       let ind = combination.indexOf(attempt[index]);
       combination[ind] = "";
-    } else outcome[index] = "N";
+    } else outcome[index] = 0;
   }
   console.log(
     "This is outcome after second for loop: " + JSON.stringify(outcome)

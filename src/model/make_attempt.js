@@ -9,6 +9,7 @@ const make_attempt = (id, code) => {
     attempt_outcome: compare_code(code, combination),
   };
   attempts.push(new_attp);
+  return new_attp.attempt_outcome;
 };
 
 export default make_attempt;

@@ -7,7 +7,7 @@ const is_target_reached = () => {
   console.log(last_attp.attempt_outcome);
   var check = true;
   last_attp.attempt_outcome.forEach((el) => {
-    if (el != "I") {
+    if (el != "2") {
       check = false;
     }
   });
