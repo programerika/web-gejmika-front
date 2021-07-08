@@ -20,47 +20,9 @@ import InputPanel from "./InputPanel";
 import attp_in_progress from "./view_model/attp_in_progress";
 
 function App() {
-  const userAttp = ["K", "P", "K", "P"];
-
-  const [res1, setRes1] = useState([]);
-  const [res2, setRes2] = useState([]);
-  const [res3, setRes3] = useState([]);
-  const [res4, setRes4] = useState([]);
-  const [res5, setRes5] = useState([]);
-
-  const [out1, setOut1] = useState([]);
-  const [out2, setOut2] = useState([]);
-  const [out3, setOut3] = useState([]);
-  const [out4, setOut4] = useState([]);
-  const [out5, setOut5] = useState([]);
-
-  const [attp, setAttp] = useState([]);
-
   useEffect(() => {
     new_game();
-    while (!is_target_reached()) {
-      console.log("------ ATTEMPT -------");
-      make_attempt(next_attempt_id(), test_gen());
-    }
-    console.log("Your score is: " + score());
-
-    setRes1(attempts[0].attempt_code);
-    setRes2(attempts[1].attempt_code);
-    setRes3(attempts[2].attempt_code);
-    setRes4(attempts[3].attempt_code);
-    setRes5(attempts[4].attempt_code);
-
-    setOut1(attempts[0].attempt_outcome);
-    setOut2(attempts[1].attempt_outcome);
-    setOut3(attempts[2].attempt_outcome);
-    setOut4(attempts[3].attempt_outcome);
-    setOut5(attempts[4].attempt_outcome);
   }, []);
-
-  useEffect(() => {
-    setAttp(attp_in_progress);
-    console.log("im here");
-  }, [InputPanel]);
 
   const attp_in_prog = useSelector(
     (state) => state.input_reducers.attp_in_progress

@@ -14,32 +14,40 @@ const initial_state = {
 const input_reducers = (state = initial_state, action) => {
   switch (action.type) {
     case "INPUT_CLICK":
-      return {
-        ...state,
-        attp_in_progress: [...state.attp_in_progress, action.payload],
-      };
+      if (state.attp_in_progress.length >= 4) {
+        return state;
+      } else {
+        return {
+          ...state,
+          attp_in_progress: [...state.attp_in_progress, action.payload],
+        };
+      }
     case "INPUT_CANCEL":
       return {
         ...state,
         attp_in_progress: [],
       };
     case "INPUT_CONFIRM":
-      return {
-        ...state,
-        attp_in_progress: [],
-        attempts: [
-          ...state.attempts,
-          {
-            attempt_id: state.attp_id + 1,
-            attempt_code: state.attp_in_progress,
-            attempt_outcome: compare_code(
-              state.attp_in_progress,
-              state.secret_comb
-            ),
-          },
-        ],
-        attp_id: state.attp_id + 1,
-      };
+      if (state.attp_in_progress.length != 4) {
+        return state;
+      } else {
+        return {
+          ...state,
+          attp_in_progress: [],
+          attempts: [
+            ...state.attempts,
+            {
+              attempt_id: state.attp_id + 1,
+              attempt_code: state.attp_in_progress,
+              attempt_outcome: compare_code(
+                state.attp_in_progress,
+                state.secret_comb
+              ),
+            },
+          ],
+          attp_id: state.attp_id + 1,
+        };
+      }
     default:
       return state;
   }

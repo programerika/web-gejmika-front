@@ -1,8 +1,8 @@
 const outcome_to_color = (outcome) => {
   let colors = [];
   let out = [...outcome];
-  out.sort();
-  out.reverse();
+  out.sort().reverse();
+
   console.log("Sorted array: " + out);
   for (let index = 0; index < out.length; index++) {
     switch (out[index]) {
