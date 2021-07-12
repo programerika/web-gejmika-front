@@ -1,14 +1,14 @@
-import add_to_attempt from "../../view_model/add_to_attempt";
-import cancel_attp from "../../view_model/cancel_attp";
-import next_attempt_id from "../../model/next_attempt_id";
-import combination from "../../model/combination";
 import compare_code from "../../model/compare_code";
+import secret_code from "../../model/secret_code";
+import is_target_reached from "../../model/is_target_reached";
+import score from "../../model/score";
 
 const initial_state = {
   attp_in_progress: [],
   attempts: [],
   attp_id: -1,
-  secret_comb: combination,
+  secret_comb: [],
+  score: -1,
 };
 
 const input_reducers = (state = initial_state, action) => {
@@ -48,6 +48,26 @@ const input_reducers = (state = initial_state, action) => {
           attp_id: state.attp_id + 1,
         };
       }
+    case "START_GAME": {
+      return {
+        ...state,
+        attp_in_progress: [],
+        attempts: [],
+        attp_id: -1,
+        score: -1,
+        secret_comb: secret_code(),
+      };
+    }
+    case "GET_SCORE": {
+      if (!is_target_reached(state.attempts)) {
+        return state;
+      } else {
+        return {
+          ...state,
+          score: score(state.attempts),
+        };
+      }
+    }
     default:
       return state;
   }

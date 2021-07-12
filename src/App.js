@@ -1,50 +1,48 @@
 import "./App.css";
-import { HelloComponent } from "./lib";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import input_actions from "./redux/actions/input_actions";
-import new_game from "./model/new_game";
-import is_target_reached from "./model/is_target_reached";
-import make_attempt from "./model/make_attempt";
-import next_attempt_id from "./model/next_attempt_id";
-import score from "./model/score";
-import test_gen from "./model/test_gen";
 import AttemptPanel from "./AttemptPanel";
 import comb_to_icon from "./view_model/comb_to_icon";
-import attempts from "./model/attempts";
-import code_length from "./model/code_length";
 import Indicator from "./Indicator";
 import outcome_to_color from "./view_model/outcome_to_color";
-import combination from "./model/combination";
 import InputPanel from "./InputPanel";
-import attp_in_progress from "./view_model/attp_in_progress";
+import all_actions from "./redux/actions";
+import SVGIndicator from "./SVGIndicator";
 
 function App() {
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    new_game();
+    dispatch(all_actions.input_actions.start_game());
   }, []);
 
+  const comb = useSelector((state) => state.input_reducers.secret_comb);
   const attp_in_prog = useSelector(
     (state) => state.input_reducers.attp_in_progress
   );
   const attps = useSelector((state) => state.input_reducers.attempts);
   const id = useSelector((state) => state.input_reducers.attp_id);
-
-  const check_color = (attp_id) => {
-    if (id + 1 == attp_id) {
-      return "gray";
-    } else {
-      return outcome_to_color(attps[attp_id].attempt_code);
-    }
-  };
+  const score = useSelector((state) => state.input_reducers.score);
 
   return (
     <>
       <div>
         <div className="correct">
           <h6>Correct combination:</h6>
-          <AttemptPanel comb={comb_to_icon(combination)}></AttemptPanel>
+          <AttemptPanel comb={comb_to_icon(comb)}></AttemptPanel>
         </div>
+        {score != -1 && (
+          <div className="score">
+            <h2>
+              You got {score} points!!!{" "}
+              <button
+                onClick={() => dispatch(all_actions.input_actions.start_game())}
+              >
+                Play again!
+              </button>{" "}
+            </h2>
+          </div>
+        )}
         <div className="container">
           <div className="flex-cont">
             <AttemptPanel
@@ -53,18 +51,25 @@ function App() {
                   ? comb_to_icon(attp_in_prog)
                   : attps.length >= 1
                   ? comb_to_icon(attps[0].attempt_code)
-                  : comb_to_icon(["", "", "", ""])
+                  : comb_to_icon([])
               }
             ></AttemptPanel>
-            <Indicator
+
+            {/* <Indicator
               color={
+             
+              }
+            ></Indicator> */}
+            <SVGIndicator
+              colors={
                 id + 1 == 0
-                  ? "gray"
+                  ? ["grey", "grey", "grey", "grey"]
                   : attps.length >= 1
                   ? outcome_to_color(attps[0].attempt_outcome)
-                  : "gray"
+                  : ["grey", "grey", "grey", "grey"]
               }
-            ></Indicator>
+              indID="prvi"
+            ></SVGIndicator>
           </div>
           <div className="flex-cont">
             <AttemptPanel
@@ -76,7 +81,7 @@ function App() {
                   : comb_to_icon([])
               }
             ></AttemptPanel>
-            <Indicator
+            {/* <Indicator
               color={
                 id + 1 == 1
                   ? "gray"
@@ -84,7 +89,17 @@ function App() {
                   ? outcome_to_color(attps[1].attempt_outcome)
                   : "gray"
               }
-            ></Indicator>
+            ></Indicator> */}
+            <SVGIndicator
+              colors={
+                id + 1 == 1
+                  ? ["grey", "grey", "grey", "grey"]
+                  : attps.length >= 2
+                  ? outcome_to_color(attps[1].attempt_outcome)
+                  : ["grey", "grey", "grey", "grey"]
+              }
+              indID="drugi"
+            ></SVGIndicator>
           </div>
           <div className="flex-cont">
             <AttemptPanel
@@ -96,7 +111,7 @@ function App() {
                   : comb_to_icon([])
               }
             ></AttemptPanel>
-            <Indicator
+            {/* <Indicator
               color={
                 id + 1 == 2
                   ? "gray"
@@ -104,7 +119,17 @@ function App() {
                   ? outcome_to_color(attps[2].attempt_outcome)
                   : "gray"
               }
-            ></Indicator>
+            ></Indicator> */}
+            <SVGIndicator
+              colors={
+                id + 1 == 2
+                  ? ["grey", "grey", "grey", "grey"]
+                  : attps.length >= 3
+                  ? outcome_to_color(attps[2].attempt_outcome)
+                  : ["grey", "grey", "grey", "grey"]
+              }
+              indID="treci"
+            ></SVGIndicator>
           </div>
           <div className="flex-cont">
             <AttemptPanel
@@ -116,7 +141,7 @@ function App() {
                   : comb_to_icon([])
               }
             ></AttemptPanel>
-            <Indicator
+            {/* <Indicator
               color={
                 id + 1 == 3
                   ? "gray"
@@ -124,7 +149,17 @@ function App() {
                   ? outcome_to_color(attps[3].attempt_outcome)
                   : "gray"
               }
-            ></Indicator>
+            ></Indicator> */}
+            <SVGIndicator
+              colors={
+                id + 1 == 3
+                  ? ["grey", "grey", "grey", "grey"]
+                  : attps.length >= 4
+                  ? outcome_to_color(attps[3].attempt_outcome)
+                  : ["grey", "grey", "grey", "grey"]
+              }
+              indID="cetvrti"
+            ></SVGIndicator>
           </div>
           <div className="flex-cont">
             <AttemptPanel
@@ -136,7 +171,7 @@ function App() {
                   : comb_to_icon([])
               }
             ></AttemptPanel>
-            <Indicator
+            {/* <Indicator
               color={
                 id + 1 == 4
                   ? "gray"
@@ -144,7 +179,17 @@ function App() {
                   ? outcome_to_color(attps[4].attempt_outcome)
                   : "gray"
               }
-            ></Indicator>
+            ></Indicator> */}
+            <SVGIndicator
+              colors={
+                id + 1 == 4
+                  ? ["grey", "grey", "grey", "grey"]
+                  : attps.length >= 5
+                  ? outcome_to_color(attps[4].attempt_outcome)
+                  : ["grey", "grey", "grey", "grey"]
+              }
+              indID="peti"
+            ></SVGIndicator>
           </div>
         </div>
         <InputPanel onClick={() => console.log("im clicked!")}></InputPanel>

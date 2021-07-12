@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
 }
 
 code {
@@ -52,13 +53,13 @@ code {
 
 .indicator {
   display: flex;
-  background-color: lightblue;
+  /* background-color: lightblue; */
   align-items: center;
   justify-content: center;
-  height: 30px;
-  width: 100px;
-  padding: 10px;
-  margin: 15px;
+  height: 60px;
+  width: 60px;
+  padding-top: 4px;
+  padding-left: 10px;
 }
 
 .ind-circle {
@@ -70,7 +71,7 @@ code {
 
 .correct {
   margin: auto;
-  width: 40%;
+  width: fit-content;
   height: min-content;
 }
 
@@ -89,4 +90,40 @@ code {
   position: sticky;
   border: brown solid 1px;
   border-radius: 5%;
+}
+
+.score {
+  background-color: lightcoral;
+  color: black;
+  border: black solid 1px;
+  text-align: center;
+  margin: 5px;
+}
+
+.gray {
+  background-color: gray;
+}
+
+.red {
+  background-color: red;
+}
+
+.green {
+  background-color: green;
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+/* SVG */
+
+svg {
+  height: inherit;
+  width: inherit;
+  position: inherit;
+}
+
+path {
+  stroke: black;
 }
