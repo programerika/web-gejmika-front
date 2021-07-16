@@ -28,7 +28,7 @@ const input_reducers = (state = initial_state, action) => {
         attp_in_progress: [],
       };
     case "INPUT_CONFIRM":
-      if (state.attp_in_progress.length != 4) {
+      if (state.attp_in_progress.length !== 4) {
         return state;
       } else {
         return {

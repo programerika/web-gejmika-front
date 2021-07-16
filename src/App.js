@@ -1,9 +1,8 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AttemptPanel from "./AttemptPanel";
 import comb_to_icon from "./view_model/comb_to_icon";
-import Indicator from "./Indicator";
 import outcome_to_color from "./view_model/outcome_to_color";
 import InputPanel from "./InputPanel";
 import all_actions from "./redux/actions";
@@ -47,7 +46,7 @@ function App() {
           <div className="flex-cont">
             <AttemptPanel
               comb={
-                id + 1 == 0
+                id + 1 === 0
                   ? comb_to_icon(attp_in_prog)
                   : attps.length >= 1
                   ? comb_to_icon(attps[0].attempt_code)
@@ -62,7 +61,7 @@ function App() {
             ></Indicator> */}
             <SVGIndicator
               colors={
-                id + 1 == 0
+                id + 1 === 0
                   ? ["grey", "grey", "grey", "grey"]
                   : attps.length >= 1
                   ? outcome_to_color(attps[0].attempt_outcome)
@@ -74,7 +73,7 @@ function App() {
           <div className="flex-cont">
             <AttemptPanel
               comb={
-                id + 1 == 1
+                id + 1 === 1
                   ? comb_to_icon(attp_in_prog)
                   : attps.length >= 2
                   ? comb_to_icon(attps[1].attempt_code)
@@ -92,7 +91,7 @@ function App() {
             ></Indicator> */}
             <SVGIndicator
               colors={
-                id + 1 == 1
+                id + 1 === 1
                   ? ["grey", "grey", "grey", "grey"]
                   : attps.length >= 2
                   ? outcome_to_color(attps[1].attempt_outcome)
@@ -104,7 +103,7 @@ function App() {
           <div className="flex-cont">
             <AttemptPanel
               comb={
-                id + 1 == 2
+                id + 1 === 2
                   ? comb_to_icon(attp_in_prog)
                   : attps.length >= 3
                   ? comb_to_icon(attps[2].attempt_code)
@@ -122,7 +121,7 @@ function App() {
             ></Indicator> */}
             <SVGIndicator
               colors={
-                id + 1 == 2
+                id + 1 === 2
                   ? ["grey", "grey", "grey", "grey"]
                   : attps.length >= 3
                   ? outcome_to_color(attps[2].attempt_outcome)
@@ -134,7 +133,7 @@ function App() {
           <div className="flex-cont">
             <AttemptPanel
               comb={
-                id + 1 == 3
+                id + 1 === 3
                   ? comb_to_icon(attp_in_prog)
                   : attps.length >= 4
                   ? comb_to_icon(attps[3].attempt_code)
@@ -152,7 +151,7 @@ function App() {
             ></Indicator> */}
             <SVGIndicator
               colors={
-                id + 1 == 3
+                id + 1 === 3
                   ? ["grey", "grey", "grey", "grey"]
                   : attps.length >= 4
                   ? outcome_to_color(attps[3].attempt_outcome)
@@ -164,7 +163,7 @@ function App() {
           <div className="flex-cont">
             <AttemptPanel
               comb={
-                id + 1 == 4
+                id + 1 === 4
                   ? comb_to_icon(attp_in_prog)
                   : attps.length >= 5
                   ? comb_to_icon(attps[4].attempt_code)
@@ -182,7 +181,7 @@ function App() {
             ></Indicator> */}
             <SVGIndicator
               colors={
-                id + 1 == 4
+                id + 1 === 4
                   ? ["grey", "grey", "grey", "grey"]
                   : attps.length >= 5
                   ? outcome_to_color(attps[4].attempt_outcome)
@@ -192,7 +191,7 @@ function App() {
             ></SVGIndicator>
           </div>
         </div>
-        <InputPanel onClick={() => console.log("im clicked!")}></InputPanel>
+        <InputPanel></InputPanel>
       </div>
     </>
   );

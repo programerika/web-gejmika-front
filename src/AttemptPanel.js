@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 const AttemptPanel = (props) => {
   const source = "./icons/circle.png";
@@ -8,19 +7,23 @@ const AttemptPanel = (props) => {
     <>
       <img
         className="circle"
-        src={typeof props.comb[0] == "undefined" ? source : props.comb[0]}
+        src={typeof props.comb[0] === "undefined" ? source : props.comb[0]}
+        alt="kombinacija"
       />
       <img
         className="circle"
-        src={typeof props.comb[1] == "undefined" ? source : props.comb[1]}
+        src={typeof props.comb[1] === "undefined" ? source : props.comb[1]}
+        alt="kombinacija"
       />
       <img
         className="circle"
-        src={typeof props.comb[2] == "undefined" ? source : props.comb[2]}
+        src={typeof props.comb[2] === "undefined" ? source : props.comb[2]}
+        alt="kombinacija"
       />
       <img
         className="circle"
-        src={typeof props.comb[3] == "undefined" ? source : props.comb[3]}
+        src={typeof props.comb[3] === "undefined" ? source : props.comb[3]}
+        alt="kombinacija"
       />
     </>
   );

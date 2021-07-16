@@ -1,12 +1,8 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import all_actions from "./redux/actions";
 
 const InputPanel = (props) => {
-  const attp_in_prog = useSelector(
-    (state) => state.input_reducers.attp_in_progress
-  );
-  const attps = useSelector((state) => state.input_reducers.attempts);
   const dispatch = useDispatch();
 
   return (
@@ -15,31 +11,37 @@ const InputPanel = (props) => {
         className="input"
         src="/icons/clubs.png"
         onClick={() => dispatch(all_actions.input_actions.input_click("T"))}
+        alt="tref"
       />
       <img
         className="input"
         src="/icons/diamond.png"
         onClick={() => dispatch(all_actions.input_actions.input_click("K"))}
+        alt="karo"
       />
       <img
         className="input"
         src="/icons/heart.png"
         onClick={() => dispatch(all_actions.input_actions.input_click("H"))}
+        alt="herc"
       />
       <img
         className="input"
         src="/icons/star.png"
         onClick={() => dispatch(all_actions.input_actions.input_click("L"))}
+        alt="zvezda"
       />
       <img
         className="input"
         src="/icons/symbol-of-spades.png"
         onClick={() => dispatch(all_actions.input_actions.input_click("P"))}
+        alt="pik"
       />
       <img
         className="input"
         src="/icons/traffic-light.png"
         onClick={() => dispatch(all_actions.input_actions.input_click("S"))}
+        alt="semafor"
       />
 
       <hr />
@@ -63,7 +65,5 @@ const InputPanel = (props) => {
     </div>
   );
 };
-
-InputPanel.propTypes = {};
 
 export default InputPanel;

@@ -6,7 +6,7 @@ const score = (attempts) => {
       check = false;
     }
   });
-  if (!check && attempts.length == 5) return 0;
+  if (!check && attempts.length === 5) return 0;
   else {
     switch (last_attp.attempt_id) {
       case 0:

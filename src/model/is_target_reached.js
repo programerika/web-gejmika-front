@@ -1,5 +1,5 @@
 const is_target_reached = (attempts) => {
-  if (attempts.length == 0) return false;
+  if (attempts.length === 0) return false;
   var last_attp = attempts[attempts.length - 1];
   var check = true;
   last_attp.attempt_outcome.forEach((el) => {
@@ -7,7 +7,7 @@ const is_target_reached = (attempts) => {
       check = false;
     }
   });
-  if (attempts.length == 5) {
+  if (attempts.length === 5) {
     return true;
   } else if (check) {
     return true;

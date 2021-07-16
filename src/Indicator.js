@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 const Indicator = (props) => {
   return (
@@ -11,7 +10,5 @@ const Indicator = (props) => {
     </div>
   );
 };
-
-Indicator.propTypes = {};
 
 export default Indicator;
