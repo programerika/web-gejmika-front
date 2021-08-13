@@ -1,12 +1,9 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import all_actions from "./redux/actions";
 import Confetti from "react-confetti";
 import { setTimeout } from "timers";
 import { useEffect, useState } from "react";
-import ConfettiExplosion from "@reonomy/react-confetti-explosion";
 import { useDispatch, useSelector } from "react-redux";
-import all_actions from "./redux/actions";
 import comb_to_icon from "./view_model/comb_to_icon";
 import AttemptPanel from "./AttemptPanel";
 
@@ -34,7 +31,7 @@ const Score = ({ score }) => {
               numberOfPieces={300}
               wind={0.05}
               gravity={0.2}
-              confettiSource={{ x: 100, y: 100, w: window.innerWidth, h: 500 }}
+              //  confettiSource={{ x: 0, y: 0, w: window.innerWidth, h: 200 }}
               initialVelocityX={10}
               initialVelocityY={10}
             />
@@ -47,7 +44,7 @@ const Score = ({ score }) => {
               numberOfPieces={200}
               wind={0.05}
               gravity={0.2}
-              confettiSource={{ x: 100, y: 100, w: window.innerWidth, h: 500 }}
+              //  confettiSource={{ x: 0, y: 0, w: window.innerWidth, h: 200 }}
             />
           ) : score == 8 ? (
             <Confetti
@@ -58,7 +55,7 @@ const Score = ({ score }) => {
               numberOfPieces={150}
               wind={0.05}
               gravity={0.2}
-              confettiSource={{ x: 100, y: 100, w: window.innerWidth, h: 500 }}
+              // confettiSource={{ x: 0, y: 0, w: window.innerWidth, h: 200 }}
             />
           ) : (
             <Confetti
@@ -69,7 +66,7 @@ const Score = ({ score }) => {
               numberOfPieces={100}
               wind={0.05}
               gravity={0.2}
-              confettiSource={{ x: 100, y: 100, w: window.innerWidth, h: 500 }}
+              // confettiSource={{ x: 0, y: 0, w: window.innerWidth, h: 200 }}
             />
           )}
           <div className="correct">
