@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AttemptPanel from "./AttemptPanel";
 import comb_to_icon from "./view_model/comb_to_icon";
@@ -7,6 +7,7 @@ import outcome_to_color from "./view_model/outcome_to_color";
 import InputPanel from "./InputPanel";
 import all_actions from "./redux/actions";
 import SVGIndicator from "./SVGIndicator";
+import ConfettiExplosion from "@reonomy/react-confetti-explosion";
 
 function App() {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ function App() {
         {score != -1 && (
           <div className="score">
             <h2>
-              You got {score} points!!!{" "}
+              You got {score} points!!! <ConfettiExplosion></ConfettiExplosion>
               <button
                 onClick={() => dispatch(all_actions.input_actions.start_game())}
               >
