@@ -17,7 +17,7 @@ function App() {
     dispatch(all_actions.input_actions.start_game());
   }, []);
 
-  const comb = useSelector((state) => state.input_reducers.secret_comb);
+  
   const attp_in_prog = useSelector(
     (state) => state.input_reducers.attp_in_progress
   );
@@ -27,13 +27,11 @@ function App() {
 
   return (
     <>
+    {score != -1 && <Score score={score}></Score>}
       <div>
-        <div className="correct">
-          <h6>Correct combination:</h6>
-          <AttemptPanel comb={comb_to_icon(comb)}></AttemptPanel>
-        </div>
-        {score != -1 && <Score score={score}></Score>}
+        
         <div className="container">
+        
           <div className="flex-cont">
             <AttemptPanel
               comb={
@@ -181,8 +179,9 @@ function App() {
               indID="peti"
             ></SVGIndicator>
           </div>
+          <InputPanel></InputPanel>
         </div>
-        <InputPanel></InputPanel>
+        
       </div>
     </>
   );

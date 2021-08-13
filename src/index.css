@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
+  background-color: black;
 }
 
 code {
@@ -80,16 +81,22 @@ code {
   height: 40px;
   width: 40px;
   border: black 1px solid;
+  padding: 5px;
+  margin: 5px;
 }
 
 .input-panel {
   height: 10%;
-  width: fit-content;
+  width: 94%;
+  padding: 10px;
   /* margin: auto; */
   background-color: lightcyan;
   position: sticky;
   border: brown solid 1px;
   border-radius: 5%;
+  display: flex;
+  flex-wrap: wrap;
+
 }
 
 .score {
@@ -98,6 +105,10 @@ code {
   border: black solid 1px;
   text-align: center;
   margin: 5px;
+  position: absolute;
+  width: 100%;
+  top: 30%;
+  z-index: 2;
 }
 
 .gray {
@@ -127,3 +138,27 @@ svg {
 path {
   stroke: black;
 }
+
+.input-icons-wrapper{
+  display: grid;
+  grid-template-columns: 33.33% 33.33% 33.33%;
+  width: 75%;
+  border-right: 1px solid black;
+}
+
+.confirm-cancel-wrapper{
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  place-items: center;
+  margin: auto;
+  margin-right: 0px;
+}
+
+
+@media screen and (max-width: 600px) {
+  .container{
+    transform: scale(0.9);
+  }
+}
+
