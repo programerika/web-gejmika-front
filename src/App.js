@@ -7,7 +7,8 @@ import outcome_to_color from "./view_model/outcome_to_color";
 import InputPanel from "./InputPanel";
 import all_actions from "./redux/actions";
 import SVGIndicator from "./SVGIndicator";
-import ConfettiExplosion from "@reonomy/react-confetti-explosion";
+
+import Score from "./Score";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,18 +32,7 @@ function App() {
           <h6>Correct combination:</h6>
           <AttemptPanel comb={comb_to_icon(comb)}></AttemptPanel>
         </div>
-        {score != -1 && (
-          <div className="score">
-            <h2>
-              You got {score} points!!! <ConfettiExplosion></ConfettiExplosion>
-              <button
-                onClick={() => dispatch(all_actions.input_actions.start_game())}
-              >
-                Play again!
-              </button>{" "}
-            </h2>
-          </div>
-        )}
+        {score != -1 && <Score score={score}></Score>}
         <div className="container">
           <div className="flex-cont">
             <AttemptPanel
