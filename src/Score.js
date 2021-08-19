@@ -24,7 +24,7 @@ const Score = ({ score }) => {
         {score == 21 ? (
           <Confetti
             width={window.innerWidth}
-            height={100}
+            height={300}
             tweenDuration={3000}
             recycle={explode}
             numberOfPieces={300}
@@ -42,7 +42,7 @@ const Score = ({ score }) => {
         ) : score == 13 ? (
           <Confetti
             width={window.innerWidth}
-            height={100}
+            height={300}
             tweenDuration={3000}
             recycle={explode}
             numberOfPieces={200}
@@ -58,7 +58,7 @@ const Score = ({ score }) => {
         ) : score == 8 ? (
           <Confetti
             width={window.innerWidth}
-            height={100}
+            height={300}
             tweenDuration={3000}
             recycle={explode}
             numberOfPieces={150}
