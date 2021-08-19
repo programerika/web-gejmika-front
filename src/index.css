@@ -115,7 +115,7 @@ code {
   width: 100vw;
   top: 30%;
   z-index: 2;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .gray {

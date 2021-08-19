@@ -7,10 +7,6 @@ import outcome_to_color from "./view_model/outcome_to_color";
 import InputPanel from "./InputPanel";
 import all_actions from "./redux/actions";
 import SVGIndicator from "./SVGIndicator";
-import { SHA256 } from "crypto-js";
-import { HmacSHA512 } from "crypto-js";
-import Base64 from "crypto-js/enc-base64";
-import CryptoJS from "crypto-js";
 
 import Score from "./Score";
 
@@ -19,16 +15,6 @@ function App() {
 
   useEffect(() => {
     dispatch(all_actions.input_actions.start_game());
-    const message = "naca";
-    // const hashDigest = SHA256(message);
-    // console.log(hashDigest);
-    // const hmacDigest = Base64.stringify(HmacSHA512(hashDigest, "hgfrjjj"));
-    // console.log(hmacDigest);
-    const cipherText = CryptoJS.AES.encrypt(message, "ghkconv").toString();
-    console.log(cipherText);
-    const bytes = CryptoJS.AES.decrypt(cipherText, "ghkconv");
-    const originalText = bytes.toString(CryptoJS.enc.Utf8);
-    console.log(originalText);
   }, []);
 
   const attp_in_prog = useSelector(
