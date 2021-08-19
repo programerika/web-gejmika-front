@@ -7,6 +7,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
   background-color: black;
+  overflow-x: hidden;
+}
+
+.wrapper {
+  padding-top: 50px;
 }
 
 code {
@@ -74,6 +79,7 @@ code {
   margin: auto;
   width: fit-content;
   height: min-content;
+  padding-bottom: 30px;
 }
 
 .input {
@@ -96,7 +102,6 @@ code {
   border-radius: 5%;
   display: flex;
   flex-wrap: wrap;
-
 }
 
 .score {
@@ -104,11 +109,13 @@ code {
   color: black;
   border: black solid 1px;
   text-align: center;
-  margin: 5px;
+  /* margin: 5px; */
   position: absolute;
-  width: 100%;
+  display: inline-block;
+  width: 100vw;
   top: 30%;
   z-index: 2;
+  overflow-x: hidden;
 }
 
 .gray {
@@ -139,14 +146,14 @@ path {
   stroke: black;
 }
 
-.input-icons-wrapper{
+.input-icons-wrapper {
   display: grid;
   grid-template-columns: 33.33% 33.33% 33.33%;
   width: 75%;
   border-right: 1px solid black;
 }
 
-.confirm-cancel-wrapper{
+.confirm-cancel-wrapper {
   display: flex;
   flex-direction: column;
   width: max-content;
@@ -154,11 +161,24 @@ path {
   margin: auto;
   margin-right: 0px;
 }
+.playAgain {
+  padding: 12px 28px;
+  font: 0.7em sans-serif;
+  border-radius: 5%;
+  border: 1px solid rgb(44, 44, 44);
+  text-align: center;
+  transition-duration: 0.4s;
+  margin-bottom: 10px;
+  font-size: large;
+}
 
+.playAgain:hover {
+  background-color: #1d011b; /* Green */
+  color: white;
+}
 
 @media screen and (max-width: 600px) {
-  .container{
+  .container {
     transform: scale(0.9);
   }
 }
-
