@@ -29,10 +29,24 @@ const get_score = () => {
   };
 };
 
+const update = () => {
+  return {
+    type: "UPDATE",
+  };
+};
+
+const update_attempts = () => {
+  return {
+    type: "UPDATE_ATTEMPTS",
+  };
+};
+
 export default {
   input_click,
   input_confirm,
   input_cancel,
   start_game,
   get_score,
+  update,
+  update_attempts,
 };

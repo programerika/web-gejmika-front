@@ -17,12 +17,22 @@ function App() {
     dispatch(all_actions.input_actions.start_game());
   }, []);
 
-  const attp_in_prog = useSelector(
-    (state) => state.input_reducers.attp_in_progress
-  );
-  const attps = useSelector((state) => state.input_reducers.attempts);
-  const id = useSelector((state) => state.input_reducers.attp_id);
-  const score = useSelector((state) => state.input_reducers.score);
+  //NE DIRAJ FAMILIJOOOOO - BEZ OVOG NE RADI!!
+  const redux_state = useSelector((state) => state.input_reducers);
+
+  const { attp_in_progress, attempts, attp_id, secret_comb, score } =
+    redux_state;
+
+  useEffect(() => {
+    console.log(
+      "Attp in prog: " +
+        attp_in_progress +
+        attempts +
+        attp_id +
+        secret_comb +
+        score
+    );
+  }, []);
 
   return (
     <>
@@ -32,10 +42,10 @@ function App() {
           <div className="flex-cont">
             <AttemptPanel
               comb={
-                id + 1 === 0
-                  ? comb_to_icon(attp_in_prog)
-                  : attps.length >= 1
-                  ? comb_to_icon(attps[0].attempt_code)
+                attp_id + 1 === 0
+                  ? comb_to_icon(attp_in_progress)
+                  : attempts.length >= 1
+                  ? comb_to_icon(attempts[0].attempt_code)
                   : comb_to_icon([])
               }
             ></AttemptPanel>
@@ -47,10 +57,10 @@ function App() {
             ></Indicator> */}
             <SVGIndicator
               colors={
-                id + 1 === 0
+                attp_id + 1 === 0
                   ? ["grey", "grey", "grey", "grey"]
-                  : attps.length >= 1
-                  ? outcome_to_color(attps[0].attempt_outcome)
+                  : attempts.length >= 1
+                  ? outcome_to_color(attempts[0].attempt_outcome)
                   : ["grey", "grey", "grey", "grey"]
               }
               indID="prvi"
@@ -59,10 +69,10 @@ function App() {
           <div className="flex-cont">
             <AttemptPanel
               comb={
-                id + 1 === 1
-                  ? comb_to_icon(attp_in_prog)
-                  : attps.length >= 2
-                  ? comb_to_icon(attps[1].attempt_code)
+                attp_id + 1 === 1
+                  ? comb_to_icon(attp_in_progress)
+                  : attempts.length >= 2
+                  ? comb_to_icon(attempts[1].attempt_code)
                   : comb_to_icon([])
               }
             ></AttemptPanel>
@@ -77,10 +87,10 @@ function App() {
             ></Indicator> */}
             <SVGIndicator
               colors={
-                id + 1 === 1
+                attp_id + 1 === 1
                   ? ["grey", "grey", "grey", "grey"]
-                  : attps.length >= 2
-                  ? outcome_to_color(attps[1].attempt_outcome)
+                  : attempts.length >= 2
+                  ? outcome_to_color(attempts[1].attempt_outcome)
                   : ["grey", "grey", "grey", "grey"]
               }
               indID="drugi"
@@ -89,10 +99,10 @@ function App() {
           <div className="flex-cont">
             <AttemptPanel
               comb={
-                id + 1 === 2
-                  ? comb_to_icon(attp_in_prog)
-                  : attps.length >= 3
-                  ? comb_to_icon(attps[2].attempt_code)
+                attp_id + 1 === 2
+                  ? comb_to_icon(attp_in_progress)
+                  : attempts.length >= 3
+                  ? comb_to_icon(attempts[2].attempt_code)
                   : comb_to_icon([])
               }
             ></AttemptPanel>
@@ -107,10 +117,10 @@ function App() {
             ></Indicator> */}
             <SVGIndicator
               colors={
-                id + 1 === 2
+                attp_id + 1 === 2
                   ? ["grey", "grey", "grey", "grey"]
-                  : attps.length >= 3
-                  ? outcome_to_color(attps[2].attempt_outcome)
+                  : attempts.length >= 3
+                  ? outcome_to_color(attempts[2].attempt_outcome)
                   : ["grey", "grey", "grey", "grey"]
               }
               indID="treci"
@@ -119,10 +129,10 @@ function App() {
           <div className="flex-cont">
             <AttemptPanel
               comb={
-                id + 1 === 3
-                  ? comb_to_icon(attp_in_prog)
-                  : attps.length >= 4
-                  ? comb_to_icon(attps[3].attempt_code)
+                attp_id + 1 === 3
+                  ? comb_to_icon(attp_in_progress)
+                  : attempts.length >= 4
+                  ? comb_to_icon(attempts[3].attempt_code)
                   : comb_to_icon([])
               }
             ></AttemptPanel>
@@ -137,10 +147,10 @@ function App() {
             ></Indicator> */}
             <SVGIndicator
               colors={
-                id + 1 === 3
+                attp_id + 1 === 3
                   ? ["grey", "grey", "grey", "grey"]
-                  : attps.length >= 4
-                  ? outcome_to_color(attps[3].attempt_outcome)
+                  : attempts.length >= 4
+                  ? outcome_to_color(attempts[3].attempt_outcome)
                   : ["grey", "grey", "grey", "grey"]
               }
               indID="cetvrti"
@@ -149,10 +159,10 @@ function App() {
           <div className="flex-cont">
             <AttemptPanel
               comb={
-                id + 1 === 4
-                  ? comb_to_icon(attp_in_prog)
-                  : attps.length >= 5
-                  ? comb_to_icon(attps[4].attempt_code)
+                attp_id + 1 === 4
+                  ? comb_to_icon(attp_in_progress)
+                  : attempts.length >= 5
+                  ? comb_to_icon(attempts[4].attempt_code)
                   : comb_to_icon([])
               }
             ></AttemptPanel>
@@ -167,10 +177,10 @@ function App() {
             ></Indicator> */}
             <SVGIndicator
               colors={
-                id + 1 === 4
+                attp_id + 1 === 4
                   ? ["grey", "grey", "grey", "grey"]
-                  : attps.length >= 5
-                  ? outcome_to_color(attps[4].attempt_outcome)
+                  : attempts.length >= 5
+                  ? outcome_to_color(attempts[4].attempt_outcome)
                   : ["grey", "grey", "grey", "grey"]
               }
               indID="peti"
