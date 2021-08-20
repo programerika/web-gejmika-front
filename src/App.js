@@ -17,7 +17,6 @@ function App() {
     dispatch(all_actions.input_actions.start_game());
   }, []);
 
-  //NE DIRAJ FAMILIJOOOOO - BEZ OVOG NE RADI!!
   const redux_state = useSelector((state) => state.input_reducers);
 
   const { attp_in_progress, attempts, attp_id, secret_comb, score } =
