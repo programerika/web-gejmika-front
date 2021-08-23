@@ -5,33 +5,33 @@ import AttemptPanel from "./AttemptPanel";
 import comb_to_icon from "./view_model/comb_to_icon";
 import outcome_to_color from "./view_model/outcome_to_color";
 import InputPanel from "./InputPanel";
-import all_actions from "./redux/actions";
 import SVGIndicator from "./SVGIndicator";
 
 import Score from "./Score";
+import { ViewModel } from "./view_model/ViewModel";
 
 function App() {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(all_actions.input_actions.start_game());
-  }, []);
-
   const redux_state = useSelector((state) => state.input_reducers);
-
   const { attp_in_progress, attempts, attp_id, secret_comb, score } =
     redux_state;
 
+  const viewModel = new ViewModel(redux_state, dispatch);
+
+  useEffect(() => {
+    viewModel.start_game();
+  }, []);
+
   useEffect(() => {
     console.log(
-      "Attp in prog: " +
+      "State change triggered: " +
         attp_in_progress +
         attempts +
         attp_id +
         secret_comb +
         score
     );
-  }, []);
+  }, [attp_in_progress]);
 
   return (
     <>

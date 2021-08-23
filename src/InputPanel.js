@@ -1,6 +1,5 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import all_actions from "./redux/actions";
 import { ViewModel } from "./view_model/ViewModel";
 
 const InputPanel = (props) => {
@@ -60,17 +59,19 @@ const InputPanel = (props) => {
           className="input"
           src="/icons/checked.png"
           onClick={() => {
-            // dispatch(all_actions.input_actions.input_confirm());
             viewModel.input_confirm();
-            // dispatch(all_actions.input_actions.get_score());
+            // viewModel.get_score();
           }}
         />
 
         <img
           className="input"
           src="/icons/close.png"
+          // onClick={() => {
+          //   dispatch(all_actions.input_actions.input_cancel());
+          // }}
           onClick={() => {
-            dispatch(all_actions.input_actions.input_cancel());
+            viewModel.input_cancel();
           }}
         />
       </div>
