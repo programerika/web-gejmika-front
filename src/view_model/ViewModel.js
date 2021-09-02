@@ -1,101 +1,137 @@
-import { Model } from "../model/Model";
 import all_actions from "../redux/actions";
 import { ModelFunctions } from "../model/ModelFunctions";
 
 export class ViewModel {
-  constructor(state, dispatcher) {
-    this.state = state;
+  constructor(model_state, view_state, dispatcher) {
+    this.model_state = model_state;
+    this.view_state = view_state;
     this.dispatcher = dispatcher;
     this.modelFunctions = new ModelFunctions();
   }
 
-  dispatch_update(newState) {
-    console.log("State from dispatcher: " + JSON.stringify(newState));
-    this.dispatcher(all_actions.input_actions.update(newState));
+  dispatch_update(newState_model, newState_view) {
+    this.dispatcher(
+      all_actions.input_actions.update(newState_model, newState_view)
+    );
   }
 
   input_click(input) {
-    if (this.state.attp_in_progress.length >= 4) {
+    if (this.model_state.attp_in_progress.length >= 4) {
       return;
     } else {
-      // const newState = {
-      //   ...this.state,
-      //   attp_in_progress: [...this.state.attp_in_progress, input],
-      // };
-      // console.log("From input click: " + JSON.stringify(newState));
-      this.dispatch_update({
-        ...this.state,
-        attp_in_progress: [...this.state.attp_in_progress, input],
-      });
-      // this.state.attp_in_progress.push(input);
-      // this.dispatch_update(this.state);
+      const newState_model = {
+        ...this.model_state,
+        attp_in_progress: [...this.model_state.attp_in_progress, input],
+      };
+
+      const icons = this.comb_to_icon(newState_model.attp_in_progress);
+
+      const newState_view = {
+        ...this.view_state,
+        comb_in_progress: icons,
+      };
+
+      this.dispatch_update(newState_model, newState_view);
     }
   }
 
   input_confirm() {
-    if (this.state.attp_in_progress.length !== 4) {
+    if (this.model_state.attp_in_progress.length !== 4) {
       return;
     } else {
+      const attp_outcome = this.modelFunctions.compare_code(
+        this.model_state.attp_in_progress,
+        this.model_state.secret_comb
+      );
       const newState = {
-        ...this.state,
+        ...this.model_state,
         attp_in_progress: [],
         attempts: [
-          ...this.state.attempts,
+          ...this.model_state.attempts,
           {
-            attempt_id: this.state.attp_id + 1,
-            attempt_code: this.state.attp_in_progress,
-            attempt_outcome: this.modelFunctions.compare_code(
-              this.state.attp_in_progress,
-              this.state.secret_comb
-            ),
+            attempt_id: this.model_state.attp_id + 1,
+            attempt_code: this.model_state.attp_in_progress,
+            attempt_outcome: attp_outcome,
           },
         ],
-        attp_id: this.state.attp_id + 1,
+        attp_id: this.model_state.attp_id + 1,
       };
+      const outcome = this.outcome_to_color(attp_outcome);
 
-      // const newAttp = {
-      //   attempt_id: this.state.attp_id + 1,
-      //   attempt_code: this.state.attp_in_progress,
-      //   attempt_outcome: this.modelFunctions.compare_code(
-      //     this.state.attp_in_progress,
-      //     this.state.secret_comb
-      //   ),
-      // };
-      // this.state.attempts.push(newAttp);
-      // this.state.attp_id = this.state.attp_id + 1;
-      // this.state.attp_in_progress = [];
+      const newState_view = {
+        ...this.view_state,
 
-      // this.dispatch_update(newState);
+        attempts_view: [
+          ...this.view_state.attempts_view,
+          {
+            attempt_view_id: this.model_state.attp_id + 1,
+            attempt_view_comb: this.view_state.comb_in_progress,
+            attempt_view_outcome: outcome,
+          },
+        ],
+        comb_in_progress: [
+          "./icons/circle.png",
+          "./icons/circle.png",
+          "./icons/circle.png",
+          "./icons/circle.png",
+        ],
+        id: this.view_state.id + 1,
+      };
       if (this.modelFunctions.is_target_reached(newState.attempts)) {
         newState.score = this.modelFunctions.score(newState.attempts);
-        this.dispatch_update(newState);
+        newState_view.correct_view = this.comb_to_icon(newState.secret_comb);
+        this.dispatch_update(newState, newState_view);
       } else {
-        this.dispatch_update(newState);
+        this.dispatch_update(newState, newState_view);
       }
     }
   }
 
   input_cancel() {
-    this.dispatch_update({
-      ...this.state,
-      attp_in_progress: [],
-    });
+    this.dispatch_update(
+      {
+        ...this.model_state,
+        attp_in_progress: [],
+      },
+      {
+        ...this.view_state,
+        comb_in_progress: [
+          "./icons/circle.png",
+          "./icons/circle.png",
+          "./icons/circle.png",
+          "./icons/circle.png",
+        ],
+      }
+    );
   }
 
   start_game() {
-    this.dispatch_update({
-      ...this.state,
-      attp_in_progress: [],
-      attempts: [],
-      attp_id: -1,
-      score: -1,
-      secret_comb: this.modelFunctions.secret_code(),
-    });
+    this.dispatch_update(
+      {
+        ...this.model_state,
+        attp_in_progress: [],
+        attempts: [],
+        attp_id: -1,
+        score: -1,
+        secret_comb: this.modelFunctions.secret_code(),
+      },
+      {
+        comb_in_progress: [
+          "./icons/circle.png",
+          "./icons/circle.png",
+          "./icons/circle.png",
+          "./icons/circle.png",
+        ],
+        attempts_view: [],
+        correct_view: [],
+        id: -1,
+      }
+    );
   }
 
   comb_to_icon = (comb) => {
-    var icons = [];
-    for (let index = 0; index < comb.length; index++) {
+    var icons = ["", "", "", ""];
+    for (let index = 0; index < icons.length; index++) {
       switch (comb[index]) {
         case "K":
           icons[index] = "/icons/diamond.png";

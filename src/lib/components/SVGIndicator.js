@@ -34,7 +34,6 @@ const SVGIndicator = (props) => {
         "," +
         toCoordY +
         "z";
-      //console.log(d);
       path.setAttributeNS(null, "d", d);
       path.setAttributeNS(null, "fill", props.colors[c[i]]);
       reference.current.appendChild(path);

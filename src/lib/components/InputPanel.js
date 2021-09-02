@@ -1,11 +1,7 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ViewModel } from "./view_model/ViewModel";
 
 const InputPanel = (props) => {
-  const dispatch = useDispatch();
-  const redux_state = useSelector((state) => state.input_reducers);
-  const viewModel = new ViewModel(redux_state, dispatch);
+  const viewModel = props.viewModel;
 
   return (
     <div className="input-panel">
@@ -13,42 +9,36 @@ const InputPanel = (props) => {
         <img
           className="input"
           src="/icons/clubs.png"
-          // onClick={() => dispatch(all_actions.input_actions.input_click("T"))}
           onClick={() => viewModel.input_click("T")}
           alt="tref"
         />
         <img
           className="input"
           src="/icons/diamond.png"
-          // onClick={() => dispatch(all_actions.input_actions.input_click("K"))}
           onClick={() => viewModel.input_click("K")}
           alt="karo"
         />
         <img
           className="input"
           src="/icons/heart.png"
-          // onClick={() => dispatch(all_actions.input_actions.input_click("H"))}
           onClick={() => viewModel.input_click("H")}
           alt="herc"
         />
         <img
           className="input"
           src="/icons/star.png"
-          // onClick={() => dispatch(all_actions.input_actions.input_click("L"))}
           onClick={() => viewModel.input_click("L")}
           alt="zvezda"
         />
         <img
           className="input"
           src="/icons/symbol-of-spades.png"
-          // onClick={() => dispatch(all_actions.input_actions.input_click("P"))}
           onClick={() => viewModel.input_click("P")}
           alt="pik"
         />
         <img
           className="input"
           src="/icons/traffic-light.png"
-          // onClick={() => dispatch(all_actions.input_actions.input_click("S"))}
           onClick={() => viewModel.input_click("S")}
           alt="semafor"
         />
@@ -60,16 +50,12 @@ const InputPanel = (props) => {
           src="/icons/checked.png"
           onClick={() => {
             viewModel.input_confirm();
-            // viewModel.get_score();
           }}
         />
 
         <img
           className="input"
           src="/icons/close.png"
-          // onClick={() => {
-          //   dispatch(all_actions.input_actions.input_cancel());
-          // }}
           onClick={() => {
             viewModel.input_cancel();
           }}
