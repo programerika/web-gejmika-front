@@ -6,7 +6,7 @@ export class ViewModel {
     this.model_state = model_state;
     this.view_state = view_state;
     this.dispatcher = dispatcher;
-    this.modelFunctions = new ModelFunctions();
+    this.modelFunctions = new ModelFunctions(model_state);
   }
 
   dispatch_update(newState_model, newState_view) {

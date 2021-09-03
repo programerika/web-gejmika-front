@@ -1,4 +1,8 @@
 export class ModelFunctions {
+  constructor(modelState) {
+    this.modelState = modelState;
+  }
+
   compare_code = (attempt, combination_org) => {
     var combination = [...combination_org];
     let outcome = [];

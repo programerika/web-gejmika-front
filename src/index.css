@@ -86,19 +86,33 @@ code {
   border-radius: 50%;
   height: 40px;
   width: 40px;
-  border: black 1px solid;
+  border: rgb(53, 50, 50) 2px solid;
   padding: 5px;
+  box-shadow: 1px 3.5px rgb(106, 109, 109);
+  background-color: rgb(199, 218, 230);
   margin: 5px;
+  cursor: pointer;
+}
+
+.input:hover {
+  background-color: rgb(184, 192, 192);
+}
+
+.input:active {
+  background-color: #848f84;
+  box-shadow: 0 5px #666;
+  transform: translateY(3px);
 }
 
 .input-panel {
   height: 10%;
   width: 94%;
   padding: 10px;
+  margin-top: 15px;
   /* margin: auto; */
   background-color: lightcyan;
   position: sticky;
-  border: brown solid 1px;
+  border: rgb(34, 11, 11) solid 3px;
   border-radius: 5%;
   display: flex;
   flex-wrap: wrap;
