@@ -12,6 +12,9 @@ body {
 
 .wrapper {
   padding-top: 50px;
+  display: flex;
+  /* align-items: center; */
+  justify-content: space-between;
 }
 
 code {
@@ -113,9 +116,47 @@ code {
   position: absolute;
   display: inline-block;
   width: 100vw;
+  min-height: fit-content;
   top: 30%;
   z-index: 2;
   overflow: hidden;
+}
+
+table,
+td,
+th {
+  border-bottom: 1px solid black;
+}
+
+td {
+  padding: 10px;
+}
+
+.input {
+  margin: 10px;
+}
+
+.score-board {
+  border-collapse: collapse;
+  background-color: lightgreen;
+  width: 30%;
+  height: auto;
+  text-align: center;
+  border-radius: 5%;
+  margin: auto;
+  font-weight: 500;
+}
+
+.score-board-header th {
+  padding: 15px 5px;
+  font-size: 1.1rem;
+  background-color: rgb(64, 105, 64);
+}
+
+.person-score {
+  color: black;
+  padding: 5px;
+  margin: 5px;
 }
 
 .gray {

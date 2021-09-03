@@ -1,10 +1,11 @@
 import "./App.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import InputPanel from "./lib/components/InputPanel";
 import GamePanel from "./lib/components/GamePanel";
 import Score from "./lib/components/Score";
 import { ViewModel } from "./view_model/ViewModel";
+import ScoreBoard from "./lib/components/ScoreBoard";
 
 function App() {
   const dispatch = useDispatch();
@@ -17,8 +18,17 @@ function App() {
 
   const viewModel = new ViewModel(model_state, view_state, dispatch);
 
-  useEffect(() => {
+  const [people, setPeople] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(async () => {
     viewModel.start_game();
+    const response = await fetch(
+      "http://localhost:8080/api/v1/player-score/top-score"
+    );
+    const data = await response.json();
+    setPeople(data);
+    setLoading(false);
   }, []);
 
   return (
@@ -39,6 +49,11 @@ function App() {
           ></GamePanel>
           <InputPanel viewModel={viewModel}></InputPanel>
         </div>
+        {!loading ? (
+          <ScoreBoard people={people}></ScoreBoard>
+        ) : (
+          <h1 style={{ color: "white" }}>Loading...</h1>
+        )}
       </div>
     </>
   );
