@@ -2,7 +2,7 @@ import React from "react";
 import Confetti from "react-confetti";
 import AttemptPanel from "./AttemptPanel";
 
-const Score = ({ score, correct_view, viewModel }) => {
+const Score = ({ score, correctView, viewModel }) => {
   return (
     <div>
       <div className="score">
@@ -64,9 +64,9 @@ const Score = ({ score, correct_view, viewModel }) => {
         )}
         <div className="correct">
           <h5>Correct combination:</h5>
-          <AttemptPanel comb={correct_view}></AttemptPanel>
+          <AttemptPanel comb={correctView}></AttemptPanel>
         </div>
-        <button className="playAgain" onClick={() => viewModel.start_game()}>
+        <button className="playAgain" onClick={() => viewModel.startGame()}>
           Play again!
         </button>{" "}
       </div>

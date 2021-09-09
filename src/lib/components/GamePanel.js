@@ -2,7 +2,7 @@ import React from "react";
 import AttemptPanel from "./AttemptPanel";
 import SVGIndicator from "./SVGIndicator";
 
-const GamePanel = ({ comb_in_progress, attempts_view, id }) => {
+const GamePanel = ({ combInProgress, attemptsView, id }) => {
   const attps = [0, 1, 2, 3, 4];
 
   return (
@@ -13,9 +13,9 @@ const GamePanel = ({ comb_in_progress, attempts_view, id }) => {
             <AttemptPanel
               comb={
                 id + 1 == e
-                  ? comb_in_progress
-                  : typeof attempts_view[e] !== "undefined"
-                  ? attempts_view[e].attempt_view_comb
+                  ? combInProgress
+                  : typeof attemptsView[e] !== "undefined"
+                  ? attemptsView[e].attemptViewComb
                   : [
                       "./icons/circle.png",
                       "./icons/circle.png",
@@ -26,8 +26,8 @@ const GamePanel = ({ comb_in_progress, attempts_view, id }) => {
             ></AttemptPanel>
             <SVGIndicator
               colors={
-                typeof attempts_view[e] !== "undefined"
-                  ? attempts_view[e].attempt_view_outcome
+                typeof attemptsView[e] !== "undefined"
+                  ? attemptsView[e].attemptViewOutcome
                   : ["gray", "gray", "gray", "gray"]
               }
             ></SVGIndicator>

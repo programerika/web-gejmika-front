@@ -1,10 +1,10 @@
-export class ModelFunctions {
+export class WebGejmikaModel {
   constructor(modelState) {
     this.modelState = modelState;
   }
 
-  compare_code = (attempt, combination_org) => {
-    var combination = [...combination_org];
+  compareCode = (attempt, combinationOrg) => {
+    var combination = [...combinationOrg];
     let outcome = [];
     for (let index = 0; index < attempt.length; index++) {
       if (attempt[index] === combination[index]) {
@@ -27,21 +27,21 @@ export class ModelFunctions {
     return outcome;
   };
 
-  secret_code = () => {
-    let comb_arr = ["K", "H", "P", "T", "L", "S"];
+  secretCode = () => {
+    let combArr = ["K", "H", "P", "T", "L", "S"];
     let combination = [];
     for (let index = 0; index <= 3; index++) {
-      let rand = Math.floor(Math.random() * comb_arr.length);
-      combination[index] = comb_arr[rand];
+      let rand = Math.floor(Math.random() * combArr.length);
+      combination[index] = combArr[rand];
     }
     return combination;
   };
 
-  is_target_reached = (attempts) => {
+  isTargetReached = (attempts) => {
     if (attempts.length === 0) return false;
-    var last_attp = attempts[attempts.length - 1];
+    var lastAttp = attempts[attempts.length - 1];
     var check = true;
-    last_attp.attempt_outcome.forEach((el) => {
+    lastAttp.attemptOutcome.forEach((el) => {
       if (el != "2") {
         check = false;
       }
@@ -54,16 +54,16 @@ export class ModelFunctions {
   };
 
   score = (attempts) => {
-    var last_attp = attempts[attempts.length - 1];
+    var lastAttp = attempts[attempts.length - 1];
     var check = true;
-    last_attp.attempt_outcome.forEach((el) => {
+    lastAttp.attemptOutcome.forEach((el) => {
       if (el != "2") {
         check = false;
       }
     });
     if (!check && attempts.length === 5) return 0;
     else {
-      switch (last_attp.attempt_id) {
+      switch (lastAttp.attemptId) {
         case 0:
           return 21;
         case 1:

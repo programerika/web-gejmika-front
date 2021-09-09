@@ -1,6 +1,8 @@
+import {UPDATE} from '../types';
+
 const update = (newState_model, newState_view) => {
   return {
-    type: "UPDATE",
+    type: UPDATE,
     payload: { newState_model, newState_view },
   };
 };

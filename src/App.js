@@ -4,21 +4,21 @@ import { useSelector, useDispatch } from "react-redux";
 import InputPanel from "./lib/components/InputPanel";
 import GamePanel from "./lib/components/GamePanel";
 import Score from "./lib/components/Score";
-import { ViewModel } from "./view_model/ViewModel";
+import { WebGejmikaViewModel } from "./viewModel/WebGejmikaViewModel";
 
 function App() {
   const dispatch = useDispatch();
-  const model_state = useSelector((state) => state.model);
-  const view_state = useSelector((state) => state.view);
+  const modelState = useSelector((state) => state.model);
+  const viewState = useSelector((state) => state.view);
 
-  const { score } = model_state;
+  const { score } = modelState;
 
-  const { comb_in_progress, attempts_view, correct_view, id } = view_state;
+  const { combInProgress, attemptsView, correctView, id } = viewState;
 
-  const viewModel = new ViewModel(model_state, view_state, dispatch);
+  const viewModel = new WebGejmikaViewModel(modelState, viewState, dispatch);
 
   useEffect(() => {
-    viewModel.start_game();
+    viewModel.startGame();
   }, []);
 
   return (
@@ -27,14 +27,14 @@ function App() {
         <Score
           score={score}
           viewModel={viewModel}
-          correct_view={correct_view}
+          correctView={correctView}
         ></Score>
       )}
       <div className="wrapper">
         <div className="container">
           <GamePanel
-            comb_in_progress={comb_in_progress}
-            attempts_view={attempts_view}
+            combInProgress={combInProgress}
+            attemptsView={attemptsView}
             id={id}
           ></GamePanel>
           <InputPanel viewModel={viewModel}></InputPanel>

@@ -1,9 +1,9 @@
 import { combineReducers } from "redux";
-import input_reducers from "./input_reducers";
-import view_reducers from "./view_reducers";
+import inputreducers from "./inputReducers";
+import view_reducers from "./viewReducers";
 
 const rootReducer = combineReducers({
-  model: input_reducers,
+  model: inputreducers,
   view: view_reducers,
 });
 

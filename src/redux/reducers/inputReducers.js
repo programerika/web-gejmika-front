@@ -1,4 +1,6 @@
-const input_reducers = (
+import {UPDATE} from '../types';
+
+const inputreducers = (
   state = {
     attp_in_progress: [],
     attempts: [],
@@ -9,7 +11,7 @@ const input_reducers = (
   action
 ) => {
   switch (action.type) {
-    case "UPDATE":
+    case UPDATE:
       const { newState_model } = action.payload;
       if (newState_model) {
         return newState_model;
@@ -22,4 +24,4 @@ const input_reducers = (
   }
 };
 
-export default input_reducers;
+export default inputreducers;
