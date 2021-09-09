@@ -3,8 +3,9 @@ export class ModelFunctions {
     this.modelState = modelState;
   }
 
-  compare_code = (attempt, combination_org) => {
-    var combination = [...combination_org];
+  compare_code = () => {
+    var combination = [...this.modelState.secret_comb];
+    var attempt = [...this.modelState.attp_in_progress];
     let outcome = [];
     for (let index = 0; index < attempt.length; index++) {
       if (attempt[index] === combination[index]) {
@@ -24,7 +25,25 @@ export class ModelFunctions {
       } else outcome[index] = 0;
     }
 
-    return outcome;
+    const newState = {
+      ...this.modelState,
+      attp_in_progress: [],
+      attempts: [
+        ...this.modelState.attempts,
+        {
+          attempt_id: this.modelState.attp_id + 1,
+          attempt_code: this.modelState.attp_in_progress,
+          attempt_outcome: outcome,
+        },
+      ],
+      attp_id: this.modelState.attp_id + 1,
+    };
+
+    if (this.is_target_reached(newState.attempts)) {
+      newState.score = this.score(newState.attempts);
+    }
+
+    return newState;
   };
 
   secret_code = () => {
@@ -34,7 +53,15 @@ export class ModelFunctions {
       let rand = Math.floor(Math.random() * comb_arr.length);
       combination[index] = comb_arr[rand];
     }
-    return combination;
+    const newState = {
+      ...this.modelState,
+      attp_in_progress: [],
+      attempts: [],
+      attp_id: -1,
+      score: -1,
+      secret_comb: combination,
+    };
+    return newState;
   };
 
   is_target_reached = (attempts) => {
