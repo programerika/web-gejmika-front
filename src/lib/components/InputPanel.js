@@ -49,7 +49,7 @@ const InputPanel = (props) => {
           className="input"
           src="/icons/checked.png"
           onClick={() => {
-            viewModel.input_confirm();
+            viewModel.inputConfirm();
           }}
         />
 
@@ -57,7 +57,7 @@ const InputPanel = (props) => {
           className="input"
           src="/icons/close.png"
           onClick={() => {
-            viewModel.input_cancel();
+            viewModel.inputDeleteLast();
           }}
         />
       </div>

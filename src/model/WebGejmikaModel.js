@@ -1,13 +1,13 @@
-export class ModelFunctions {
+export class WebGejmikaModel {
   constructor(modelState) {
     this.modelState = modelState;
   }
 
   // compares entered combination to secret combination and returns new model state with outcome
 
-  compare_code = (attp_in_progress) => {
-    var combination = [...this.modelState.secret_comb];
-    var attempt = [...attp_in_progress];
+   compareCode = (attpInProgress) => {
+    var combination = [...this.modelState.secretComb];
+    var attempt = [...attpInProgress];
     let outcome = [];
     for (let index = 0; index < attempt.length; index++) {
       if (attempt[index] === combination[index]) {
@@ -29,17 +29,17 @@ export class ModelFunctions {
 
     const newState = {
       ...this.modelState,
-      attp_in_progress: [],
+      attpInProgress: [],
       attempts: [
         ...this.modelState.attempts,
         {
-          attempt_code: [...attp_in_progress],
-          attempt_outcome: outcome,
+          attemptCode: [...attpInProgress],
+          attemptOutcome: outcome,
         },
       ],
     };
 
-    if (this.is_target_reached(newState.attempts)) {
+    if (this.isTargetReached(newState.attempts)) {
       newState.score = this.score(newState.attempts);
     }
 
@@ -48,30 +48,30 @@ export class ModelFunctions {
 
   // generates random secret combination and returns new model state
 
-  secret_code = () => {
-    let comb_arr = ["K", "H", "P", "T", "L", "S"];
+  secretCode = () => {
+    let combArr = ["K", "H", "P", "T", "L", "S"];
     let combination = [];
     for (let index = 0; index <= 3; index++) {
-      let rand = Math.floor(Math.random() * comb_arr.length);
-      combination[index] = comb_arr[rand];
+      let rand = Math.floor(Math.random() * combArr.length);
+      combination[index] = combArr[rand];
     }
     const newState = {
       ...this.modelState,
-      attp_in_progress: [],
+      attpInProgress: [],
       attempts: [],
       score: -1,
-      secret_comb: combination,
+      secretComb: combination,
     };
     return newState;
   };
 
   // checks if game end is reached
 
-  is_target_reached = (attempts) => {
+  isTargetReached = (attempts) => {
     if (attempts.length === 0) return false;
-    var last_attp = attempts[attempts.length - 1];
+    var lastAttp = attempts[attempts.length - 1];
     var check = true;
-    last_attp.attempt_outcome.forEach((el) => {
+    lastAttp.attemptOutcome.forEach((el) => {
       if (el != "2") {
         check = false;
       }
@@ -86,9 +86,9 @@ export class ModelFunctions {
   // calculates score
 
   score = (attempts) => {
-    var last_attp = attempts[attempts.length - 1];
+    var lastAttp = attempts[attempts.length - 1];
     var check = true;
-    last_attp.attempt_outcome.forEach((el) => {
+    lastAttp.attemptOutcome.forEach((el) => {
       if (el != "2") {
         check = false;
       }

@@ -1,7 +1,7 @@
-import input_actions from "./input_actions";
+import inputActions from "./actions";
 
-const all_actions = {
-  input_actions,
+const allActions = {
+  inputActions,
 };
 
-export default all_actions;
+export default allActions;

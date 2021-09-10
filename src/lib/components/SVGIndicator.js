@@ -52,6 +52,6 @@ const SVGIndicator = (props) => {
 };
 
 SVGIndicator.defaultProps = {
-  colors: ["grey", "grey", "grey", "grey"],
+  colors: ["lightgrey", "lightgrey", "lightgrey", "lightgrey"],
 };
 export default SVGIndicator;
