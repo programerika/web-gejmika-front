@@ -17,12 +17,6 @@ export class WebGejmikaViewModel {
     );
   }
 
-  // dispatchUpdate(newState_model, newStateView) {
-  //   this.dispatcher(
-  //     all_actions.input_actions.update(newState_model, newStateView)
-  //   );
-  // }
-
   // methods for each button icon clicked
 
   heartButtonClicked() {
@@ -105,59 +99,12 @@ export class WebGejmikaViewModel {
 
   // methods for each button icon clicked END
 
-  // input_confirm() {
-  //   if (this.viewState.combInProgress.length !== 4) {
-  //     return;
-  //   } else {
-  //     const newState = this.modelFunctions.compare_code(
-  //       this.iconToComb(this.viewState.combInProgress)
-  //     );
-  //     const newStateView = {
-  //       ...this.viewState,
-
-  //       attempts_view: [
-  //         ...this.viewState.attempts_view,
-  //         {
-  //           attemptViewId: this.viewState.id + 1,
-  //           attempt_view_comb: this.viewState.combInProgress,
-  //           attempt_view_outcome: this.outcome_to_color(
-  //             newState.attempts[newState.attempts.length - 1].attempt_outcome
-  //           ),
-  //         },
-  //       ],
-  //       combInProgress: [],
-  //       id: this.viewState.id + 1,
-  //     };
-
-  //     this.dispatchUpdate(newState, newStateView);
-  //   }
-  // }
-
   // method for confirming combination and updating model state attempts array
 
   inputConfirm() {
     if (this.viewState.combInProgress.length !== 4) {
       return;
-    } else {
-      // const attpOutcome = this.webGejmikaModel.compareCode(
-      //   this.modelState.attpInProgress,
-      //   this.modelState.secretComb
-      // );
-      // const newState = {
-      //   ...this.modelState,
-      //   attpInProgress: [],
-      //   attempts: [
-      //     ...this.modelState.attempts,
-      //     {
-      //       attemptId: this.modelState.attpId + 1,
-      //       attemptCode: this.modelState.attpInProgress,
-      //       attemptOutcome: attpOutcome,
-      //     },
-      //   ],
-      //   attpId: this.modelState.attpId + 1,
-      // };
-      // const outcome = this.outcomeToColor(attpOutcome);
-
+    } else {   
       const newStateModel = this.webGejmikaModel.compareCode(
         this.iconToComb(this.viewState.combInProgress)
       );
@@ -171,20 +118,14 @@ export class WebGejmikaViewModel {
             attemptViewId: this.viewState.id + 1,
             attemptViewComb: this.viewState.combInProgress,
             attemptViewOutcome: this.outcomeToColor(
-              newStateModel.attempts[newStateModel.attempts.length - 1].attemptOutcome
+              newStateModel.attempts[newStateModel.attempts.length - 1]
+                .attemptOutcome
             ),
           },
         ],
         combInProgress: [],
         id: this.viewState.id + 1,
       };
-      // if (this.webGejmikaModel.isTargetReached(newState.attempts)) {
-      //   newState.score = this.webGejmikaModel.score(newState.attempts);
-      //   newStateView.correctView = this.combToIcon(newState.secretComb);
-      //   this.dispatchUpdate(newState, newStateView);
-      // } else {
-      //   this.dispatchUpdate(newState, newStateView);
-      // }
 
       this.dispatchUpdate(newStateModel, newStateView);
     }
@@ -253,36 +194,6 @@ export class WebGejmikaViewModel {
     return icons;
   };
 
-  // comb_to_icon = (comb) => {
-  //   var icons = ["", "", "", ""];
-  //   for (let index = 0; index < icons.length; index++) {
-  //     switch (comb[index]) {
-  //       case "K":
-  //         icons[index] = "/icons/diamond.png";
-  //         break;
-  //       case "H":
-  //         icons[index] = "/icons/heart.png";
-  //         break;
-  //       case "P":
-  //         icons[index] = "/icons/symbol-of-spades.png";
-  //         break;
-  //       case "T":
-  //         icons[index] = "/icons/clubs.png";
-  //         break;
-  //       case "L":
-  //         icons[index] = "/icons/star.png";
-  //         break;
-  //       case "S":
-  //         icons[index] = "/icons/traffic-light.png";
-  //         break;
-  //       default:
-  //         icons[index] = "/icons/circle.png";
-  //         break;
-  //     }
-  //   }
-  //   return icons;
-  // };
-
   // transforms view state combination to model state combination
 
   iconToComb = (icons) => {
@@ -340,68 +251,4 @@ export class WebGejmikaViewModel {
     return colors;
   };
 
-  // outcome_to_color = (outcome) => {
-  //   let colors = [];
-  //   let out = [...outcome];
-  //   out.sort().reverse();
-  //   for (let index = 0; index < out.length; index++) {
-  //     switch (out[index]) {
-  //       case 2:
-  //         colors[index] = "green";
-  //         break;
-  //       case 1:
-  //         colors[index] = "yellow";
-  //         break;
-  //       case 0:
-  //         colors[index] = "gray";
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   }
-
-  //   return colors;
-  // };
-
-  // inputDeleteLast() {
-  //   this.dispatchUpdate(
-  //     {
-  //       ...this.modelState,
-  //       attpInProgress: [],
-  //     },
-  //     {
-  //       ...this.viewState,
-  //       combInProgress: [
-  //         "./icons/circle.png",
-  //         "./icons/circle.png",
-  //         "./icons/circle.png",
-  //         "./icons/circle.png",
-  //       ],
-  //     }
-  //   );
-  // }
-
-  // startGame() {
-  //   this.dispatchUpdate(
-  //     {
-  //       ...this.modelState,
-  //       attpInProgress: [],
-  //       attempts: [],
-  //       attpId: -1,
-  //       score: -1,
-  //       secretComb: this.webGejmikaModel.secretCode(),
-  //     },
-  //     {
-  //       combInProgress: [
-  //         "./icons/circle.png",
-  //         "./icons/circle.png",
-  //         "./icons/circle.png",
-  //         "./icons/circle.png",
-  //       ],
-  //       attemptsView: [],
-  //       correctView: [],
-  //       id: -1,
-  //     }
-  //   );
-  // }
 }
