@@ -5,6 +5,7 @@ import InputPanel from "./lib/components/InputPanel";
 import GamePanel from "./lib/components/GamePanel";
 import Score from "./lib/components/Score";
 import { ViewModel } from "./view_model/ViewModel";
+import ShowScore from "./lib/components/ShowScore";
 
 function App() {
   const dispatch = useDispatch();
@@ -23,23 +24,37 @@ function App() {
 
   return (
     <>
-      {score != -1 && (
-        <Score
-          score={score}
-          viewModel={viewModel}
-          correct_view={correct_view}
-        ></Score>
-      )}
-      <div className="wrapper">
+      {score != -1 ? (
+        // <Score
+        //   score={score}
+        //   viewModel={viewModel}
+        //   correct_view={correct_view}
+        // ></Score>
+        <div className="wrapper">
         <div className="container">
           <GamePanel
             comb_in_progress={comb_in_progress}
             attempts_view={attempts_view}
             id={id}
           ></GamePanel>
-          <InputPanel viewModel={viewModel}></InputPanel>
+           <ShowScore
+           score={score}
+           viewModel={viewModel}
+           correct_view={correct_view}
+         ></ShowScore>
         </div>
       </div>
+      ) : (<div className="wrapper">
+      <div className="container">
+        <GamePanel
+          comb_in_progress={comb_in_progress}
+          attempts_view={attempts_view}
+          id={id}
+        ></GamePanel>
+        <InputPanel viewModel={viewModel}></InputPanel>
+      </div>
+    </div>)
+    }
     </>
   );
 }
