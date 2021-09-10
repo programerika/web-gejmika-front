@@ -1,26 +1,24 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 const AttemptPanel = (props) => {
   return (
     <>
-      {props.comb.map((comb, index) => {
+      {[0, 1, 2, 3].map((num, index) => {
         return (
-          <img key={index} className="circle" src={comb} alt="kombinacija" />
+          <img
+            key={index}
+            className="circle"
+            src={
+              typeof props.comb[num] == "undefined"
+                ? "./icons/circle.png"
+                : props.comb[num]
+            }
+            alt="kombinacija"
+          />
         );
       })}
     </>
   );
-};
-
-AttemptPanel.propTypes = {};
-AttemptPanel.defaultProps = {
-  comb: [
-    "./icons/circle.png",
-    "./icons/circle.png",
-    "./icons/circle.png",
-    "./icons/circle.png",
-  ],
 };
 
 export default AttemptPanel;

@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
-import input_reducers from "./input_reducers";
-import view_reducers from "./view_reducers";
+import modelReducers from "./modelReducers";
+import viewReducers from "./viewReducers";
 
 const rootReducer = combineReducers({
-  model: input_reducers,
-  view: view_reducers,
+  model: modelReducers,
+  view: viewReducers,
 });
 
 export default rootReducer;
