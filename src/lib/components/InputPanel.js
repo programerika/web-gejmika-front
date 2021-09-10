@@ -9,37 +9,37 @@ const InputPanel = (props) => {
         <img
           className="input"
           src="/icons/clubs.png"
-          onClick={() => viewModel.input_click("T")}
+          onClick={() => viewModel.clubsButtonClicked()}
           alt="tref"
         />
         <img
           className="input"
           src="/icons/diamond.png"
-          onClick={() => viewModel.input_click("K")}
+          onClick={() => viewModel.diamondButtonClicked()}
           alt="karo"
         />
         <img
           className="input"
           src="/icons/heart.png"
-          onClick={() => viewModel.input_click("H")}
+          onClick={() => viewModel.heartButtonClicked()}
           alt="herc"
         />
         <img
           className="input"
           src="/icons/star.png"
-          onClick={() => viewModel.input_click("L")}
+          onClick={() => viewModel.starButtonClicked()}
           alt="zvezda"
         />
         <img
           className="input"
           src="/icons/symbol-of-spades.png"
-          onClick={() => viewModel.input_click("P")}
+          onClick={() => viewModel.spadesButtonClicked()}
           alt="pik"
         />
         <img
           className="input"
           src="/icons/traffic-light.png"
-          onClick={() => viewModel.input_click("S")}
+          onClick={() => viewModel.trafficLightButtonClicked()}
           alt="semafor"
         />
       </div>

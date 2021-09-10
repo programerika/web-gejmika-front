@@ -9,54 +9,131 @@ export class ViewModel {
     this.modelFunctions = new ModelFunctions(model_state);
   }
 
+  // dispatch update to both view and model reducers
+
   dispatch_update(newState_model, newState_view) {
     this.dispatcher(
       all_actions.input_actions.update(newState_model, newState_view)
     );
   }
 
-  input_click(input) {
-    if (this.model_state.attp_in_progress.length >= 4) {
+  // methods for each button icon clicked
+
+  heartButtonClicked() {
+    if (this.view_state.comb_in_progress.length >= 4) {
       return;
-    } else {
-      const newState_model = {
-        ...this.model_state,
-        attp_in_progress: [...this.model_state.attp_in_progress, input],
-      };
-
-      const newState_view = {
-        ...this.view_state,
-        comb_in_progress: this.comb_to_icon(newState_model.attp_in_progress),
-      };
-
-      this.dispatch_update(newState_model, newState_view);
     }
+    const newState_view = {
+      ...this.view_state,
+      comb_in_progress: [
+        ...this.view_state.comb_in_progress,
+        "/icons/heart.png",
+      ],
+    };
+
+    this.dispatch_update({ ...this.model_state }, newState_view);
   }
 
+  starButtonClicked() {
+    if (this.view_state.comb_in_progress.length >= 4) {
+      return;
+    }
+    const newState_view = {
+      ...this.view_state,
+      comb_in_progress: [
+        ...this.view_state.comb_in_progress,
+        "/icons/star.png",
+      ],
+    };
+
+    this.dispatch_update({ ...this.model_state }, newState_view);
+  }
+
+  diamondButtonClicked() {
+    if (this.view_state.comb_in_progress.length >= 4) {
+      return;
+    }
+    const newState_view = {
+      ...this.view_state,
+      comb_in_progress: [
+        ...this.view_state.comb_in_progress,
+        "/icons/diamond.png",
+      ],
+    };
+
+    this.dispatch_update({ ...this.model_state }, newState_view);
+  }
+
+  spadesButtonClicked() {
+    if (this.view_state.comb_in_progress.length >= 4) {
+      return;
+    }
+    const newState_view = {
+      ...this.view_state,
+      comb_in_progress: [
+        ...this.view_state.comb_in_progress,
+        "/icons/symbol-of-spades.png",
+      ],
+    };
+
+    this.dispatch_update(null, newState_view);
+  }
+
+  trafficLightButtonClicked() {
+    if (this.view_state.comb_in_progress.length >= 4) {
+      return;
+    }
+    const newState_view = {
+      ...this.view_state,
+      comb_in_progress: [
+        ...this.view_state.comb_in_progress,
+        "/icons/traffic-light.png",
+      ],
+    };
+
+    this.dispatch_update({ ...this.model_state }, newState_view);
+  }
+
+  clubsButtonClicked() {
+    if (this.view_state.comb_in_progress.length >= 4) {
+      return;
+    }
+    const newState_view = {
+      ...this.view_state,
+      comb_in_progress: [
+        ...this.view_state.comb_in_progress,
+        "/icons/clubs.png",
+      ],
+    };
+
+    this.dispatch_update({ ...this.model_state }, newState_view);
+  }
+
+  // methods for each button icon clicked END
+
+  // method for confirming combination and updating model state attempts array
+
   input_confirm() {
-    if (this.model_state.attp_in_progress.length !== 4) {
+    if (this.view_state.comb_in_progress.length !== 4) {
       return;
     } else {
-      const newState = this.modelFunctions.compare_code();
+      const newState = this.modelFunctions.compare_code(
+        this.icon_to_comb(this.view_state.comb_in_progress)
+      );
       const newState_view = {
         ...this.view_state,
 
         attempts_view: [
           ...this.view_state.attempts_view,
           {
-            attempt_view_id: this.model_state.attp_id + 1,
+            attempt_view_id: this.view_state.id + 1,
             attempt_view_comb: this.view_state.comb_in_progress,
             attempt_view_outcome: this.outcome_to_color(
               newState.attempts[newState.attempts.length - 1].attempt_outcome
             ),
           },
         ],
-        comb_in_progress: [
-          "./icons/circle.png",
-          "./icons/circle.png",
-          "./icons/circle.png",
-          "./icons/circle.png",
-        ],
+        comb_in_progress: [],
         id: this.view_state.id + 1,
       };
 
@@ -64,38 +141,38 @@ export class ViewModel {
     }
   }
 
+  // method for deleting last element in combination in progress
+
   input_cancel() {
-    this.dispatch_update(
-      {
-        ...this.model_state,
-        attp_in_progress: [],
-      },
-      {
-        ...this.view_state,
-        comb_in_progress: [
-          "./icons/circle.png",
-          "./icons/circle.png",
-          "./icons/circle.png",
-          "./icons/circle.png",
-        ],
-      }
-    );
+    if (this.view_state.comb_in_progress.length > 0) {
+      let combInProg = [...this.view_state.comb_in_progress];
+      combInProg.pop();
+
+      this.dispatch_update(
+        {
+          ...this.model_state,
+        },
+        {
+          ...this.view_state,
+          comb_in_progress: combInProg,
+        }
+      );
+    }
   }
+
+  // sets both model and view states to default
 
   start_game() {
     const newState_model = this.modelFunctions.secret_code();
     this.dispatch_update(newState_model, {
-      comb_in_progress: [
-        "./icons/circle.png",
-        "./icons/circle.png",
-        "./icons/circle.png",
-        "./icons/circle.png",
-      ],
+      comb_in_progress: [],
       attempts_view: [],
       correct_view: this.comb_to_icon(newState_model.secret_comb),
       id: -1,
     });
   }
+
+  // transforms model state combination to view state combination
 
   comb_to_icon = (comb) => {
     var icons = ["", "", "", ""];
@@ -126,6 +203,40 @@ export class ViewModel {
     }
     return icons;
   };
+
+  // transforms view state combination to model state combination
+
+  icon_to_comb = (icons) => {
+    var comb = ["", "", "", ""];
+    for (let index = 0; index < comb.length; index++) {
+      switch (icons[index]) {
+        case "/icons/diamond.png":
+          comb[index] = "K";
+          break;
+        case "/icons/heart.png":
+          comb[index] = "H";
+          break;
+        case "/icons/symbol-of-spades.png":
+          comb[index] = "P";
+          break;
+        case "/icons/clubs.png":
+          comb[index] = "T";
+          break;
+        case "/icons/star.png":
+          comb[index] = "L";
+          break;
+        case "/icons/traffic-light.png":
+          comb[index] = "S";
+          break;
+        default:
+          comb[index] = "";
+          break;
+      }
+    }
+    return comb;
+  };
+
+  // transforms model compare code outcome to colors for view
 
   outcome_to_color = (outcome) => {
     let colors = [];

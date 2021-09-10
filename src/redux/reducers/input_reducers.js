@@ -1,8 +1,6 @@
 const input_reducers = (
   state = {
-    attp_in_progress: [],
     attempts: [],
-    attp_id: -1,
     secret_comb: [],
     score: -1,
   },

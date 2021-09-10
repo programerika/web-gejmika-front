@@ -3,9 +3,11 @@ export class ModelFunctions {
     this.modelState = modelState;
   }
 
-  compare_code = () => {
+  // compares entered combination to secret combination and returns new model state with outcome
+
+  compare_code = (attp_in_progress) => {
     var combination = [...this.modelState.secret_comb];
-    var attempt = [...this.modelState.attp_in_progress];
+    var attempt = [...attp_in_progress];
     let outcome = [];
     for (let index = 0; index < attempt.length; index++) {
       if (attempt[index] === combination[index]) {
@@ -31,12 +33,10 @@ export class ModelFunctions {
       attempts: [
         ...this.modelState.attempts,
         {
-          attempt_id: this.modelState.attp_id + 1,
-          attempt_code: this.modelState.attp_in_progress,
+          attempt_code: [...attp_in_progress],
           attempt_outcome: outcome,
         },
       ],
-      attp_id: this.modelState.attp_id + 1,
     };
 
     if (this.is_target_reached(newState.attempts)) {
@@ -45,6 +45,8 @@ export class ModelFunctions {
 
     return newState;
   };
+
+  // generates random secret combination and returns new model state
 
   secret_code = () => {
     let comb_arr = ["K", "H", "P", "T", "L", "S"];
@@ -57,12 +59,13 @@ export class ModelFunctions {
       ...this.modelState,
       attp_in_progress: [],
       attempts: [],
-      attp_id: -1,
       score: -1,
       secret_comb: combination,
     };
     return newState;
   };
+
+  // checks if game end is reached
 
   is_target_reached = (attempts) => {
     if (attempts.length === 0) return false;
@@ -80,6 +83,8 @@ export class ModelFunctions {
     } else return false;
   };
 
+  // calculates score
+
   score = (attempts) => {
     var last_attp = attempts[attempts.length - 1];
     var check = true;
@@ -90,16 +95,16 @@ export class ModelFunctions {
     });
     if (!check && attempts.length === 5) return 0;
     else {
-      switch (last_attp.attempt_id) {
-        case 0:
-          return 21;
+      switch (attempts.length) {
         case 1:
           return 21;
         case 2:
           return 21;
         case 3:
-          return 13;
+          return 21;
         case 4:
+          return 13;
+        case 5:
           return 8;
         default:
           return 0;
