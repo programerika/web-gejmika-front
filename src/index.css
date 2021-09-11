@@ -10,7 +10,8 @@ body {
   overflow-x: hidden;
 }
 
-.score>h1,h5{
+.score > h1,
+h5 {
   margin: 0px;
   font-size: 20px;
 }
@@ -42,10 +43,16 @@ code {
   border-radius: 10px;
   overflow: hidden;
 }
-
+.header {
+  /* height: 500px; */
+  display: flex;
+}
+/* .header.h1 {
+  color: white;
+} */
 .flex-cont {
   display: flex;
-  background-color:rgb(21, 179, 160);
+  background-color: rgb(21, 179, 160);
   margin-top: 5px;
   border: darkgreen 1px solid;
   border-radius: 10px;
@@ -61,7 +68,6 @@ code {
   margin: 10px;
   padding: 3px;
   background-color: rgb(209, 207, 207);
-
 }
 
 .indicator {
@@ -80,7 +86,6 @@ code {
   height: 20px;
   width: 20px;
   background-color: gray;
- 
 }
 
 .correct {
@@ -144,7 +149,8 @@ code {
   border-radius: 10px;
 }
 
-.score>h1,h5{
+.score > h1,
+h5 {
   font-size: 15px;
   text-align: center;
 }
@@ -192,7 +198,8 @@ path {
   margin: auto;
   margin-right: 0px;
 }
-.playAgainBtn,.saveScoreBtn{
+.playAgainBtn,
+.saveScoreBtn {
   padding: 5px 28px;
   font: 0.7em sans-serif;
   border-radius: 10px;
@@ -203,12 +210,13 @@ path {
   font-size: large;
 }
 
-.playAgainBtn:hover,.saveScoreBtn:hover {
+.playAgainBtn:hover,
+.saveScoreBtn:hover {
   background-color: #1d011b; /* Green */
   color: white;
 }
 
-.saveScore{
+.saveScore {
   display: flex;
   justify-content: space-around;
 }
@@ -218,12 +226,12 @@ path {
     transform: scale(0.9);
   }
 
-  .wrapper{
+  .wrapper {
     margin-top: 0px;
   }
 }
 
- @media screen and (max-width: 320px) {
+@media screen and (max-width: 320px) {
   .container {
     transform: scale(0.6);
     overflow: visible;

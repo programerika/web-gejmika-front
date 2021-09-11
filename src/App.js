@@ -5,6 +5,7 @@ import InputPanel from "./lib/components/InputPanel";
 import GamePanel from "./lib/components/GamePanel";
 import ShowScore from "./lib/components/ShowScore";
 import { WebGejmikaViewModel } from "./viewModel/WebGejmikaViewModel";
+import Header from './lib/components/Header'
 
 function App() {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <>
+    {/* <Header></Header> */}
       {score != -1 ? (
         // <Score
         //   score={score}
@@ -31,6 +33,7 @@ function App() {
         // ></Score>
         <div className="wrapper">
         <div className="container">
+          <Header></Header>
           <GamePanel
             combInProgress={combInProgress}
             attemptsView={attemptsView}
@@ -45,6 +48,7 @@ function App() {
       </div>
       ) : (<div className="wrapper">
       <div className="container">
+        <Header></Header>
         <GamePanel
           combInProgress={combInProgress}
           attemptsView={attemptsView}
