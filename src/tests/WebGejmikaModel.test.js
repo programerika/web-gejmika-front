@@ -1,3 +1,6 @@
+/** 
+    @author Programerika
+*/
 import { WebGejmikaModel } from "../model/WebGejmikaModel";
 
 // BEGIN of tests for function compareCode()
@@ -13,7 +16,8 @@ const test21Points = {
 const wgmt = new WebGejmikaModel(test21Points);
 
 /**
- *  @author Milan Uzelac
+ * @param {Array} Strings of code combination letters (H,K,S,L,T,P)
+ * @returns {Object} Model state with added new attempt, and set attemptOutcome
  *  This test tests if a player has hit a correct combination in first attempt.
  *  Function gets attemptInProgress as an argument, compares attemptInProgress with secret code,
  *  if it matches, attemptOutcome array will be [2,2,2,2], player will get 21 points,
@@ -32,7 +36,8 @@ test("testing compareCode() with correct combination in first attempt", () => {
 });
 
 /**
- *  @author Milan Uzelac
+ * @param {Array} Strings of code combination letters (H,K,S,L,T,P)
+ * @returns {Object} Model state with added new attempt, and set attemptOutcome
  *  This test tests if a player has missed a correct combination in first attempt.
  *  Function gets attemptInProgress as an argument, compares attemptInProgress with secret code
  *  and if it doesn't match, attemptOutcome array will be [2,2,2,0] player will stay at -1 points,
@@ -50,7 +55,8 @@ test("testing compareCode() with incorect combination in first attempt", () => {
 });
 
 /**
- * @author Milan Uzelac
+ * @param {Array} Strings of code combination letters (H,K,S,L,T,P)
+ * @returns {Object} Model state with added new attempt, and set attemptOutcome
  *  This test tests if a player has hit a correct combination in fourth attempt.
  *  Function gets attemptInProgress as an argument, compares attemptInProgress with secret code,
  *  if it matches, attemptOutcome array will be [2,2,2,2] in fourth attempt,
@@ -87,7 +93,8 @@ test("testing compareCode() with correct combination in fourth attempt", () => {
 });
 
 /**
- * @author Milan Uzelac
+ * @param {Array} Strings of code combination letters (H,K,S,L,T,P)
+ * @returns {Object} Model state with added new attempt, and set attemptOutcome
  * This test tests if a player has hit a correct combination in fifth attempt.
  * Function gets attemptInProgress as an argument, compares attemptInProgress with secret code,
  * if it matches, attemptOutcome array will be [2,2,2,2] in fifth attempt,
@@ -126,7 +133,8 @@ test("testing compareCode() with correct combination in fifth attempt", () => {
 });
 
 /**
- * @author Milan Uzelac
+ * @param {Array} Strings of code combination letters (H,K,S,L,T,P)
+ * @returns {Object} Model state with added new attempt, and set attemptOutcome
  * This test tests if a player has missed a correct combination in fifth attempt.
  * Function gets attpInProgress as an argument, compares attemptInProgress with secret code,
  * if it doesn't match, attemptOutcome array will be [2,2,2,0] in fifth attempt,
@@ -165,7 +173,8 @@ test("testing compareCode() with missed all combinations in all attempts", () =>
 });
 
 /**
- *  @author Milan Uzelac
+ * @param {Array} Strings of code combination letters (H,K,S,L,T,P)
+ * @returns {Object} Model state with added new attempt, and set attemptOutcome
  *  This test tests if a sign is inside a secret code but in a wrong place
  */
 
@@ -185,9 +194,9 @@ test("testing compareCode() if a sign is inside a secret code but in a wrong pla
 //BEGIN of tests for function isTargetReached()
 
 /**
- * @author Milan Uzelac
- * @return true
- * Testing function isTargetReached with 5 total attempts
+ * @param {Array} Attempts - size 5
+ * @return {boolean} true
+ * Testing function isTargetReached with 5 total attempts, no guesses
  */
 
 // customized object for testing purposes
@@ -217,9 +226,9 @@ test("testing isTargetReached() with five wrong attempts ", () => {
 });
 
 /**
- *  @author Milan Uzelac
- *  @return false
- *  Testing function isTargetReached with 4 total attempts
+ * @param {Array} Attempts - size 4
+ * @return {boolean} false
+ *  Testing function isTargetReached with 4 total attempts, no guesses
  */
 
 // customized object for testing purposes
@@ -248,9 +257,9 @@ test("testing isTargetReached() with four wrong attempts ", () => {
 });
 
 /**
- *  @author Milan Uzelac
- *  @return true
- *  Testing function isTargetReached with hit in fourth attempt
+ * @param {Array} Attempts - size 4
+ * @return {boolean} true
+ *  Testing function isTargetReached with code guess in fourth attempt
  */
 
 // customized object for testing purposes
@@ -270,7 +279,7 @@ const wgmtIsTargetReachedCorrectCombination = new WebGejmikaModel(
   isTargetReachedCorrectCombination
 );
 
-test("testing isTargetReached() with hitted fourth combination ", () => {
+test("testing isTargetReached() with code guess in fourth attempt", () => {
   expect(
     wgmtIsTargetReachedCorrectCombination.isTargetReached(
       wgmtIsTargetReachedCorrectCombination.modelState.attempts
@@ -279,8 +288,8 @@ test("testing isTargetReached() with hitted fourth combination ", () => {
 });
 
 /**
- *  @author Milan Uzelac
- *  @return false
+ * @param {Array} Attempts - size 0
+ *  @return {boolean} false
  *  Testing isTargetReached() with empty attempts array
  */
 
@@ -309,8 +318,8 @@ test("testing isTargetReached() with empty attempts array ", () => {
 // BEGIN of tests for function score()
 
 /**
- *  @author Milan Uzelac
- *  @returns object with score 21
+ * @param {Object} Model state with set attempts
+ * @returns {number} Score - 21
  *  Testing hit in second attempt
  */
 
@@ -334,9 +343,9 @@ test("testing score() - 21 points 2 attempt", () => {
 });
 
 /**
- * @author Milan Uzelac
- * @returns object with score 13
- * Testing fourth attempt
+ * @param {Object} Model state with set attempts
+ * @returns {number} Score - 13
+ * Testing score number for correct guess in fourth attempt
  */
 
 // customized object for testing purposes
@@ -361,9 +370,9 @@ test("testing score() - 13 points 4 attempt", () => {
 });
 
 /**
- * @author Milan Uzelac
- * @returns object with score 8
- * Testing fifth attempt
+ * @param {Object} Model state with set attempts
+ * @returns {number} Score - 8
+ * Testing score number for correct guess in fifth attempt
  */
 
 // customized object for testing purposes
@@ -389,9 +398,9 @@ test("testing score() - 8 points 5 attempt", () => {
 });
 
 /**
- * @author Milan Uzelac
- * @returns object with score 0
- * Missed all attempts
+ * @param {Object} Model state with set attempts
+ * @returns {number} Score - 0
+ * Testing score number for all five failed attempts
  */
 
 // customized object for testing purposes
