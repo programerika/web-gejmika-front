@@ -1,11 +1,23 @@
+/**
+ * @author Programerika
+ */
+
 export class WebGejmikaModel {
   constructor(modelState) {
     this.modelState = modelState;
   }
 
-  // compares entered combination to secret combination and returns new model state with outcome
+  /**
+   *
+   * @param {Array} attpInProgress
+   * @returns {Object} Model state with added attempt and set attemptOutcome
+   * This method compares attpInProgress with secretComb and generates attemptOutcome - array of numbers [0-2]
+   * 0 - guess not in secret comb
+   * 1 - guess exists in secret combination but is not in right place
+   * 2 - guess is in right place
+   */
 
-   compareCode = (attpInProgress) => {
+  compareCode = (attpInProgress) => {
     var combination = [...this.modelState.secretComb];
     var attempt = [...attpInProgress];
     let outcome = [];
@@ -46,7 +58,11 @@ export class WebGejmikaModel {
     return newState;
   };
 
-  // generates random secret combination and returns new model state
+  /**
+   *
+   * @returns {Object} Model state with set secretComb
+   * This method generates random secret combination of size 4 from letters K,H,P,T,L,S
+   */
 
   secretCode = () => {
     let combArr = ["K", "H", "P", "T", "L", "S"];
@@ -65,7 +81,12 @@ export class WebGejmikaModel {
     return newState;
   };
 
-  // checks if game end is reached
+  /**
+   *
+   * @param {Array} attempts
+   * @returns {boolean}
+   * This method checks if game end is reached based on number of attempts or attempt outcome
+   */
 
   isTargetReached = (attempts) => {
     if (attempts.length === 0) return false;
@@ -83,7 +104,12 @@ export class WebGejmikaModel {
     } else return false;
   };
 
-  // calculates score
+  /**
+   *
+   * @param {Array} attempts
+   * @returns {number} score - 8, 13, 21 or 0
+   * This method calculates score based on correct code guess attempt number
+   */
 
   score = (attempts) => {
     var lastAttp = attempts[attempts.length - 1];

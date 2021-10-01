@@ -1,3 +1,6 @@
+/**
+ * @author Programerika
+ */
 import allActions from "../redux/actions";
 import { WebGejmikaModel } from "../model/WebGejmikaModel";
 
@@ -9,7 +12,12 @@ export class WebGejmikaViewModel {
     this.webGejmikaModel = new WebGejmikaModel(modelState);
   }
 
-  // dispatch update to both view and model reducers
+  /**
+   *
+   * @param {Object} newStateModel
+   * @param {Object} newStateView
+   * This method dispatches model and view state updates to reducers
+   */
 
   dispatchUpdate(newStateModel, newStateView) {
     this.dispatcher(
@@ -17,7 +25,11 @@ export class WebGejmikaViewModel {
     );
   }
 
-  // methods for each button icon clicked
+  /**
+   * Methods for each button icon clicked BEGIN
+   *
+   * All methods add the appropriate picture link to combInProgress and dispatch view state update
+   * */
 
   heartButtonClicked() {
     if (this.viewState.combInProgress.length >= 4) {
@@ -97,14 +109,20 @@ export class WebGejmikaViewModel {
     this.dispatchUpdate({ ...this.modelState }, newStateView);
   }
 
-  // methods for each button icon clicked END
+  /**
+   * Methods for each button icon clicked END
+   * */
 
-  // method for confirming combination and updating model state attempts array
+  /**
+   *
+   * This method updates view state by adding new attemptView, and setting viewOutcome
+   * Gets new model state from webGejmikaModel and calls dispatchUpdate function
+   */
 
   inputConfirm() {
     if (this.viewState.combInProgress.length !== 4) {
       return;
-    } else {   
+    } else {
       const newStateModel = this.webGejmikaModel.compareCode(
         this.iconToComb(this.viewState.combInProgress)
       );
@@ -131,7 +149,9 @@ export class WebGejmikaViewModel {
     }
   }
 
-  // method for deleting last element in combination in progress
+  /**
+   * This method deletes last element in combInProgress array and calls dispatchUpdate function
+   */
 
   inputDeleteLast() {
     if (this.viewState.combInProgress.length > 0) {
@@ -150,7 +170,9 @@ export class WebGejmikaViewModel {
     }
   }
 
-  // sets both model and view states to default
+  /**
+   * This method sets both model and view state to default parameters and calls dispatchUpdate function
+   */
 
   startGame() {
     const newStateModel = this.webGejmikaModel.secretCode();
@@ -162,7 +184,12 @@ export class WebGejmikaViewModel {
     });
   }
 
-  // transforms model state combination to view state combination
+  /**
+   *
+   * @param {Array} comb
+   * @returns {Array} icons
+   * This method takes in array of combination attempt letters and transforms it into icon picture links for view state
+   */
 
   combToIcon = (comb) => {
     var icons = ["", "", "", ""];
@@ -194,7 +221,12 @@ export class WebGejmikaViewModel {
     return icons;
   };
 
-  // transforms view state combination to model state combination
+  /**
+   *
+   * @param {Array} icons
+   * @returns {Array} comb
+   * This method takes in array of icon picture links and transforms it into combination attempt letters for model state
+   */
 
   iconToComb = (icons) => {
     var comb = ["", "", "", ""];
@@ -226,7 +258,15 @@ export class WebGejmikaViewModel {
     return comb;
   };
 
-  // transforms model compare code outcome to colors for view
+  /**
+   *
+   * @param {Array} outcome
+   * @returns {Array} colors
+   * This method takes in array of numbers [0-2] and transforms is into array of color names for view state
+   * 0 - gray
+   * 1 - yellow
+   * 2 - green
+   */
 
   outcomeToColor = (outcome) => {
     let colors = [];
@@ -250,5 +290,4 @@ export class WebGejmikaViewModel {
 
     return colors;
   };
-
 }
