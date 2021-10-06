@@ -1,26 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import AttemptPanel from "./AttemptPanel";
 import { WebGejmikaService } from "../../services/WebGejmikaService";
 
 const ShowScore = ({ score, correctView, viewModel }) => {
   const [state, setState] = useState({
-    message: "Please enter an username",
-    isValid: "",
     toolTipStatus: "toolTipHidden",
-    isSaveButtonDisabled: true,
-    messageStatus: "toolTipVisible",
-    messageColor: "messageRed",
+    isSaveButtonDisabled: false,
+    message: "Please enter an username",
+    messageStatus: "visible",
+    messageColor: "messageWhite",
   });
 
+  useEffect(() => {
+    if (localStorage.getItem("username") === null) {
+      setState({ ...state, isSaveButtonDisabled: true });
+    }
+  }, []);
+
   const [saveStatus, setSaveStatus] = useState();
-
-  const [username, setUsername] = useState();
-
+  const [username, setUsername] = useState("");
   let webgejmikaservice = new WebGejmikaService();
-
-  console.log("State -> " + JSON.stringify(state));
-  console.log("State isValid -> " + state.isValid);
 
   return (
     <div>
@@ -89,16 +89,12 @@ const ShowScore = ({ score, correctView, viewModel }) => {
           <AttemptPanel comb={correctView}></AttemptPanel>
         </div>
         <div className="saveScore">
-          {/* <p className={state.usernameHint}>
-            Username has to have 4 - 6 characters and last two numbers
-          </p> */}
-
-          {localStorage.getItem("username") == null ? (
+          {localStorage.getItem("username") == null && score > 0 ? (
             <>
               <div className="tooltip">
                 <input
                   type="text"
-                  // className={state.isValid}
+                  //className={state.isValid}
                   maxLength="8"
                   placeholder="Username - eg. MyName12"
                   onMouseLeave={() => {
@@ -114,7 +110,7 @@ const ShowScore = ({ score, correctView, viewModel }) => {
                       setTimeout(async () => {
                         setState(await viewModel.testInput(e.target.value));
                         setUsername(e.target.value);
-                      }, 3000)
+                      }, 100)
                     )
                   }
                 />
@@ -136,20 +132,25 @@ const ShowScore = ({ score, correctView, viewModel }) => {
           <div className="buttons">
             <button
               className="playAgainBtn"
-              onClick={() => viewModel.startGame()}
+              onClick={() => {
+                viewModel.startGame();
+              }}
             >
               Play again!
             </button>
+
             <button
               className="saveScoreBtn"
-              disabled={
-                viewModel.checkIfUsernameExists() && state.isSaveButtonDisabled
-              }
+              disabled={state.isSaveButtonDisabled || score == 0}
               onClick={async () => {
                 setSaveStatus(
                   await webgejmikaservice.saveScore(username, score)
                 );
-                setState({ ...state, isSaveButtonDisabled: true });
+                setState({
+                  ...state,
+                  isSaveButtonDisabled: true,
+                  messageColor: "messageGreen",
+                });
               }}
             >
               Save score!

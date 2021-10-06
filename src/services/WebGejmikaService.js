@@ -9,12 +9,12 @@ export class WebGejmikaService {
       }
     );
 
-    const stat = await response.status;
+    const status = await response.status;
 
-    if (stat === 200) {
+    if (status === 200) {
       return 200;
     } else {
-      return 400;
+      return 404;
     }
   };
 
@@ -36,9 +36,30 @@ export class WebGejmikaService {
         }
       );
 
-      const resp = await response.status;
-      if (resp === 201) {
+      const resp = await response;
+      resp.json().then((uid) => localStorage.setItem("uid", uid.id));
+      if (resp.status === 201) {
         return "Score has been successfully saved";
+      } else {
+        return "Something went wrong";
+      }
+    } else {
+      const response = await fetch(
+        "http://localhost:8080/api/v1/player-scores/" +
+          localStorage.getItem("username") +
+          "/add-score",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: score,
+        }
+      );
+
+      const resp = await response;
+      if (resp.status === 204) {
+        return "Score has been successfully added";
       } else {
         return "Something went wrong";
       }

@@ -236,9 +236,9 @@ path {
   font-size: large;
 }
 
-.playAgainBtn:hover,
-.saveScoreBtn:hover {
-  background-color: #1d011b; /* Green */
+.playAgainBtn:hover:enabled,
+.saveScoreBtn:hover:enabled {
+  background-color: #1d011b;
   color: white;
   cursor: pointer;
 }
@@ -254,13 +254,13 @@ path {
   margin: 0px auto 0px auto;
 }
 
-.isValidInput{
+/* .isValidInput{
   background-color: white;
 }
 
 .isNotValidInput{
   background-color: rgb(247, 57, 57);
-}
+} */
 
 .toolTipVisible{
   visibility: visible;
@@ -325,14 +325,25 @@ path {
   border-color: white transparent transparent transparent;
 }
 
+
+.hidden{
+  visibility: hidden;
+}
+
+.visible{
+  visibility: visible;
+}
+
 .messageGreen{
   color: green;
-  transition-duration: 1s;
 }
 
 .messageRed{
   color: red;
-  transition-duration: 0.5s;
+}
+
+.messageWhite{
+  color: white;
 }
 
 @media screen and (max-width: 600px) {

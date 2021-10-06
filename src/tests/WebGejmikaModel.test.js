@@ -417,3 +417,7 @@ test("testing score() - 0 points 5 attempt", () => {
 });
 
 // END of testing score() function
+
+test("testing secretCode() ", () => {
+  expect(wgmt.secretCode().secretComb.length).toBe(4);
+});

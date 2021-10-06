@@ -260,13 +260,13 @@ export class WebGejmikaViewModel {
         isSaveButtonDisabled: true,
         isValid: "isNotValidInput",
         toolTipStatus: "toolTipVisible",
-        messageStatus: "toolTipVisible",
-        messageColor: "messageRed",
+        messageStatus: "visible",
+        messageColor: "messageWhite",
       };
     }
 
     let regex = new RegExp("[a-zA-Z0-9]{4,6}[0-9]{2}$");
-    if (regex.test(input) && localStorage.getItem("username") == null) {
+    if (regex.test(input) && localStorage.getItem("username") === null) {
       if ((await this.WebGejmikaService.checkIfUsernameExists(input)) === 200) {
         return {
           message: "*Username already exists",
@@ -295,14 +295,6 @@ export class WebGejmikaViewModel {
         //messageStatus: "visible",
         messageColor: "messageRed",
       };
-    }
-  };
-
-  checkIfUsernameExists = () => {
-    if (localStorage.getItem("username") == null) {
-      return true;
-    } else {
-      return false;
     }
   };
 }
