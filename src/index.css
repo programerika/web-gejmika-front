@@ -10,11 +10,20 @@ body {
   overflow-x: hidden;
 }
 
+.score > h1,
+h5 {
+  margin: 0px;
+  font-size: 20px;
+}
+
 .wrapper {
   padding-top: 50px;
   display: flex;
   /* align-items: center; */
   justify-content: space-between;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 code {
@@ -32,22 +41,51 @@ code {
   /* height: 55%;
   width: 50%; */
   max-width: fit-content;
-  max-height: fit-content;
-  background-color: gray;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  border-radius: 3%;
+  /* border-radius: 15px; */
+  overflow: hidden;
 }
-
+.header {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  background-color: black;
+  border-radius: 10px 10px 4px 4px;
+  align-items: center;
+  padding: 0px 5px 0px 10px;
+  /* padding-left: 10px;
+  padding-right: 10px; */
+  box-sizing: border-box;
+  border: solid 3px rgb(21, 179, 160);
+  margin-bottom: 1px;
+}
+.header h2 {
+  color: rgb(21, 179, 160);
+  /* background-color: white; */
+}
+/* .help {
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  border: rgb(53, 50, 50) 2px solid;
+  padding: 5px;
+  box-shadow: 1px 3.5px rgb(106, 109, 109);
+  background-color: rgb(21, 179, 160);
+  margin: 5px;
+  cursor: pointer;
+} */
 .flex-cont {
   display: flex;
-  padding: 5px;
-  background-color: rgb(205, 255, 129);
-  margin: 5px;
+  background-color: rgb(21, 179, 160);
+  margin-top: 1px;
   border: darkgreen 1px solid;
-  border-radius: 5%;
+  border-radius: 4px;
   height: auto;
+  width: max-content;
+  box-sizing: border-box;
 }
 .circle {
   border-radius: 50%;
@@ -81,45 +119,75 @@ code {
 .correct {
   margin: auto;
   width: fit-content;
-  height: min-content;
-  padding-bottom: 30px;
+  height: 80px;
 }
 
 .input {
   border-radius: 50%;
   height: 40px;
   width: 40px;
-  border: black 1px solid;
+  border: rgb(53, 50, 50) 2px solid;
   padding: 5px;
+  box-shadow: 1px 3.5px rgb(106, 109, 109);
+  background-color: rgb(199, 218, 230);
   margin: 5px;
+  cursor: pointer;
+}
+
+.input:hover {
+  background-color: rgb(184, 192, 192);
+}
+
+.input:active {
+  background-color: #848f84;
+  box-shadow: 0 5px #666;
+  transform: translateY(3px);
 }
 
 .input-panel {
-  height: 10%;
-  width: 94%;
-  padding: 10px;
-  /* margin: auto; */
-  background-color: lightcyan;
-  position: sticky;
-  border: brown solid 1px;
-  border-radius: 5%;
   display: flex;
   flex-wrap: wrap;
+  height: 10%;
+  padding: 10px;
+  margin-top: 3px;
+  /* margin: auto; */
+  background-color: black;
+  /* background-color: rgb(44, 216, 14); */
+  border-radius: 4px 4px 10px 10px;
+  border: solid 3px rgb(21, 179, 160);
 }
 
-.score {
+/*.score {
   background-color: lightcoral;
   color: black;
   border: black solid 1px;
   text-align: center;
-  /* margin: 5px; */
   position: absolute;
   display: inline-block;
   width: 100vw;
+<<<<<<< HEAD
   min-height: fit-content;
   top: 30%;
+=======
+  bottom: 0px;
+>>>>>>> feature/pws-103
   z-index: 2;
   overflow: hidden;
+}*/
+
+.score {
+  background-color: orange;
+  display: flex;
+  flex-direction: column;
+  height: max-content;
+  margin-top: 3px;
+  border-radius: 10px;
+}
+
+.score > h1,
+h5 {
+  font-size: 15px;
+  text-align: center;
 }
 
 table,
@@ -191,7 +259,7 @@ path {
   display: grid;
   grid-template-columns: 33.33% 33.33% 33.33%;
   width: 75%;
-  border-right: 1px solid black;
+  border-right: 1px solid white;
 }
 
 .confirm-cancel-wrapper {
@@ -202,10 +270,11 @@ path {
   margin: auto;
   margin-right: 0px;
 }
-.playAgain {
-  padding: 12px 28px;
+.playAgainBtn,
+.saveScoreBtn {
+  padding: 5px 28px;
   font: 0.7em sans-serif;
-  border-radius: 5%;
+  border-radius: 10px;
   border: 1px solid rgb(44, 44, 44);
   text-align: center;
   transition-duration: 0.4s;
@@ -213,13 +282,129 @@ path {
   font-size: large;
 }
 
-.playAgain:hover {
-  background-color: #1d011b; /* Green */
+.playAgainBtn:hover:enabled,
+.saveScoreBtn:hover:enabled {
+  background-color: #1d011b;
+  color: white;
+  cursor: pointer;
+}
+
+.saveScore {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
+.saveScore>p{
+  font-size: 13px;
+  margin: 0px auto 0px auto;
+}
+
+/* .isValidInput{
+  background-color: white;
+}
+
+.isNotValidInput{
+  background-color: rgb(247, 57, 57);
+} */
+
+.toolTipVisible{
+  visibility: visible;
+  opacity: 1;
+  transition-duration: 0.5s;
+}
+
+.toolTipHidden{
+  visibility: hidden;
+  transition-duration: 0.5s;
+  opacity: 0;
+}
+
+.tooltip>input{
+  padding: 5px 28px;
+  font: 0.4em sans-serif;
+  border-radius: 10px;
+  border: 1px solid rgb(44, 44, 44);
+  text-align: center;
+  transition-duration: 0.4s;
+  margin-bottom: 10px;
+  font-size: small;
+  width: 76%;
+  margin: 0px auto;
+}
+.buttons{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+
+.tooltip {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+
+.tooltip .tooltiptext {
+  width: 93%;
+  background-color: white;
+  text-align: center;
+  border-radius: 10px;
+  padding: 2px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 120%;
+  font-size: 11px;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: white transparent transparent transparent;
+}
+
+
+.hidden{
+  visibility: hidden;
+}
+
+.visible{
+  visibility: visible;
+}
+
+.messageGreen{
+  color: green;
+}
+
+.messageRed{
+  color: red;
+}
+
+.messageWhite{
   color: white;
 }
 
 @media screen and (max-width: 600px) {
   .container {
     transform: scale(0.9);
+  }
+
+  .wrapper {
+    margin-top: 0px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .container {
+    transform: scale(0.6);
+    overflow: visible;
   }
 }

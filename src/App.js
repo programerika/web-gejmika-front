@@ -3,58 +3,83 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import InputPanel from "./lib/components/InputPanel";
 import GamePanel from "./lib/components/GamePanel";
-import Score from "./lib/components/Score";
-import { ViewModel } from "./view_model/ViewModel";
+import ShowScore from "./lib/components/ShowScore";
 import ScoreBoard from "./lib/components/ScoreBoard";
+import { WebGejmikaViewModel } from "./viewModel/WebGejmikaViewModel";
+import Header from "./lib/components/Header";
 
 function App() {
   const dispatch = useDispatch();
-  const model_state = useSelector((state) => state.model);
-  const view_state = useSelector((state) => state.view);
+  const modelState = useSelector((state) => state.model);
+  const viewState = useSelector((state) => state.view);
 
-  const { score } = model_state;
+  const { score } = modelState;
 
-  const { comb_in_progress, attempts_view, correct_view, id } = view_state;
+  const { combInProgress, attemptsView, correctView, id, topPlayers } =
+    viewState;
 
-  const viewModel = new ViewModel(model_state, view_state, dispatch);
+  const viewModel = new WebGejmikaViewModel(modelState, viewState, dispatch);
 
   const [people, setPeople] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(async () => {
-    viewModel.start_game();
-    const response = await fetch(
-      "http://localhost:8080/api/v1/player-score/top-score"
-    );
-    const data = await response.json();
-    setPeople(data);
-    setLoading(false);
+  useEffect(() => {
+    // viewModel.getTopPlayers();
+    viewModel.startGame();
+    console.log(JSON.stringify(viewState));
+
+    // const response = await fetch("http://localhost:8080/api/v1/top-score");
+    // console.log(response.body);
+    // console.log(response.status);
+
+    // const data = await response.json();
+    // setPeople(data);
+    // console.log(JSON.stringify(data));
+
+    // setLoading(false);
   }, []);
+
+  useEffect(() => {
+    console.log(JSON.stringify(viewState));
+  }, [viewState]);
+
+  useEffect(() => {
+    console.log(JSON.stringify(modelState));
+  }, [modelState]);
 
   return (
     <>
-      {score != -1 && (
-        <Score
-          score={score}
-          viewModel={viewModel}
-          correct_view={correct_view}
-        ></Score>
-      )}
-      <div className="wrapper">
-        <div className="container">
-          <GamePanel
-            comb_in_progress={comb_in_progress}
-            attempts_view={attempts_view}
-            id={id}
-          ></GamePanel>
-          <InputPanel viewModel={viewModel}></InputPanel>
+      {score != -1 ? (
+        <div className="wrapper">
+          <div className="container">
+            <Header></Header>
+            <GamePanel
+              combInProgress={combInProgress}
+              attemptsView={attemptsView}
+              id={id}
+            ></GamePanel>
+            <ShowScore
+              score={score}
+              viewModel={viewModel}
+              correctView={correctView}
+            ></ShowScore>
+          </div>
+          <ScoreBoard people={topPlayers}></ScoreBoard>
         </div>
-        {!loading ? (
-          <ScoreBoard people={people}></ScoreBoard>
-        ) : (
-          <h1 style={{ color: "white" }}>Loading...</h1>
-        )}
-      </div>
+      ) : (
+        <div className="wrapper">
+          <div className="container">
+            <Header></Header>
+            <GamePanel
+              combInProgress={combInProgress}
+              attemptsView={attemptsView}
+              id={id}
+            ></GamePanel>
+            <InputPanel viewModel={viewModel}></InputPanel>
+          </div>
+          <ScoreBoard people={topPlayers}></ScoreBoard>
+        </div>
+      )}
     </>
   );
 }
