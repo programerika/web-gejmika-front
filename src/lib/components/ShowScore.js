@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import AttemptPanel from "./AttemptPanel";
 import { WebGejmikaService } from "../../services/WebGejmikaService";
+import { WebGejmikaViewModel } from "../../viewModel/WebGejmikaViewModel";
 
 const ShowScore = ({ score, correctView, viewModel }) => {
   const [state, setState] = useState({
@@ -21,6 +22,7 @@ const ShowScore = ({ score, correctView, viewModel }) => {
   const [saveStatus, setSaveStatus] = useState();
   const [username, setUsername] = useState("");
   let webgejmikaservice = new WebGejmikaService();
+  const webGejmikaVM = new WebGejmikaViewModel();
 
   return (
     <div>

@@ -121,7 +121,7 @@ export class WebGejmikaViewModel {
    * Gets new model state from webGejmikaModel and calls dispatchUpdate function
    */
 
-  inputConfirm() {
+  async inputConfirm() {
     if (this.viewState.combInProgress.length !== 4) {
       return;
     } else {
@@ -183,6 +183,13 @@ export class WebGejmikaViewModel {
     console.log(newStateModel.secretComb);
     // const newViewModel = this.getTopPlayers();
     // console.log("START: " + newViewModel);
+    // const newStateView = {
+    //   combInProgress: [],
+    //   attemptsView: [],
+    //   correctView: this.combToIcon(newStateModel.secretComb),
+    //   id: -1,
+    //   topPlayers: [],
+    // };
     this.dispatchUpdate(newStateModel, {
       combInProgress: [],
       attemptsView: [],
@@ -344,9 +351,24 @@ export class WebGejmikaViewModel {
     }
   };
 
+  refreshScoreBoard = async () => {
+    this.dispatchUpdate(
+      { ...this.modelState },
+      {
+        ...this.viewState,
+        topPlayers: await this.getTopPlayers(),
+      }
+    );
+  };
+
   getTopPlayers = async () => {
     const topPlayers = await this.WebGejmikaService.getTopPlayers();
     console.log("GET TOP: " + JSON.stringify(topPlayers));
+    // const newViewState = {
+    //   ...this.viewState,
+    //   topPlayers: [...topPlayers],
+    // };
     return [...topPlayers];
+    //   return newViewState;
   };
 }
