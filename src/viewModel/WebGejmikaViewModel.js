@@ -3,6 +3,7 @@
  */
 import allActions from "../redux/actions";
 import { WebGejmikaModel } from "../model/WebGejmikaModel";
+import { WebGejmikaService } from "../services/WebGejmikaService";
 
 export class WebGejmikaViewModel {
   constructor(modelState, viewState, dispatcher) {
@@ -10,6 +11,7 @@ export class WebGejmikaViewModel {
     this.viewState = viewState;
     this.dispatcher = dispatcher;
     this.webGejmikaModel = new WebGejmikaModel(modelState);
+    this.WebGejmikaService = new WebGejmikaService();
   }
 
   /**
@@ -289,5 +291,50 @@ export class WebGejmikaViewModel {
     }
 
     return colors;
+  };
+
+  testInput = async (input) => {
+    if (input.length === 0) {
+      return {
+        message: "Please enter an username",
+        isSaveButtonDisabled: true,
+        isValid: "isNotValidInput",
+        toolTipStatus: "toolTipVisible",
+        messageStatus: "visible",
+        messageColor: "messageWhite",
+      };
+    }
+
+    let regex = new RegExp("[a-zA-Z0-9]{4,6}[0-9]{2}$");
+    if (regex.test(input) && localStorage.getItem("username") === null) {
+      if ((await this.WebGejmikaService.checkIfUsernameExists(input)) === 200) {
+        return {
+          message: "*Username already exists",
+          isSaveButtonDisabled: true,
+          //isValid: "isNotValidInput",
+          //toolTipStatus: "visible",
+          //messageStatus: "visible",
+          messageColor: "messageRed",
+        };
+      } else {
+        return {
+          message: "*Username is correct",
+          isSaveButtonDisabled: false,
+          //isValid: "isValidInput",
+          //toolTipStatus: "hiddfden",
+          //messageStatus: "hidfdfden",
+          messageColor: "messageGreen",
+        };
+      }
+    } else {
+      return {
+        message: "*Your username is not in valid format",
+        isSaveButtonDisabled: true,
+        //isValid: "isNotValidInput",
+        //toolTipStatus: "visible",
+        //messageStatus: "visible",
+        messageColor: "messageRed",
+      };
+    }
   };
 }
