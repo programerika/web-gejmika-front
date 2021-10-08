@@ -343,6 +343,14 @@ path {
   margin-top: 20px;
 }
 
+.hideSaveButton{
+  display: none;
+}
+
+.showSaveButton{
+  display: block;
+}
+
 .tooltip .tooltiptext {
   width: 93%;
   background-color: white;

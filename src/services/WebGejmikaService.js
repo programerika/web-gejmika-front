@@ -2,11 +2,11 @@
  *  @author Programerika
  */
 
-import { LocalStorageService } from "./LocalStorageService";
+import { StorageService } from "./StorageService";
 
 export class WebGejmikaService {
   constructor() {
-    this.storage = new LocalStorageService();
+    this.storage = new StorageService();
   }
 
   /**
@@ -44,8 +44,8 @@ export class WebGejmikaService {
    */
 
   saveScore = async (username, score) => {
-    if (this.storage.getItemFromLocalStorage("username") == null) {
-      this.storage.setItemToLocalStorage("username", username);
+    if (this.storage.getItem("username") == null) {
+      this.storage.setItem("username", username);
       const response = await fetch(
         "http://localhost:8080/api/v1/player-scores",
         {
@@ -54,7 +54,7 @@ export class WebGejmikaService {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            username: this.storage.getItemFromLocalStorage("username"),
+            username: this.storage.getItem("username"),
             score: score,
           }),
         }
@@ -63,7 +63,7 @@ export class WebGejmikaService {
       const resp = await response;
       resp
         .json()
-        .then((uid) => this.storage.setItemToLocalStorage("uid", uid.id));
+        .then((uid) => this.storage.setItem("uid", uid.id));
       if (resp.status === 201) {
         return "Score has been successfully saved";
       } else {
@@ -72,7 +72,7 @@ export class WebGejmikaService {
     } else {
       const response = await fetch(
         "http://localhost:8080/api/v1/player-scores/" +
-          this.storage.getItemFromLocalStorage("username") +
+          this.storage.getItem("username") +
           "/add-score",
         {
           method: "POST",
@@ -113,10 +113,10 @@ export class WebGejmikaService {
    */
 
   deleteScore = async () => {
-    if (this.storage.getItemFromLocalStorage("uid") != null) {
+    if (this.storage.getItem("uid") != null) {
       const response = await fetch(
         "http://localhost:8080/api/v1/player-scores/" +
-          this.storage.getItemFromLocalStorage("uid"),
+          this.storage.getItem("uid"),
         {
           method: "DELETE",
         }
@@ -125,8 +125,8 @@ export class WebGejmikaService {
       const status = await response.status;
 
       if (status === 204) {
-        this.storage.removeFromLocalStorage("username");
-        this.storage.removeFromLocalStorage("uid");
+        this.storage.removeItem("username");
+        this.storage.removeItem("uid");
         return "User has been successfully deleted";
       } else {
         return "Something went wrong";

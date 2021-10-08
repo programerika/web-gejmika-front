@@ -4,7 +4,7 @@
 import allActions from "../redux/actions";
 import { WebGejmikaModel } from "../model/WebGejmikaModel";
 import { WebGejmikaService } from "../services/WebGejmikaService";
-import { LocalStorageService } from "../services/LocalStorageService";
+import { StorageService } from "../services/StorageService";
 
 export class WebGejmikaViewModel {
   constructor(modelState, viewState, dispatcher) {
@@ -13,7 +13,7 @@ export class WebGejmikaViewModel {
     this.dispatcher = dispatcher;
     this.webGejmikaModel = new WebGejmikaModel(modelState);
     this.WebGejmikaService = new WebGejmikaService();
-    this.storage = new LocalStorageService();
+    this.storage = new StorageService();
   }
 
   /**
@@ -301,55 +301,6 @@ export class WebGejmikaViewModel {
     return colors;
   };
 
-  /**
-   *
-   * @param {String} input - text from input field (username)
-   * @returns {Object} - customized object for styling validation
-   */
-
-  testInput = async (input) => {
-    if (input.length === 0) {
-      return {
-        message: "Please enter an username",
-        isSaveButtonDisabled: true,
-        isValid: "",
-        toolTipStatus: "toolTipVisible",
-        messageStatus: "visible",
-        messageColor: "messageWhite",
-      };
-    }
-
-    let regex = new RegExp("[a-zA-Z]{4,6}[0-9]{2}$");
-    if (
-      regex.test(input) &&
-      this.storage.getItemFromLocalStorage("username") === null
-    ) {
-      if (
-        (await this.WebGejmikaService.checkIfUsernameExists(input)) === true
-      ) {
-        return {
-          message: "*Username already exists",
-          isSaveButtonDisabled: true,
-          isValid: "isNotValidInput",
-          messageColor: "messageRed",
-        };
-      } else {
-        return {
-          message: "*Username is correct",
-          isSaveButtonDisabled: false,
-          isValid: "isValidInput",
-          messageColor: "messageGreen",
-        };
-      }
-    } else {
-      return {
-        message: "*Your username is not in valid format",
-        isSaveButtonDisabled: true,
-        isValid: "isNotValidInput",
-        messageColor: "messageRed",
-      };
-    }
-  };
 
   /**
    * @returns {Array} - array of top players

@@ -7,6 +7,7 @@ import ShowScore from "./lib/components/ShowScore";
 import ScoreBoard from "./lib/components/ScoreBoard";
 import { WebGejmikaViewModel } from "./viewModel/WebGejmikaViewModel";
 import Header from "./lib/components/Header";
+import { ScoreViewModel } from "./viewModel/ScoreViewModel";
 
 function App() {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ function App() {
     viewState;
 
   const viewModel = new WebGejmikaViewModel(modelState, viewState, dispatch);
+  const scoreViewModel = new ScoreViewModel()
 
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -62,6 +64,7 @@ function App() {
               score={score}
               viewModel={viewModel}
               correctView={correctView}
+              scoreViewModel={scoreViewModel}
             ></ShowScore>
           </div>
           <ScoreBoard people={topPlayers}></ScoreBoard>
