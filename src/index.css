@@ -165,12 +165,9 @@ code {
   position: absolute;
   display: inline-block;
   width: 100vw;
-<<<<<<< HEAD
   min-height: fit-content;
   top: 30%;
-=======
   bottom: 0px;
->>>>>>> feature/pws-103
   z-index: 2;
   overflow: hidden;
 }*/
@@ -328,13 +325,13 @@ path {
   margin: 0px auto 0px auto;
 }
 
-/* .isValidInput{
-  background-color: white;
+.isValidInput{
+  background-color: greenyellow;
 }
 
 .isNotValidInput{
   background-color: rgb(247, 57, 57);
-} */
+} 
 
 .toolTipVisible {
   visibility: visible;
@@ -371,7 +368,7 @@ path {
   position: relative;
   display: flex;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .tooltip .tooltiptext {

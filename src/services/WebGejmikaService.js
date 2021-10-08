@@ -1,5 +1,18 @@
+/**
+ *  @author Programerika
+ */
+
+import { LocalStorageService } from "./LocalStorageService";
+
 export class WebGejmikaService {
-  constructor() {}
+  constructor() {
+    this.storage = new LocalStorageService();
+  }
+
+  /**
+   *  @param {String} username - passing username we want to check
+   *  @returns {Boolean} true if username already exists
+   */
 
   checkIfUsernameExists = async (username) => {
     const response = await fetch(
@@ -12,16 +25,27 @@ export class WebGejmikaService {
     const status = await response.status;
 
     if (status === 200) {
-      return 200;
+      return true;
     } else {
-      return 404;
+      return false;
     }
   };
 
+  /**
+   *  @param {String} username - passing username we want to save
+   *  @param {Number} score - passing score of current player
+   *  @returns {String} status message
+   *
+   *  This method sends post request for saving score if username doesnt't exist
+   *  in localstorage. If username already exists in localstorage, then
+   *  function will make a post request to add-score, and current player score will be
+   *  added to total score of player.
+   *
+   */
+
   saveScore = async (username, score) => {
-    if (localStorage.getItem("username") == null) {
-      localStorage.setItem("username", username);
-      console.log("save called");
+    if (this.storage.getItemFromLocalStorage("username") == null) {
+      this.storage.setItemToLocalStorage("username", username);
       const response = await fetch(
         "http://localhost:8080/api/v1/player-scores",
         {
@@ -30,14 +54,16 @@ export class WebGejmikaService {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            username: localStorage.getItem("username"),
+            username: this.storage.getItemFromLocalStorage("username"),
             score: score,
           }),
         }
       );
 
       const resp = await response;
-      resp.json().then((uid) => localStorage.setItem("uid", uid.id));
+      resp
+        .json()
+        .then((uid) => this.storage.setItemToLocalStorage("uid", uid.id));
       if (resp.status === 201) {
         return "Score has been successfully saved";
       } else {
@@ -46,7 +72,7 @@ export class WebGejmikaService {
     } else {
       const response = await fetch(
         "http://localhost:8080/api/v1/player-scores/" +
-          localStorage.getItem("username") +
+          this.storage.getItemFromLocalStorage("username") +
           "/add-score",
         {
           method: "POST",
@@ -66,6 +92,10 @@ export class WebGejmikaService {
     }
   };
 
+  /**
+   *  @returns {Array} - array of top players
+   */
+
   getTopPlayers = async () => {
     const response = await fetch("http://localhost:8080/api/v1/top-score");
     const resp = await response.json();
@@ -76,10 +106,32 @@ export class WebGejmikaService {
     } else {
       return [];
     }
+  };
 
-    // const data = await response.json();
-    // setPeople(data);
-    // console.log(JSON.stringify(data));
+  /**
+   *  @returns {String} - message if current player deleted his score
+   */
+
+  deleteScore = async () => {
+    if (this.storage.getItemFromLocalStorage("uid") != null) {
+      const response = await fetch(
+        "http://localhost:8080/api/v1/player-scores/" +
+          this.storage.getItemFromLocalStorage("uid"),
+        {
+          method: "DELETE",
+        }
+      );
+
+      const status = await response.status;
+
+      if (status === 204) {
+        this.storage.removeFromLocalStorage("username");
+        this.storage.removeFromLocalStorage("uid");
+        return "User has been successfully deleted";
+      } else {
+        return "Something went wrong";
+      }
+    }
   };
 
   getCurrentPlayer = async (username) => {

@@ -7,6 +7,7 @@ import { WebGejmikaViewModel } from "../../viewModel/WebGejmikaViewModel";
 const ShowScore = ({ score, correctView, viewModel }) => {
   const [state, setState] = useState({
     toolTipStatus: "toolTipHidden",
+    isValid: "",
     isSaveButtonDisabled: false,
     message: "Please enter an username",
     messageStatus: "visible",
@@ -14,7 +15,7 @@ const ShowScore = ({ score, correctView, viewModel }) => {
   });
 
   useEffect(() => {
-    if (localStorage.getItem("username") === null) {
+    if (viewModel.storage.getItemFromLocalStorage("username") === null) {
       setState({ ...state, isSaveButtonDisabled: true });
     }
   }, []);
@@ -90,12 +91,13 @@ const ShowScore = ({ score, correctView, viewModel }) => {
           <AttemptPanel comb={correctView}></AttemptPanel>
         </div>
         <div className="saveScore">
-          {localStorage.getItem("username") == null && score > 0 ? (
+          {viewModel.storage.getItemFromLocalStorage("username") == null &&
+          score > 0 ? (
             <>
               <div className="tooltip">
                 <input
                   type="text"
-                  //className={state.isValid}
+                  className={state.isValid}
                   maxLength="8"
                   placeholder="Username - eg. MyName12"
                   onMouseLeave={() => {
@@ -104,16 +106,19 @@ const ShowScore = ({ score, correctView, viewModel }) => {
                   onMouseEnter={() =>
                     setState({ ...state, toolTipStatus: "toolTipVisible" })
                   }
-                  //onChange={async (e) => {setState(await viewModel.testInput(e.target.value));setUsername(e.target.value)}}
+                  onChange={async (e) => {
+                    setState(await viewModel.testInput(e.target.value));
+                    setUsername(e.target.value);
+                  }}
 
-                  onChange={async (e) =>
-                    await new Promise(() =>
-                      setTimeout(async () => {
-                        setState(await viewModel.testInput(e.target.value));
-                        setUsername(e.target.value);
-                      }, 100)
-                    )
-                  }
+                  // onChange={async (e) =>
+                  //   await new Promise(() =>
+                  //     setTimeout(async () => {
+                  //       setState(await viewModel.testInput(e.target.value));
+                  //       setUsername(e.target.value);
+                  //     }, 100)
+                  //   )
+                  // }
                 />
 
                 <div className={"tooltiptext " + state.toolTipStatus}>

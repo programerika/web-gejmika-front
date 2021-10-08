@@ -427,6 +427,15 @@ test("testing score() - 0 points 5 attempt", () => {
 
 // END of testing score() function
 
+// BEGIN of testing secretCode()
+
+/**
+ * @returns {number} - length of an array
+ * Testing if function secretCode returns secret combination array with length 4
+ */
+
 test("testing secretCode() ", () => {
   expect(wgmt.secretCode().secretComb.length).toBe(4);
 });
+
+// END of testing secretCode()

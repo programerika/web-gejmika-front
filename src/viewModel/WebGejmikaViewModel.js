@@ -4,6 +4,7 @@
 import allActions from "../redux/actions";
 import { WebGejmikaModel } from "../model/WebGejmikaModel";
 import { WebGejmikaService } from "../services/WebGejmikaService";
+import { LocalStorageService } from "../services/LocalStorageService";
 
 export class WebGejmikaViewModel {
   constructor(modelState, viewState, dispatcher) {
@@ -12,6 +13,7 @@ export class WebGejmikaViewModel {
     this.dispatcher = dispatcher;
     this.webGejmikaModel = new WebGejmikaModel(modelState);
     this.WebGejmikaService = new WebGejmikaService();
+    this.storage = new LocalStorageService();
   }
 
   /**
@@ -299,36 +301,43 @@ export class WebGejmikaViewModel {
     return colors;
   };
 
+  /**
+   *
+   * @param {String} input - text from input field (username)
+   * @returns {Object} - customized object for styling validation
+   */
+
   testInput = async (input) => {
     if (input.length === 0) {
       return {
         message: "Please enter an username",
         isSaveButtonDisabled: true,
-        isValid: "isNotValidInput",
+        isValid: "",
         toolTipStatus: "toolTipVisible",
         messageStatus: "visible",
         messageColor: "messageWhite",
       };
     }
 
-    let regex = new RegExp("[a-zA-Z0-9]{4,6}[0-9]{2}$");
-    if (regex.test(input) && localStorage.getItem("username") === null) {
-      if ((await this.WebGejmikaService.checkIfUsernameExists(input)) === 200) {
+    let regex = new RegExp("[a-zA-Z]{4,6}[0-9]{2}$");
+    if (
+      regex.test(input) &&
+      this.storage.getItemFromLocalStorage("username") === null
+    ) {
+      if (
+        (await this.WebGejmikaService.checkIfUsernameExists(input)) === true
+      ) {
         return {
           message: "*Username already exists",
           isSaveButtonDisabled: true,
-          //isValid: "isNotValidInput",
-          //toolTipStatus: "visible",
-          //messageStatus: "visible",
+          isValid: "isNotValidInput",
           messageColor: "messageRed",
         };
       } else {
         return {
           message: "*Username is correct",
           isSaveButtonDisabled: false,
-          //isValid: "isValidInput",
-          //toolTipStatus: "hiddfden",
-          //messageStatus: "hidfdfden",
+          isValid: "isValidInput",
           messageColor: "messageGreen",
         };
       }
@@ -336,9 +345,7 @@ export class WebGejmikaViewModel {
       return {
         message: "*Your username is not in valid format",
         isSaveButtonDisabled: true,
-        //isValid: "isNotValidInput",
-        //toolTipStatus: "visible",
-        //messageStatus: "visible",
+        isValid: "isNotValidInput",
         messageColor: "messageRed",
       };
     }
@@ -356,6 +363,9 @@ export class WebGejmikaViewModel {
       );
     });
   };
+  /**
+   * @returns {Array} - array of top players
+   */
 
   getTopPlayers = async () => {
     const topPlayers = await this.WebGejmikaService.getTopPlayers();
