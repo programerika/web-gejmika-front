@@ -405,4 +405,11 @@ export class WebGejmikaViewModel {
     //  !userInTopTen && !viewModel.isLocalStorageEmpty();
     return !this.isUserInTopTen() && !this.isLocalStorageEmpty();
   };
+
+  deleteUsername = async () => {
+    const message = await this.WebGejmikaService.deleteScore();
+    return {
+      message: message,
+    };
+  };
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 
 const ScoreBoard = ({ people, currentPlayer, viewModel }) => {
+  const [msg, setMsg] = useState("");
   // console.log("FROM SCORE BOARD: " + JSON.stringify(currentPlayer));
   // console.log("ISUSER: " + userInTopTen);
   //  const userInTopTen = viewModel.isUserInTopTen();
@@ -59,7 +60,16 @@ const ScoreBoard = ({ people, currentPlayer, viewModel }) => {
           </tr>
         </>
       )}
-      <button className="delete-score-btn">Delete</button>
+      <button
+        className="delete-score-btn"
+        onClick={async () => {
+          setMsg(
+            viewModel.deleteUsername().then(viewModel.refreshScoreBoard())
+          );
+        }}
+      >
+        Delete
+      </button>
     </table>
   );
 };
