@@ -2,18 +2,18 @@
  * @author Programerika
  */
 
-export class LocalStorageService {
+export class StorageService {
   constructor() {}
 
-  setItemToLocalStorage = (key, value) => {
+  setItem = (key, value) => {
     localStorage.setItem(key, value);
   };
 
-  getItemFromLocalStorage = (key) => {
+  getItem = (key) => {
     return localStorage.getItem(key);
   };
 
-  removeFromLocalStorage = (key) => {
+  removeItem = (key) => {
     localStorage.removeItem(key);
   };
 }

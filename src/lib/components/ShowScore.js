@@ -4,28 +4,29 @@ import AttemptPanel from "./AttemptPanel";
 import { WebGejmikaService } from "../../services/WebGejmikaService";
 import { WebGejmikaViewModel } from "../../viewModel/WebGejmikaViewModel";
 
-const ShowScore = ({ score, correctView, viewModel }) => {
+const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
   const [state, setState] = useState({
     toolTipStatus: "toolTipHidden",
-    isValid: "",
+    isUsernameValid: "",
     isSaveButtonDisabled: false,
     message: "Please enter an username",
     messageStatus: "visible",
     messageColor: "messageWhite",
+    hideSaveButton: "showSaveButton"
   });
 
   useEffect(() => {
-    if (viewModel.storage.getItemFromLocalStorage("username") === null) {
-      setState({ ...state, isSaveButtonDisabled: true });
-    }
+    setState({
+      ...state,
+      isSaveButtonDisabled: scoreViewModel.disableSaveScoreIfUsernameExists(),
+    });
   }, []);
 
   const [saveStatus, setSaveStatus] = useState();
   const [username, setUsername] = useState("");
-  let webgejmikaservice = new WebGejmikaService();
 
   return (
-    <div>
+    
       <div className="score">
         {score == 0 ? (
           <h1>Sorry, better luck next time! :(</h1>
@@ -91,13 +92,12 @@ const ShowScore = ({ score, correctView, viewModel }) => {
           <AttemptPanel comb={correctView}></AttemptPanel>
         </div>
         <div className="saveScore">
-          {viewModel.storage.getItemFromLocalStorage("username") == null &&
-          score > 0 ? (
+          {scoreViewModel.checkStorageAndScore(score) ? (
             <>
               <div className="tooltip">
                 <input
                   type="text"
-                  className={state.isValid}
+                  className={state.isUsernameValid}
                   maxLength="8"
                   placeholder="Username - eg. MyName12"
                   onMouseLeave={() => {
@@ -107,14 +107,16 @@ const ShowScore = ({ score, correctView, viewModel }) => {
                     setState({ ...state, toolTipStatus: "toolTipVisible" })
                   }
                   onChange={async (e) => {
-                    setState(await viewModel.testInput(e.target.value));
+                    setState(
+                      await scoreViewModel.usernameValidation(e.target.value)
+                    );
                     setUsername(e.target.value);
                   }}
 
                   // onChange={async (e) =>
                   //   await new Promise(() =>
                   //     setTimeout(async () => {
-                  //       setState(await viewModel.testInput(e.target.value));
+                  //       setState(await viewModel.usernameValidation(e.target.value));
                   //       setUsername(e.target.value);
                   //     }, 100)
                   //   )
@@ -146,17 +148,18 @@ const ShowScore = ({ score, correctView, viewModel }) => {
             </button>
 
             <button
-              className="saveScoreBtn"
+              className={"saveScoreBtn " + state.hideSaveButton} 
               disabled={state.isSaveButtonDisabled || score == 0}
               onClick={async () => {
                 // viewModel.saveUsername(username);
                 setSaveStatus(
-                  await webgejmikaservice.saveScore(username, score)
+                  await scoreViewModel.saveUserScore(username, score)
                 );
                 setState({
                   ...state,
                   isSaveButtonDisabled: true,
                   messageColor: "messageGreen",
+                  hideSaveButton: "hideSaveButton"
                 });
                 viewModel.refreshScoreBoard();
               }}
@@ -166,7 +169,7 @@ const ShowScore = ({ score, correctView, viewModel }) => {
           </div>
         </div>
       </div>
-    </div>
+    
   );
 };
 
