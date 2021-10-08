@@ -206,11 +206,11 @@ td {
 
 .score-board {
   border-collapse: collapse;
-  background-color: lightgreen;
+  background-color: rgb(100, 180, 171);
   width: 30%;
   height: auto;
   text-align: center;
-  border-radius: 5%;
+  border-radius: 7%;
   margin: auto;
   font-weight: 500;
 }
@@ -218,7 +218,9 @@ td {
 .score-board-header th {
   padding: 15px 5px;
   font-size: 1.1rem;
-  background-color: rgb(64, 105, 64);
+  background-color: rgb(47, 116, 95);
+  border-bottom: black 5px solid;
+  border-radius: 5%;
 }
 
 .person-score {
@@ -227,12 +229,38 @@ td {
   margin: 5px;
 }
 
+.current-player-separator {
+  background-color: rgb(100, 180, 171);
+  border-top: black 5px solid;
+  color: black;
+}
+
+.currentPlayer {
+  background-color: rgb(156, 111, 97);
+  border: rgb(0, 0, 0) 3px solid;
+}
+
+.delete-score-btn {
+  background-color: #b6b6b6;
+  border: none;
+  color: black;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin-top: 10px;
+  margin-bottom: 4px;
+  margin: 10px 3px 3px 4px;
+  cursor: pointer;
+}
+
 .gray {
   background-color: gray;
 }
 
 .red {
-  background-color: red;
+  background-color: rgb(184, 30, 89);
 }
 
 .green {
@@ -295,7 +323,7 @@ path {
   flex-direction: column;
 }
 
-.saveScore>p{
+.saveScore > p {
   font-size: 13px;
   margin: 0px auto 0px auto;
 }
@@ -308,19 +336,19 @@ path {
   background-color: rgb(247, 57, 57);
 } */
 
-.toolTipVisible{
+.toolTipVisible {
   visibility: visible;
   opacity: 1;
   transition-duration: 0.5s;
 }
 
-.toolTipHidden{
+.toolTipHidden {
   visibility: hidden;
   transition-duration: 0.5s;
   opacity: 0;
 }
 
-.tooltip>input{
+.tooltip > input {
   padding: 5px 28px;
   font: 0.4em sans-serif;
   border-radius: 10px;
@@ -332,13 +360,12 @@ path {
   width: 76%;
   margin: 0px auto;
 }
-.buttons{
+.buttons {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   margin-top: 10px;
 }
-
 
 .tooltip {
   position: relative;
@@ -346,7 +373,6 @@ path {
   justify-content: center;
   margin-top: 30px;
 }
-
 
 .tooltip .tooltiptext {
   width: 93%;
@@ -371,25 +397,36 @@ path {
   border-color: white transparent transparent transparent;
 }
 
-
-.hidden{
+.hidden {
   visibility: hidden;
 }
 
-.visible{
+.visible {
   visibility: visible;
 }
 
-.messageGreen{
+.messageGreen {
   color: green;
 }
 
-.messageRed{
+.messageRed {
   color: red;
 }
 
-.messageWhite{
+.messageWhite {
   color: white;
+}
+
+@media screen and (max-width: 800px) {
+  .wrapper {
+    margin-top: 0px;
+    flex-direction: column;
+  }
+
+  .score-board {
+    margin-top: 30px;
+    width: 50%;
+  }
 }
 
 @media screen and (max-width: 600px) {
@@ -399,6 +436,11 @@ path {
 
   .wrapper {
     margin-top: 0px;
+    flex-direction: column;
+  }
+
+  .score-board {
+    width: 50%;
   }
 }
 

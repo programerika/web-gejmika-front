@@ -81,4 +81,21 @@ export class WebGejmikaService {
     // setPeople(data);
     // console.log(JSON.stringify(data));
   };
+
+  getCurrentPlayer = async (username) => {
+    const response = await fetch(
+      "http://localhost:8080/api/v1/player-scores/" + username,
+      {
+        method: "GET",
+      }
+    );
+
+    const res = await response.json();
+    console.log("LOG RES: " + JSON.stringify(res));
+    if (response.status == 200) {
+      return res;
+    } else {
+      return {};
+    }
+  };
 }

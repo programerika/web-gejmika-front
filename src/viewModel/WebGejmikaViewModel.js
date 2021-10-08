@@ -22,6 +22,7 @@ export class WebGejmikaViewModel {
    */
 
   dispatchUpdate(newStateModel, newStateView) {
+    console.log("FROM DISPATCH: " + JSON.stringify(newStateView));
     this.dispatcher(
       allActions.inputActions.update(newStateModel, newStateView)
     );
@@ -149,6 +150,8 @@ export class WebGejmikaViewModel {
         id: this.viewState.id + 1,
       };
 
+      console.log("OVO GLEDAJ: " + JSON.stringify(newStateView));
+
       this.dispatchUpdate(newStateModel, newStateView);
     }
   }
@@ -180,16 +183,6 @@ export class WebGejmikaViewModel {
 
   async startGame() {
     const newStateModel = this.webGejmikaModel.secretCode();
-    console.log(newStateModel.secretComb);
-    // const newViewModel = this.getTopPlayers();
-    // console.log("START: " + newViewModel);
-    // const newStateView = {
-    //   combInProgress: [],
-    //   attemptsView: [],
-    //   correctView: this.combToIcon(newStateModel.secretComb),
-    //   id: -1,
-    //   topPlayers: [],
-    // };
     this.dispatchUpdate(newStateModel, {
       combInProgress: [],
       attemptsView: [],
@@ -352,23 +345,54 @@ export class WebGejmikaViewModel {
   };
 
   refreshScoreBoard = async () => {
-    this.dispatchUpdate(
-      { ...this.modelState },
-      {
-        ...this.viewState,
-        topPlayers: await this.getTopPlayers(),
-      }
-    );
+    console.log("REFRESHUJEM SCOREBOARD: ");
+    this.getTopPlayers().then((players) => {
+      this.dispatchUpdate(
+        { ...this.modelState },
+        {
+          ...this.viewState,
+          topPlayers: { ...players },
+        }
+      );
+    });
   };
 
   getTopPlayers = async () => {
     const topPlayers = await this.WebGejmikaService.getTopPlayers();
-    console.log("GET TOP: " + JSON.stringify(topPlayers));
-    // const newViewState = {
-    //   ...this.viewState,
-    //   topPlayers: [...topPlayers],
-    // };
-    return [...topPlayers];
-    //   return newViewState;
+    const currentPlayer = await this.WebGejmikaService.getCurrentPlayer(
+      localStorage.getItem("username")
+    );
+
+    const scoreBoard = {
+      topPlayers: [...topPlayers],
+      currentPlayer: { ...currentPlayer },
+    };
+    return scoreBoard;
+  };
+
+  isUserInTopTen = () => {
+    let isUsernameInTopTen = false;
+    this.viewState.topPlayers.topPlayers.map((person, i) => {
+      if (person.username == localStorage.getItem("username")) {
+        isUsernameInTopTen = true;
+      }
+    });
+    return isUsernameInTopTen;
+  };
+
+  highlightCurrentUser = (username) => {
+    const isEqual = username == localStorage.getItem("username");
+    return {
+      rowColor: isEqual ? "currentPlayer" : "",
+    };
+  };
+
+  isLocalStorageEmpty = () => {
+    return localStorage.getItem("username") == null;
+  };
+
+  is11PlayerOnTheBoard = () => {
+    //  !userInTopTen && !viewModel.isLocalStorageEmpty();
+    return !this.isUserInTopTen() && !this.isLocalStorageEmpty();
   };
 }

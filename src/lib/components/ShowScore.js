@@ -22,7 +22,6 @@ const ShowScore = ({ score, correctView, viewModel }) => {
   const [saveStatus, setSaveStatus] = useState();
   const [username, setUsername] = useState("");
   let webgejmikaservice = new WebGejmikaService();
-  const webGejmikaVM = new WebGejmikaViewModel();
 
   return (
     <div>
@@ -145,6 +144,7 @@ const ShowScore = ({ score, correctView, viewModel }) => {
               className="saveScoreBtn"
               disabled={state.isSaveButtonDisabled || score == 0}
               onClick={async () => {
+                // viewModel.saveUsername(username);
                 setSaveStatus(
                   await webgejmikaservice.saveScore(username, score)
                 );
@@ -153,6 +153,7 @@ const ShowScore = ({ score, correctView, viewModel }) => {
                   isSaveButtonDisabled: true,
                   messageColor: "messageGreen",
                 });
+                viewModel.refreshScoreBoard();
               }}
             >
               Save score!

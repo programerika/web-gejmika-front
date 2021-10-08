@@ -18,7 +18,6 @@ export class WebGejmikaModel {
    */
 
   compareCode = (attpInProgress) => {
-    console.log("MODEL: " + JSON.stringify(this.modelState));
     var combination = [...this.modelState.secretComb];
     var attempt = [...attpInProgress];
     let outcome = [];
@@ -30,10 +29,6 @@ export class WebGejmikaModel {
         outcome[index] = -1;
       }
     }
-
-    console.log("Attempt: " + attempt);
-    console.log("Combination: " + combination);
-    console.log("Outcome:" + outcome);
 
     for (let index = 0; index < attempt.length; index++) {
       if (outcome[index] !== -1) continue;
@@ -59,8 +54,6 @@ export class WebGejmikaModel {
     if (this.isTargetReached(newState.attempts)) {
       newState.score = this.score(newState.attempts);
     }
-
-    console.log("New state " + JSON.stringify(newState));
 
     return newState;
   };

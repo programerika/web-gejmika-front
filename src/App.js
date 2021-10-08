@@ -15,18 +15,19 @@ function App() {
 
   const { score } = modelState;
 
-  const { combInProgress, attemptsView, correctView, id, topPlayers } =
-    viewState;
+  const {
+    combInProgress,
+    attemptsView,
+    correctView,
+    id,
+    topPlayers: { topPlayers, currentPlayer },
+  } = viewState;
 
   const viewModel = new WebGejmikaViewModel(modelState, viewState, dispatch);
-
-  const [people, setPeople] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // viewModel.getTopPlayers();
     viewModel.startGame();
-    console.log(JSON.stringify(viewState));
 
     // const response = await fetch("http://localhost:8080/api/v1/top-score");
     // console.log(response.body);
@@ -40,11 +41,12 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log(JSON.stringify(viewState));
+    console.log(JSON.stringify(topPlayers));
+    console.log(JSON.stringify(currentPlayer));
   }, [viewState]);
 
   useEffect(() => {
-    console.log(JSON.stringify(modelState));
+    console.log("SECRET: " + JSON.stringify(modelState));
   }, [modelState]);
 
   return (
@@ -64,7 +66,11 @@ function App() {
               correctView={correctView}
             ></ShowScore>
           </div>
-          <ScoreBoard people={topPlayers}></ScoreBoard>
+          <ScoreBoard
+            people={topPlayers}
+            currentPlayer={currentPlayer}
+            viewModel={viewModel}
+          ></ScoreBoard>
         </div>
       ) : (
         <div className="wrapper">
@@ -77,7 +83,11 @@ function App() {
             ></GamePanel>
             <InputPanel viewModel={viewModel}></InputPanel>
           </div>
-          <ScoreBoard people={topPlayers}></ScoreBoard>
+          <ScoreBoard
+            people={topPlayers}
+            currentPlayer={currentPlayer}
+            viewModel={viewModel}
+          ></ScoreBoard>
         </div>
       )}
     </>
