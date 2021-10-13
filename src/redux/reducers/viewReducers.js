@@ -10,6 +10,7 @@ const viewReducers = (
       topPlayers: [],
       currentPlayer: {},
     },
+    gameOver: false,
   },
   action
 ) => {

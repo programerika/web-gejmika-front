@@ -22,30 +22,20 @@ function App() {
     correctView,
     id,
     topPlayers: { topPlayers, currentPlayer },
+    gameOver,
   } = viewState;
 
   const viewModel = new WebGejmikaViewModel(modelState, viewState, dispatch);
-  const scoreViewModel = new ScoreViewModel()
+  const scoreViewModel = new ScoreViewModel();
 
   useEffect(() => {
-    // viewModel.getTopPlayers();
     viewModel.startGame();
-
-    // const response = await fetch("http://localhost:8080/api/v1/top-score");
-    // console.log(response.body);
-    // console.log(response.status);
-
-    // const data = await response.json();
-    // setPeople(data);
-    // console.log(JSON.stringify(data));
-
-    // setLoading(false);
   }, []);
 
-  useEffect(() => {
-    console.log(JSON.stringify(topPlayers));
-    console.log(JSON.stringify(currentPlayer));
-  }, [viewState]);
+  // useEffect(() => {
+  //   console.log(JSON.stringify(topPlayers));
+  //   console.log(JSON.stringify(currentPlayer));
+  // }, [viewState]);
 
   useEffect(() => {
     console.log("SECRET: " + JSON.stringify(modelState));
@@ -53,7 +43,7 @@ function App() {
 
   return (
     <>
-      {score != -1 ? (
+      {gameOver ? (
         <div className="wrapper">
           <div className="container">
             <Header></Header>

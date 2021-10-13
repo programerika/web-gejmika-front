@@ -132,6 +132,9 @@ export class WebGejmikaViewModel {
         this.iconToComb(this.viewState.combInProgress)
       );
 
+      const gameOver = newStateModel.score != -1;
+      console.log("IS game over? " + gameOver);
+
       console.log("Input confirm: " + JSON.stringify(newStateModel));
 
       const newStateView = {
@@ -150,9 +153,8 @@ export class WebGejmikaViewModel {
         ],
         combInProgress: [],
         id: this.viewState.id + 1,
+        gameOver: gameOver,
       };
-
-      console.log("OVO GLEDAJ: " + JSON.stringify(newStateView));
 
       this.dispatchUpdate(newStateModel, newStateView);
     }
@@ -191,6 +193,7 @@ export class WebGejmikaViewModel {
       correctView: this.combToIcon(newStateModel.secretComb),
       id: -1,
       topPlayers: await this.getTopPlayers(),
+      gameOver: false,
     });
   }
 
@@ -301,9 +304,7 @@ export class WebGejmikaViewModel {
     return colors;
   };
 
-
   refreshScoreBoard = async () => {
-    console.log("REFRESHUJEM SCOREBOARD: ");
     this.getTopPlayers().then((players) => {
       this.dispatchUpdate(
         { ...this.modelState },
@@ -324,17 +325,16 @@ export class WebGejmikaViewModel {
       localStorage.getItem("username")
     );
 
-    const scoreBoard = {
+    return {
       topPlayers: [...topPlayers],
       currentPlayer: { ...currentPlayer },
     };
-    return scoreBoard;
   };
 
   isUserInTopTen = () => {
     let isUsernameInTopTen = false;
     this.viewState.topPlayers.topPlayers.map((person, i) => {
-      if (person.username == localStorage.getItem("username")) {
+      if (person.username == this.storage.getItem("username")) {
         isUsernameInTopTen = true;
       }
     });
@@ -342,18 +342,17 @@ export class WebGejmikaViewModel {
   };
 
   highlightCurrentUser = (username) => {
-    const isEqual = username == localStorage.getItem("username");
+    const isEqual = username == this.storage.getItem("username");
     return {
       rowColor: isEqual ? "currentPlayer" : "",
     };
   };
 
   isLocalStorageEmpty = () => {
-    return localStorage.getItem("username") == null;
+    return this.storage.getItem("username") == null;
   };
 
   is11PlayerOnTheBoard = () => {
-    //  !userInTopTen && !viewModel.isLocalStorageEmpty();
     return !this.isUserInTopTen() && !this.isLocalStorageEmpty();
   };
 

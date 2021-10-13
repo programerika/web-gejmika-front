@@ -207,9 +207,14 @@ td {
   width: 30%;
   height: auto;
   text-align: center;
-  border-radius: 7%;
+  border-radius: 5%;
   margin: auto;
   font-weight: 500;
+}
+
+.score-board-header {
+  border-radius: 5%;
+  border: 5px solid rgb(11, 153, 82);
 }
 
 .score-board-header th {
@@ -217,13 +222,13 @@ td {
   font-size: 1.1rem;
   background-color: rgb(47, 116, 95);
   border-bottom: black 5px solid;
-  border-radius: 5%;
 }
 
 .person-score {
   color: black;
   padding: 5px;
   margin: 5px;
+  border: 2px solid rgb(11, 153, 82);
 }
 
 .current-player-separator {
@@ -233,23 +238,27 @@ td {
 }
 
 .currentPlayer {
-  background-color: rgb(156, 111, 97);
+  background-color: rgb(47, 116, 95);
   border: rgb(0, 0, 0) 3px solid;
 }
 
 .delete-score-btn {
-  background-color: #b6b6b6;
+  background-color: #9eaaaa;
   border: none;
+  border-radius: 10%;
   color: black;
   padding: 5px 10px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 12px;
-  margin-top: 10px;
-  margin-bottom: 4px;
   margin: 10px 3px 3px 4px;
   cursor: pointer;
+}
+
+.delete-score-btn:hover {
+  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+    0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
 .gray {
@@ -325,13 +334,13 @@ path {
   margin: 0px auto 0px auto;
 }
 
-.isValidInput{
+.isValidInput {
   background-color: greenyellow;
 }
 
-.isNotValidInput{
+.isNotValidInput {
   background-color: rgb(247, 57, 57);
-} 
+}
 
 .toolTipVisible {
   visibility: visible;
@@ -371,11 +380,11 @@ path {
   margin-top: 20px;
 }
 
-.hideSaveButton{
+.hideSaveButton {
   display: none;
 }
 
-.showSaveButton{
+.showSaveButton {
   display: block;
 }
 

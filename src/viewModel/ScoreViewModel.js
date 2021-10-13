@@ -17,7 +17,6 @@ export class ScoreViewModel {
     }
   };
 
-
   saveUserScore = async (username, score) => {
     const message = await this.webGejmikaService.saveScore(username, score);
     return message;
@@ -56,7 +55,7 @@ export class ScoreViewModel {
           message: "*Username is correct",
           isSaveButtonDisabled: false,
           isUsernameValid: "isValidInput",
-          messageColor: "messageGreen"
+          messageColor: "messageGreen",
         };
       }
     } else {
@@ -78,11 +77,45 @@ export class ScoreViewModel {
   };
 
   hideSaveButton = (score) => {
-    if(this.storage.getItem("username") === null && score===0){
-        return "showSaveButton"
-    }else{
-        return "hideSaveButton"
+    if (this.storage.getItem("username") === null && score === 0) {
+      return "showSaveButton";
+    } else {
+      return "hideSaveButton";
     }
-  }
+  };
 
+  calculateConffetiProps = (score) => {
+    const conffetiProps = {
+      width: window.innerWidth + 50,
+      height: window.innerHeight,
+      tweenDuration: 3000,
+      recycle: false,
+      numberOfPieces: 600,
+      wind: 0.05,
+      gravity: 0.2,
+      confettiSource: {
+        x: 0,
+        y: 0,
+        w: window.innerWidth,
+        h: window.innerHeight,
+      },
+      initialVelocityX: 20,
+      initialVelocityY: 20,
+    };
+
+    if (score == 21) return conffetiProps;
+    else if (score == 13)
+      return {
+        ...conffetiProps,
+        width: window.innerWidth,
+        numberOfPieces: 200,
+        initialVelocityX: 0,
+        initialVelocityY: 0,
+      };
+    else
+      return {
+        ...conffetiProps,
+        numberOfPieces: 100,
+      };
+  };
 }
