@@ -92,18 +92,18 @@ export class ScoreViewModel {
       message: "Please enter an username",
       messageStatus: "visible",
       messageColor: "messageWhite",
-      hideSaveButton: "showSaveButton",
+      hide: "show",
       scoreMsg: this.calculateScoreMsg(score),
     };
   };
 
-  hideSaveButton = (score) => {
+  hide = (score) => {
     if (this.storage.getItem("username") !== null && score >= 0) {
       console.log("Hide Save Button");
-      return "hideSaveButton";
+      return "hide";
     } else {
       console.log("Show Save BUTTON");
-      return "showSaveButton";
+      return "show";
     }
   };
 
@@ -182,9 +182,9 @@ export class ScoreViewModel {
       };
     }
     if (this.storage.getItem("username") === null && score === 0) {
-      return "showSaveButton";
+      return "show";
     } else {
-      return "hideSaveButton";
+      return "hide";
     }
   };
 

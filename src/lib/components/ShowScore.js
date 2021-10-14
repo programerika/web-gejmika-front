@@ -21,7 +21,7 @@ const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
     //   message: "Please enter an username",
     //   messageStatus: "visible",
     //   messageColor: "messageWhite",
-    //   hideSaveButton: "showSaveButton",
+    //   hide: "show",
     //   scoreMsg: "",
     // });
   }, []);
@@ -100,7 +100,7 @@ const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
           </button>
 
           <button
-            className={"saveScoreBtn " + scoreViewModel.hideSaveButton(score)}
+            className={"saveScoreBtn " + scoreViewModel.hide(score)}
             disabled={scoreViewModel.disableSaveScoreButton(
               state.isSaveButtonDisabled,
               score
@@ -110,7 +110,7 @@ const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
                 ...state,
                 isSaveButtonDisabled: true,
                 messageColor: "messageGreen",
-                hideSaveButton: "hideSaveButton",
+                hide: "hide",
               });
               setSaveStatus(
                 await scoreViewModel.saveUserScore(username, score)

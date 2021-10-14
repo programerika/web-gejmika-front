@@ -5,6 +5,7 @@ import allActions from "../redux/actions";
 import { WebGejmikaModel } from "../model/WebGejmikaModel";
 import { WebGejmikaService } from "../services/WebGejmikaService";
 import { StorageService } from "../services/StorageService";
+import { tsMethodSignature } from "@babel/types";
 
 export class WebGejmikaViewModel {
   constructor(modelState, viewState, scoreState, dispatcher) {
@@ -212,6 +213,7 @@ export class WebGejmikaViewModel {
     });
     this.dispatchUpdateScoreBoard({
       topPlayers: await this.getTopPlayers(),
+      // boardView: this.setScoreView(),
     });
   }
 
@@ -340,6 +342,14 @@ export class WebGejmikaViewModel {
       localStorage.getItem("username")
     );
 
+    console.log(
+      "TOP PLAYERS: " +
+        JSON.stringify(topPlayers) +
+        " " +
+        " CuRRENT " +
+        JSON.stringify(currentPlayer)
+    );
+
     return {
       topPlayers: [...topPlayers],
       currentPlayer: { ...currentPlayer },
@@ -347,12 +357,14 @@ export class WebGejmikaViewModel {
   };
 
   isUserInTopTen = () => {
+    console.log("IS IN TOP TEN: " + JSON.stringify(this.scoreState.topPlayers));
     let isUsernameInTopTen = false;
     this.scoreState.topPlayers.topPlayers.map((person, i) => {
       if (person.username == this.storage.getItem("username")) {
         isUsernameInTopTen = true;
       }
     });
+    console.log("IS USERNAME IN TOP TEN: " + isUsernameInTopTen);
     return isUsernameInTopTen;
   };
 
@@ -401,5 +413,12 @@ export class WebGejmikaViewModel {
         return true;
       });
     } else return false;
+  };
+
+  setScoreView = () => {
+    return {
+      classPlayer11: this.is11PlayerOnTheBoard() ? "showTblRow" : "hide",
+      classDeleteBtn: !this.isLocalStorageEmpty() ? "show" : "hide",
+    };
   };
 }

@@ -6,6 +6,10 @@ const scoreBoardReducers = (
       topPlayers: [],
       currentPlayer: {},
     },
+    // boardView: {
+    //   classPlayer11: "",
+    //   classDeleteBtn: "",
+    // },
   },
   action
 ) => {

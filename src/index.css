@@ -380,12 +380,16 @@ path {
   margin-top: 20px;
 }
 
-.hideSaveButton {
+.hide {
   display: none;
 }
 
-.showSaveButton {
+.showBlock {
   display: block;
+}
+
+.showTblRow {
+  display: table-row;
 }
 
 .tooltip .tooltiptext {
