@@ -7,9 +7,10 @@ import { WebGejmikaService } from "../services/WebGejmikaService";
 import { StorageService } from "../services/StorageService";
 
 export class WebGejmikaViewModel {
-  constructor(modelState, viewState, dispatcher) {
+  constructor(modelState, viewState, scoreState, dispatcher) {
     this.modelState = modelState;
     this.viewState = viewState;
+    this.scoreState = scoreState;
     this.dispatcher = dispatcher;
     this.webGejmikaModel = new WebGejmikaModel(modelState);
     this.WebGejmikaService = new WebGejmikaService();
@@ -23,12 +24,16 @@ export class WebGejmikaViewModel {
    * This method dispatches model and view state updates to reducers
    */
 
-  dispatchUpdate(newStateModel, newStateView) {
+  dispatchUpdate = (newStateModel, newStateView) => {
     console.log("FROM DISPATCH: " + JSON.stringify(newStateView));
     this.dispatcher(
       allActions.inputActions.update(newStateModel, newStateView)
     );
-  }
+  };
+
+  dispatchUpdateScoreBoard = (newStateBoard) => {
+    this.dispatcher(allActions.inputActions.updateScoreBoard(newStateBoard));
+  };
 
   /**
    * Methods for each button icon clicked BEGIN
@@ -132,10 +137,11 @@ export class WebGejmikaViewModel {
         this.iconToComb(this.viewState.combInProgress)
       );
 
-      const gameOver = newStateModel.score != -1;
-      console.log("IS game over? " + gameOver);
-
       console.log("Input confirm: " + JSON.stringify(newStateModel));
+      let gameOver = false;
+      if (newStateModel.score != -1) {
+        gameOver = true;
+      }
 
       const newStateView = {
         ...this.viewState,
@@ -156,8 +162,17 @@ export class WebGejmikaViewModel {
         gameOver: gameOver,
       };
 
+      // console.log("PRE IF GAME OVER " + gameOver);
+
       this.dispatchUpdate(newStateModel, newStateView);
-      if (gameOver) this.saveScore();
+
+      if (gameOver) {
+        console.log("USAO U IF GAME OVER " + this.viewState.gameOver);
+        this.saveScore(newStateModel.score);
+      } else {
+        console.log("USAO U ELSE GAME OVER");
+        //  this.dispatchUpdate(newStateModel, newStateView);
+      }
     }
   }
 
@@ -193,8 +208,10 @@ export class WebGejmikaViewModel {
       attemptsView: [],
       correctView: this.combToIcon(newStateModel.secretComb),
       id: -1,
-      topPlayers: await this.getTopPlayers(),
       gameOver: false,
+    });
+    this.dispatchUpdateScoreBoard({
+      topPlayers: await this.getTopPlayers(),
     });
   }
 
@@ -307,13 +324,10 @@ export class WebGejmikaViewModel {
 
   refreshScoreBoard = async () => {
     this.getTopPlayers().then((players) => {
-      this.dispatchUpdate(
-        { ...this.modelState },
-        {
-          ...this.viewState,
-          topPlayers: { ...players },
-        }
-      );
+      this.dispatchUpdateScoreBoard({
+        ...this.scoreState,
+        topPlayers: { ...players },
+      });
     });
   };
   /**
@@ -334,7 +348,7 @@ export class WebGejmikaViewModel {
 
   isUserInTopTen = () => {
     let isUsernameInTopTen = false;
-    this.viewState.topPlayers.topPlayers.map((person, i) => {
+    this.scoreState.topPlayers.topPlayers.map((person, i) => {
       if (person.username == this.storage.getItem("username")) {
         isUsernameInTopTen = true;
       }
@@ -364,5 +378,28 @@ export class WebGejmikaViewModel {
     };
   };
 
-  saveScore = async () => {};
+  saveScore = async (score) => {
+    console.log("SAVE SCORE " + score + " " + this.viewState.gameOver);
+    if (score == 0) return;
+    else {
+      this.WebGejmikaService.saveScore(
+        this.storage.getItem("username"),
+        score
+      ).then((msg) => {
+        console.log("U THEN: " + msg + " " + this.viewState.gameOver);
+        this.refreshScoreBoard();
+      });
+    }
+  };
+
+  isGameOver = async (score) => {
+    console.log("IS GAME OVER " + score);
+    if (score != -1) {
+      console.log("USLA U IF SCORE != -1!!!!");
+      this.saveScore(score).then((msg) => {
+        console.log(msg);
+        return true;
+      });
+    } else return false;
+  };
 }

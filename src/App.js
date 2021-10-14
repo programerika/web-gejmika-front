@@ -13,24 +13,44 @@ function App() {
   const dispatch = useDispatch();
   const modelState = useSelector((state) => state.model);
   const viewState = useSelector((state) => state.view);
+  const scoreState = useSelector((state) => state.score);
 
   const { score } = modelState;
+
+  const {
+    topPlayers: { topPlayers, currentPlayer },
+  } = scoreState;
+
+  //const [gameOver, setGameOver] = useState(false);
 
   const {
     combInProgress,
     attemptsView,
     correctView,
     id,
-    topPlayers: { topPlayers, currentPlayer },
+    // topPlayers: { topPlayers, currentPlayer },
     gameOver,
   } = viewState;
 
-  const viewModel = new WebGejmikaViewModel(modelState, viewState, dispatch);
+  const viewModel = new WebGejmikaViewModel(
+    modelState,
+    viewState,
+    scoreState,
+    dispatch
+  );
   const scoreViewModel = new ScoreViewModel();
 
   useEffect(() => {
     viewModel.startGame();
   }, []);
+
+  // useEffect(() => {
+  //   console.log("PROMENIO SE SCORE! " + score);
+  //   if (score != -1) setGameOver(true);
+  //   else {
+  //     setGameOver(false);
+  //   }
+  // }, [score]);
 
   // useEffect(() => {
   //   console.log(JSON.stringify(topPlayers));
@@ -40,6 +60,10 @@ function App() {
   useEffect(() => {
     console.log("SECRET: " + JSON.stringify(modelState));
   }, [modelState]);
+
+  useEffect(() => {
+    console.log("GAME OVER PROMENA: " + gameOver);
+  }, [gameOver]);
 
   return (
     <>
