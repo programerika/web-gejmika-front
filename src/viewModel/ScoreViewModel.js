@@ -11,12 +11,19 @@ export class ScoreViewModel {
     this.storage = new StorageService();
   }
 
+  checkIfScoreIsZero = (score) => {
+    if (score === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   disableSaveScoreIfUsernameExists = () => {
     if (this.storage.getItem("username") === null) {
       return true;
     }
   };
-
 
   saveUserScore = async (username, score) => {
     const message = await this.webGejmikaService.saveScore(username, score);
@@ -56,7 +63,7 @@ export class ScoreViewModel {
           message: "*Username is correct",
           isSaveButtonDisabled: false,
           isUsernameValid: "isValidInput",
-          messageColor: "messageGreen"
+          messageColor: "messageGreen",
         };
       }
     } else {
@@ -77,12 +84,101 @@ export class ScoreViewModel {
     }
   };
 
-  hideSaveButton = (score) => {
-    if(this.storage.getItem("username") === null && score===0){
-        return "showSaveButton"
-    }else{
-        return "hideSaveButton"
-    }
-  }
+  initializeView = () => {
+    return {
+      toolTipStatus: "toolTipHidden",
+      isUsernameValid: "",
+      isSaveButtonDisabled: this.disableSaveScoreIfUsernameExists(),
+      message: "Please enter an username",
+      messageStatus: "visible",
+      messageColor: "messageWhite",
+      hideSaveButton: "showSaveButton",
+    };
+  };
 
+  hideSaveButton = (score) => {
+    if (this.storage.getItem("username") !== null && score >= 0) {
+      console.log("Hide Save Button");
+      return "hideSaveButton";
+    } else {
+      console.log("Show Save BUTTON");
+      return "showSaveButton";
+    }
+  };
+
+  disableSaveScoreButton = (isSaveButtonDisabled, score) => {
+    if (isSaveButtonDisabled || score == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  confettiPerScore = (score) => {
+    if (score === 21) {
+      return {
+        width: window.innerWidth + 50,
+        height: window.innerHeight,
+        tweenDuration: 3000,
+        recycle: false,
+        numberOfPieces: 600,
+        wind: 0.5,
+        gravity: 0.2,
+        x: 0,
+        y: 0,
+        w: window.innerWidth,
+        h: window.innerHeight,
+        initialVelocityX: 20,
+        initialVelocityY: 20,
+      };
+    } else if (score == 13) {
+      return {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        tweenDuration: 3000,
+        recycle: false,
+        numberOfPieces: 200,
+        wind: 0.05,
+        gravity: 0.2,
+        x: 0,
+        y: 0,
+        w: window.innerWidth,
+        h: window.innerHeight,
+        initialVelocityX: 10,
+        initialVelocityY: 10,
+      };
+    } else if (score == 8) {
+      return {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        tweenDuration: 3000,
+        recycle: false,
+        numberOfPieces: 100,
+        wind: 0.05,
+        gravity: 0.2,
+        x: 0,
+        y: 0,
+        w: window.innerWidth,
+        h: window.innerHeight,
+        initialVelocityX: 10,
+        initialVelocityY: 10,
+      };
+    } else if (score === 0) {
+      return {
+        width: 0,
+        height: 0,
+        tweenDuration: 0,
+        recycle: false,
+        numberOfPieces: 0,
+        wind: 0,
+        gravity: 0,
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 0,
+        initialVelocityX: 0,
+        initialVelocityY: 0,
+      };
+    }
+  };
 }
