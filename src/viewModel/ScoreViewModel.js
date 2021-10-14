@@ -11,14 +11,6 @@ export class ScoreViewModel {
     this.storage = new StorageService();
   }
 
-  checkIfScoreIsZero = (score) => {
-    if (score === 0) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   disableSaveScoreIfUsernameExists = () => {
     if (this.storage.getItem("username") === null) {
       return true;
@@ -26,8 +18,23 @@ export class ScoreViewModel {
   };
 
   saveUserScore = async (username, score) => {
-    const message = await this.webGejmikaService.saveScore(username, score);
-    return message;
+    if (this.storage.getItem("username") === null) {
+      this.storage.setItem("username", username);
+      const resp = await this.webGejmikaService.saveScore(
+        this.storage.getItem("username"),
+        score
+      );
+      
+      if (resp.status === 201) {
+        resp.json().then((uid) => this.storage.setItem("uid", uid.id));
+        return "Score has been successfully saved";
+      } else {
+        return "Something went wrong";
+      }
+    } else {
+      const resp = await this.webGejmikaService.addScore(this.storage.getItem("username"))
+      return resp
+    }
   };
 
   /**
