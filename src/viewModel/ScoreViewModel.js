@@ -84,7 +84,7 @@ export class ScoreViewModel {
     }
   };
 
-  initializeView = () => {
+  initializeView = (score) => {
     return {
       toolTipStatus: "toolTipHidden",
       isUsernameValid: "",
@@ -93,6 +93,7 @@ export class ScoreViewModel {
       messageStatus: "visible",
       messageColor: "messageWhite",
       hideSaveButton: "showSaveButton",
+      scoreMsg: this.calculateScoreMsg(score),
     };
   };
 
@@ -122,7 +123,7 @@ export class ScoreViewModel {
         tweenDuration: 3000,
         recycle: false,
         numberOfPieces: 600,
-        wind: 0.5,
+        wind: 0.05,
         gravity: 0.2,
         x: 0,
         y: 0,
@@ -180,5 +181,15 @@ export class ScoreViewModel {
         initialVelocityY: 0,
       };
     }
+    if (this.storage.getItem("username") === null && score === 0) {
+      return "showSaveButton";
+    } else {
+      return "hideSaveButton";
+    }
+  };
+
+  calculateScoreMsg = (score) => {
+    if (score == 0) return "Sorry, better luck next time! :(";
+    else return `You got ${score} points!!!`;
   };
 }

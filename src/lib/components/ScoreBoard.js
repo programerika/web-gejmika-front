@@ -1,33 +1,60 @@
 import React from "react";
+import { useState } from "react";
 
-const ScoreBoard = ({ people }) => {
-  console.log("From score board " + people);
-  console.log("csds");
+const ScoreBoard = ({ people, currentPlayer, viewModel }) => {
   return (
     <table className="score-board ">
       <tr className="score-board-header">
-        <th>Position</th>
-        <th>First name</th>
-        {/* <th>Last name</th> */}
+        <th>Rank</th>
+        <th>Username</th>
         <th>Points</th>
       </tr>
       {people.map((person, i) => {
+        let { rowColor } = viewModel.highlightCurrentUser(person.username);
         return (
-          <tr key={i} className="person-score">
+          <tr key={i} className={`person-score ` + rowColor}>
             <td>
-              <b>{i + 1}</b>
+              <b>{i + 1}.</b>
             </td>
-            {person.username == localStorage.getItem("username") ? (
-              <td style={{ color: "red" }}>{person.username}</td>
-            ) : (
-              <td>{person.username}</td>
-            )}
-            {/* <td>{person.username}</td> */}
-            {/* <td>{person.name.last}</td> */}
+            <td>{person.username}</td>
             <td>{person.score}</td>
           </tr>
         );
       })}
+      {viewModel.is11PlayerOnTheBoard() && (
+        <>
+          <tr className="current-player-separator">
+            <td></td>
+            <td>...</td>
+            <td></td>
+          </tr>
+          <tr className="person-score currentPlayer">
+            <td>11.</td>
+            <td>{currentPlayer.username}</td>
+            <td>{currentPlayer.score}</td>
+          </tr>
+        </>
+      )}
+      {!viewModel.isLocalStorageEmpty() && (
+        <button
+          className="delete-score-btn"
+          onClick={async () => {
+            if (
+              window.confirm("Are you sure you want to delete your username?")
+            ) {
+              viewModel.deleteUsername().then((msg) => {
+                console.log(msg.message);
+                viewModel.refreshScoreBoard();
+              });
+              console.log("Username deleted.");
+            } else {
+              console.log("Username not deleted.");
+            }
+          }}
+        >
+          Delete
+        </button>
+      )}
     </table>
   );
 };

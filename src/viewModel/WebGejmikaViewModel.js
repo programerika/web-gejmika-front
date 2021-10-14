@@ -24,6 +24,7 @@ export class WebGejmikaViewModel {
    */
 
   dispatchUpdate(newStateModel, newStateView) {
+    console.log("FROM DISPATCH: " + JSON.stringify(newStateView));
     this.dispatcher(
       allActions.inputActions.update(newStateModel, newStateView)
     );
@@ -123,13 +124,16 @@ export class WebGejmikaViewModel {
    * Gets new model state from webGejmikaModel and calls dispatchUpdate function
    */
 
-  inputConfirm() {
+  async inputConfirm() {
     if (this.viewState.combInProgress.length !== 4) {
       return;
     } else {
       const newStateModel = this.webGejmikaModel.compareCode(
         this.iconToComb(this.viewState.combInProgress)
       );
+
+      const gameOver = newStateModel.score != -1;
+      console.log("IS game over? " + gameOver);
 
       console.log("Input confirm: " + JSON.stringify(newStateModel));
 
@@ -149,9 +153,11 @@ export class WebGejmikaViewModel {
         ],
         combInProgress: [],
         id: this.viewState.id + 1,
+        gameOver: gameOver,
       };
 
       this.dispatchUpdate(newStateModel, newStateView);
+      if (gameOver) this.saveScore();
     }
   }
 
@@ -182,15 +188,13 @@ export class WebGejmikaViewModel {
 
   async startGame() {
     const newStateModel = this.webGejmikaModel.secretCode();
-    console.log(newStateModel.secretComb);
-    // const newViewModel = this.getTopPlayers();
-    // console.log("START: " + newViewModel);
     this.dispatchUpdate(newStateModel, {
       combInProgress: [],
       attemptsView: [],
       correctView: this.combToIcon(newStateModel.secretComb),
       id: -1,
       topPlayers: await this.getTopPlayers(),
+      gameOver: false,
     });
   }
 
@@ -301,14 +305,64 @@ export class WebGejmikaViewModel {
     return colors;
   };
 
-
+  refreshScoreBoard = async () => {
+    this.getTopPlayers().then((players) => {
+      this.dispatchUpdate(
+        { ...this.modelState },
+        {
+          ...this.viewState,
+          topPlayers: { ...players },
+        }
+      );
+    });
+  };
   /**
    * @returns {Array} - array of top players
    */
 
   getTopPlayers = async () => {
     const topPlayers = await this.WebGejmikaService.getTopPlayers();
-    console.log("GET TOP: " + JSON.stringify(topPlayers));
-    return [...topPlayers];
+    const currentPlayer = await this.WebGejmikaService.getCurrentPlayer(
+      localStorage.getItem("username")
+    );
+
+    return {
+      topPlayers: [...topPlayers],
+      currentPlayer: { ...currentPlayer },
+    };
   };
+
+  isUserInTopTen = () => {
+    let isUsernameInTopTen = false;
+    this.viewState.topPlayers.topPlayers.map((person, i) => {
+      if (person.username == this.storage.getItem("username")) {
+        isUsernameInTopTen = true;
+      }
+    });
+    return isUsernameInTopTen;
+  };
+
+  highlightCurrentUser = (username) => {
+    const isEqual = username == this.storage.getItem("username");
+    return {
+      rowColor: isEqual ? "currentPlayer" : "",
+    };
+  };
+
+  isLocalStorageEmpty = () => {
+    return this.storage.getItem("username") == null;
+  };
+
+  is11PlayerOnTheBoard = () => {
+    return !this.isUserInTopTen() && !this.isLocalStorageEmpty();
+  };
+
+  deleteUsername = async () => {
+    const message = await this.WebGejmikaService.deleteScore();
+    return {
+      message: message,
+    };
+  };
+
+  saveScore = async () => {};
 }
