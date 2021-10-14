@@ -45,6 +45,7 @@ const ScoreBoard = ({ people, currentPlayer, viewModel }) => {
               viewModel.deleteUsername().then((msg) => {
                 console.log(msg.message);
                 viewModel.refreshScoreBoard();
+                viewModel.startGame();
               });
               console.log("Username deleted.");
             } else {
