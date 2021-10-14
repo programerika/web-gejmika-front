@@ -109,13 +109,21 @@ export class ScoreViewModel {
         ...conffetiProps,
         width: window.innerWidth,
         numberOfPieces: 200,
-        initialVelocityX: 0,
-        initialVelocityY: 0,
       };
-    else
+    else if (score == 21)
       return {
         ...conffetiProps,
         numberOfPieces: 100,
       };
+    else
+      return {
+        ...conffetiProps,
+        numberOfPieces: 0,
+      };
+  };
+
+  calculateScoreMsg = (score) => {
+    if (score == 0) return "Sorry, better luck next time! :(";
+    else return `You got ${score} points!!!`;
   };
 }

@@ -157,6 +157,7 @@ export class WebGejmikaViewModel {
       };
 
       this.dispatchUpdate(newStateModel, newStateView);
+      if (gameOver) this.saveScore();
     }
   }
 
@@ -362,4 +363,6 @@ export class WebGejmikaViewModel {
       message: message,
     };
   };
+
+  saveScore = async () => {};
 }

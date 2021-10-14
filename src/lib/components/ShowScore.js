@@ -3,6 +3,7 @@ import Confetti from "react-confetti";
 import AttemptPanel from "./AttemptPanel";
 import { WebGejmikaService } from "../../services/WebGejmikaService";
 import { WebGejmikaViewModel } from "../../viewModel/WebGejmikaViewModel";
+import { ScoreViewModel } from "../../viewModel/ScoreViewModel";
 
 const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
   const [state, setState] = useState({
@@ -13,24 +14,25 @@ const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
     messageStatus: "visible",
     messageColor: "messageWhite",
     hideSaveButton: "showSaveButton",
+    scoreMsg: "",
   });
 
   const [conffeti, setConffeti] = useState({
-    width: window.innerWidth + 50,
-    height: window.innerHeight,
-    tweenDuration: 3000,
-    recycle: false,
-    numberOfPieces: 600,
-    wind: 0.05,
-    gravity: 0.2,
-    confettiSource: {
-      x: 0,
-      y: 0,
-      w: window.innerWidth,
-      h: window.innerHeight,
-    },
-    initialVelocityX: 20,
-    initialVelocityY: 20,
+    // width: window.innerWidth + 50,
+    // height: window.innerHeight,
+    // tweenDuration: 3000,
+    // recycle: false,
+    // numberOfPieces: 600,
+    // wind: 0.05,
+    // gravity: 0.2,
+    // confettiSource: {
+    //   x: 0,
+    //   y: 0,
+    //   w: window.innerWidth,
+    //   h: window.innerHeight,
+    // },
+    // initialVelocityX: 20,
+    // initialVelocityY: 20,
   });
 
   useEffect(() => {
@@ -38,6 +40,7 @@ const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
     setState({
       ...state,
       isSaveButtonDisabled: scoreViewModel.disableSaveScoreIfUsernameExists(),
+      scoreMsg: scoreViewModel.calculateScoreMsg(score),
     });
   }, []);
 
@@ -46,11 +49,7 @@ const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
 
   return (
     <div className="score">
-      {score == 0 ? (
-        <h1>Sorry, better luck next time! :(</h1>
-      ) : (
-        <h1>You got {score} points!!!</h1>
-      )}
+      <h1>{state.scoreMsg}</h1>
 
       <Confetti
         width={conffeti.width}
