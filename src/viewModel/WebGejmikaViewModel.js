@@ -384,17 +384,24 @@ export class WebGejmikaViewModel {
   };
 
   deleteUsername = async () => {
-    const message = await this.WebGejmikaService.deleteScore();
-    return {
-      message: message,
-    };
+    if(this.storage.getItem("uid") != null){
+      const resp = await this.WebGejmikaService.deleteScore(this.storage.getItem("uid"))
+      console.log("STATUS - " + resp)
+      if(resp===204){
+        this.storage.removeItem("uid")
+        this.storage.removeItem("username")
+        return "User has been successfully deleted";
+      }else{
+        return "Something went wrong";
+      }
+    }
   };
 
   saveScore = async (score) => {
     console.log("SAVE SCORE " + score + " " + this.viewState.gameOver);
     if (score == 0) return;
     else {
-      this.WebGejmikaService.saveScore(
+      this.WebGejmikaService.addScore(
         this.storage.getItem("username"),
         score
       ).then((msg) => {
