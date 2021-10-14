@@ -166,7 +166,7 @@ export class WebGejmikaViewModel {
 
       this.dispatchUpdate(newStateModel, newStateView);
 
-      if (gameOver) {
+      if (gameOver && !this.isLocalStorageEmpty()) {
         console.log("USAO U IF GAME OVER " + this.viewState.gameOver);
         this.saveScore(newStateModel.score);
       } else {
