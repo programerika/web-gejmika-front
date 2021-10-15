@@ -1,10 +1,11 @@
-import {UPDATE} from '../types';
+import { UPDATE } from "../types";
 
 const modelReducers = (
   state = {
     attempts: [],
     secretComb: [],
     score: -1,
+    gameOver: false,
   },
   action
 ) => {

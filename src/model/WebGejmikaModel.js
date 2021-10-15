@@ -53,6 +53,7 @@ export class WebGejmikaModel {
 
     if (this.isTargetReached(newState.attempts)) {
       newState.score = this.score(newState.attempts);
+      newState.gameOver = true;
     }
 
     return newState;
@@ -77,6 +78,7 @@ export class WebGejmikaModel {
       attempts: [],
       score: -1,
       secretComb: combination,
+      gameOver: false,
     };
     return newState;
   };

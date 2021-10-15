@@ -31,6 +31,11 @@ export class WebGejmikaViewModel {
       allActions.inputActions.update(newStateModel, newStateView)
     );
   };
+  /**
+   *
+   * @param {Object} newStateBoard
+   * This method dispatches scoreBoard state to reducer
+   */
 
   dispatchUpdateScoreBoard = (newStateBoard) => {
     this.dispatcher(allActions.inputActions.updateScoreBoard(newStateBoard));
@@ -130,50 +135,41 @@ export class WebGejmikaViewModel {
    * Gets new model state from webGejmikaModel and calls dispatchUpdate function
    */
 
-  async inputConfirm() {
-    if (this.viewState.combInProgress.length !== 4) {
-      return;
-    } else {
-      const newStateModel = this.webGejmikaModel.compareCode(
-        this.iconToComb(this.viewState.combInProgress)
-      );
+  readyToCodeGuess() {
+    if (this.viewState.combInProgress.length !== 4) return;
+    else this.codeGuess();
+  }
 
-      console.log("Input confirm: " + JSON.stringify(newStateModel));
-      let gameOver = false;
-      if (newStateModel.score != -1) {
-        gameOver = true;
-      }
+  codeGuess() {
+    const newStateModel = this.webGejmikaModel.compareCode(
+      this.iconToComb(this.viewState.combInProgress)
+    );
 
-      const newStateView = {
-        ...this.viewState,
+    const newStateView = {
+      ...this.viewState,
 
-        attemptsView: [
-          ...this.viewState.attemptsView,
-          {
-            attemptViewId: this.viewState.id + 1,
-            attemptViewComb: this.viewState.combInProgress,
-            attemptViewOutcome: this.outcomeToColor(
-              newStateModel.attempts[newStateModel.attempts.length - 1]
-                .attemptOutcome
-            ),
-          },
-        ],
-        combInProgress: [],
-        id: this.viewState.id + 1,
-        gameOver: gameOver,
-      };
+      attemptsView: [
+        ...this.viewState.attemptsView,
+        {
+          attemptViewId: this.viewState.id + 1,
+          attemptViewComb: this.viewState.combInProgress,
+          attemptViewOutcome: this.outcomeToColor(
+            newStateModel.attempts[newStateModel.attempts.length - 1]
+              .attemptOutcome
+          ),
+        },
+      ],
+      combInProgress: [],
+      id: this.viewState.id + 1,
+      gameOver: newStateModel.gameOver,
+    };
 
-      // console.log("PRE IF GAME OVER " + gameOver);
+    this.dispatchUpdate(newStateModel, newStateView);
+    console.dir(this.inputDeleteLast);
 
-      this.dispatchUpdate(newStateModel, newStateView);
-
-      if (gameOver && !this.isLocalStorageEmpty()) {
-        console.log("USAO U IF GAME OVER " + this.viewState.gameOver);
-        this.saveScore(newStateModel.score);
-      } else {
-        console.log("USAO U ELSE GAME OVER");
-        //  this.dispatchUpdate(newStateModel, newStateView);
-      }
+    if (newStateModel.gameOver && !this.isLocalStorageEmpty()) {
+      console.log("USAO U IF GAME OVER " + this.viewState.gameOver);
+      this.saveScore(newStateModel.score);
     }
   }
 
@@ -199,7 +195,7 @@ export class WebGejmikaViewModel {
   }
 
   /**
-   * This method sets both model and view state to default parameters and calls dispatchUpdate function
+   * This method sets  model, view  and score state to default parameters and calls dispatchUpdate function
    */
 
   async startGame() {
@@ -209,11 +205,9 @@ export class WebGejmikaViewModel {
       attemptsView: [],
       correctView: this.combToIcon(newStateModel.secretComb),
       id: -1,
-      gameOver: false,
     });
     this.dispatchUpdateScoreBoard({
       topPlayers: await this.getTopPlayers(),
-      // boardView: this.setScoreView(),
     });
   }
 
@@ -332,22 +326,16 @@ export class WebGejmikaViewModel {
       });
     });
   };
+
   /**
    * @returns {Array} - array of top players
    */
 
   getTopPlayers = async () => {
     const topPlayers = await this.WebGejmikaService.getTopPlayers();
+
     const currentPlayer = await this.WebGejmikaService.getCurrentPlayer(
       localStorage.getItem("username")
-    );
-
-    console.log(
-      "TOP PLAYERS: " +
-        JSON.stringify(topPlayers) +
-        " " +
-        " CuRRENT " +
-        JSON.stringify(currentPlayer)
     );
 
     return {
@@ -384,14 +372,16 @@ export class WebGejmikaViewModel {
   };
 
   deleteUsername = async () => {
-    if(this.storage.getItem("uid") != null){
-      const resp = await this.WebGejmikaService.deleteScore(this.storage.getItem("uid"))
-      console.log("STATUS - " + resp)
-      if(resp===204){
-        this.storage.removeItem("uid")
-        this.storage.removeItem("username")
+    if (this.storage.getItem("uid") != null) {
+      const resp = await this.WebGejmikaService.deleteScore(
+        this.storage.getItem("uid")
+      );
+      console.log("STATUS - " + resp);
+      if (resp === 204) {
+        this.storage.removeItem("uid");
+        this.storage.removeItem("username");
         return "User has been successfully deleted";
-      }else{
+      } else {
         return "Something went wrong";
       }
     }
@@ -411,21 +401,17 @@ export class WebGejmikaViewModel {
     }
   };
 
-  isGameOver = async (score) => {
-    console.log("IS GAME OVER " + score);
-    if (score != -1) {
-      console.log("USLA U IF SCORE != -1!!!!");
-      this.saveScore(score).then((msg) => {
-        console.log(msg);
-        return true;
-      });
-    } else return false;
-  };
-
   setScoreView = () => {
     return {
       classPlayer11: this.is11PlayerOnTheBoard() ? "showTblRow" : "hide",
       classDeleteBtn: !this.isLocalStorageEmpty() ? "show" : "hide",
+    };
+  };
+
+  prepareGameView = () => {
+    return {
+      classShowScore: this.modelState.gameOver ? "show" : "hide",
+      classInputPanel: this.modelState.gameOver ? "hide" : "show",
     };
   };
 }

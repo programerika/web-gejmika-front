@@ -18,7 +18,7 @@ export class ScoreViewModel {
         this.storage.getItem("username"),
         score
       );
-      
+
       if (resp.status === 201) {
         resp.json().then((uid) => this.storage.setItem("uid", uid.id));
         return "Score has been successfully saved";
@@ -26,8 +26,10 @@ export class ScoreViewModel {
         return "Something went wrong";
       }
     } else {
-      const resp = await this.webGejmikaService.addScore(this.storage.getItem("username"))
-      return resp
+      const resp = await this.webGejmikaService.addScore(
+        this.storage.getItem("username")
+      );
+      return resp;
     }
   };
 
@@ -174,4 +176,6 @@ export class ScoreViewModel {
     if (score == 0) return "Sorry, better luck next time! :(";
     else return `You got ${score} points!!!`;
   };
+
+ 
 }
