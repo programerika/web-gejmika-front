@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import AttemptPanel from "./AttemptPanel";
-import { WebGejmikaService } from "../../services/WebGejmikaService";
-import { WebGejmikaViewModel } from "../../viewModel/WebGejmikaViewModel";
-import { ScoreViewModel } from "../../viewModel/ScoreViewModel";
 
 const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
   const [state, setState] = useState({});
@@ -14,16 +11,6 @@ const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
   useEffect(() => {
     setConfetti(scoreViewModel.confettiPerScore(score));
     setState(scoreViewModel.initializeView(score));
-    // const [state, setState] = useState({
-    //   toolTipStatus: "toolTipHidden",
-    //   isUsernameValid: "",
-    //   isSaveButtonDisabled: false,
-    //   message: "Please enter an username",
-    //   messageStatus: "visible",
-    //   messageColor: "messageWhite",
-    //   hide: "show",
-    //   scoreMsg: "",
-    // });
   }, []);
 
   return (

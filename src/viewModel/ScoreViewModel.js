@@ -11,14 +11,8 @@ export class ScoreViewModel {
     this.storage = new StorageService();
   }
 
-  disableSaveScoreIfUsernameExists = () => {
-    if (this.storage.getItem("username") === null) {
-      return true;
-    }
-  };
-
   saveUserScore = async (username, score) => {
-    if (this.storage.getItem("username") === null) {
+    if (this.storage.isStorageEmpty()) {
       this.storage.setItem("username", username);
       const resp = await this.webGejmikaService.saveScore(
         this.storage.getItem("username"),
@@ -38,12 +32,12 @@ export class ScoreViewModel {
   };
 
   /**
-   * @param {String} input - text from input field (username)
+   * @param {String} username - username from input field
    * @returns {Object} - customized object for styling validation
    */
 
-  usernameValidation = async (input) => {
-    if (input.length === 0) {
+  usernameValidation = async (username) => {
+    if (username.length === 0) {
       return {
         message: "Please enter an username",
         isSaveButtonDisabled: true,
@@ -55,9 +49,9 @@ export class ScoreViewModel {
     }
 
     let regex = new RegExp("[a-zA-Z]{4,6}[0-9]{2}$");
-    if (regex.test(input) && this.storage.getItem("username") === null) {
+    if (regex.test(username) && this.storage.isStorageEmpty()) {
       if (
-        (await this.webGejmikaService.checkIfUsernameExists(input)) === true
+        (await this.webGejmikaService.checkIfUsernameExists(username)) === true
       ) {
         return {
           message: "*Username already exists",
@@ -84,7 +78,7 @@ export class ScoreViewModel {
   };
 
   checkStorageAndScore = (score) => {
-    if (this.storage.getItem("username") === null && score > 0) {
+    if (this.storage.isStorageEmpty() && score > 0) {
       return true;
     } else {
       return false;
@@ -95,7 +89,7 @@ export class ScoreViewModel {
     return {
       toolTipStatus: "toolTipHidden",
       isUsernameValid: "",
-      isSaveButtonDisabled: this.disableSaveScoreIfUsernameExists(),
+      isSaveButtonDisabled: this.storage.isStorageEmpty(),
       message: "Please enter an username",
       messageStatus: "visible",
       messageColor: "messageWhite",
@@ -105,7 +99,7 @@ export class ScoreViewModel {
   };
 
   hide = (score) => {
-    if (this.storage.getItem("username") !== null && score >= 0) {
+    if (!this.storage.isStorageEmpty() && score >= 0) {
       console.log("Hide Save Button");
       return "hide";
     } else {
@@ -172,26 +166,7 @@ export class ScoreViewModel {
         initialVelocityY: 10,
       };
     } else if (score === 0) {
-      return {
-        width: 0,
-        height: 0,
-        tweenDuration: 0,
-        recycle: false,
-        numberOfPieces: 0,
-        wind: 0,
-        gravity: 0,
-        x: 0,
-        y: 0,
-        w: 0,
-        h: 0,
-        initialVelocityX: 0,
-        initialVelocityY: 0,
-      };
-    }
-    if (this.storage.getItem("username") === null && score === 0) {
-      return "show";
-    } else {
-      return "hide";
+      return {};
     }
   };
 
