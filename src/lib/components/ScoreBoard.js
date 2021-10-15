@@ -1,13 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-const ScoreBoard = ({
-  people,
-  currentPlayer,
-  viewModel,
-  // classPlayer11,
-  // classDeleteBtn,
-}) => {
+const ScoreBoard = ({ people, currentPlayer, viewModel }) => {
   const [scoreView, setScoreView] = useState({
     classPlayer11: "",
     classDeleteBtn: "",
@@ -37,7 +31,6 @@ const ScoreBoard = ({
           </tr>
         );
       })}
-      {/* {viewModel.is11PlayerOnTheBoard() && ( */}
 
       <tr className={`current-player-separator ` + scoreView.classPlayer11}>
         <td></td>
@@ -50,8 +43,6 @@ const ScoreBoard = ({
         <td>{currentPlayer.score}</td>
       </tr>
 
-      {/* )} */}
-      {/* {!viewModel.isLocalStorageEmpty() && ( */}
       <button
         className={"delete-score-btn " + scoreView.classDeleteBtn}
         onClick={async () => {
@@ -71,7 +62,6 @@ const ScoreBoard = ({
       >
         Delete
       </button>
-      {/* )} */}
     </table>
   );
 };

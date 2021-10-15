@@ -15,13 +15,13 @@ function App() {
   const viewState = useSelector((state) => state.view);
   const scoreState = useSelector((state) => state.score);
 
-  const { score } = modelState;
+  const { score, gameOver } = modelState;
 
   const {
     topPlayers: { topPlayers, currentPlayer },
   } = scoreState;
 
-  const { combInProgress, attemptsView, correctView, id, gameOver } = viewState;
+  const { combInProgress, attemptsView, correctView, id } = viewState;
 
   const viewModel = new WebGejmikaViewModel(
     modelState,
