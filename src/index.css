@@ -1,3 +1,7 @@
+:root {
+  --logo-blue-color: rgb(21, 179, 160);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -59,11 +63,11 @@ code {
   /* padding-left: 10px;
   padding-right: 10px; */
   box-sizing: border-box;
-  border: solid 3px rgb(21, 179, 160);
+  border: solid 3px var(--logo-blue-color);
   margin-bottom: 1px;
 }
 .header h2 {
-  color: rgb(21, 179, 160);
+  color: var(--logo-blue-color);
   /* background-color: white; */
 }
 /* .help {
@@ -73,13 +77,13 @@ code {
   border: rgb(53, 50, 50) 2px solid;
   padding: 5px;
   box-shadow: 1px 3.5px rgb(106, 109, 109);
-  background-color: rgb(21, 179, 160);
+  background-color: var(--logo-blue-color);
   margin: 5px;
   cursor: pointer;
 } */
 .flex-cont {
   display: flex;
-  background-color: rgb(21, 179, 160);
+  background-color: var(--logo-blue-color);
   margin-top: 1px;
   border: darkgreen 1px solid;
   border-radius: 4px;
@@ -154,7 +158,7 @@ code {
   background-color: black;
   /* background-color: rgb(44, 216, 14); */
   border-radius: 4px 4px 10px 10px;
-  border: solid 3px rgb(21, 179, 160);
+  border: solid 3px var(--logo-blue-color);
 }
 
 /*.score {
@@ -203,7 +207,7 @@ td {
 
 .score-board {
   border-collapse: collapse;
-  background-color: rgb(100, 180, 171);
+  background-color: black;
   width: 30%;
   height: auto;
   text-align: center;
@@ -213,33 +217,30 @@ td {
 }
 
 .score-board-header {
-  border-radius: 5%;
-  border: 5px solid rgb(11, 153, 82);
+  border: 2px solid var(--logo-blue-color);
 }
 
 .score-board-header th {
   padding: 15px 5px;
-  font-size: 1.1rem;
-  background-color: rgb(47, 116, 95);
-  border-bottom: black 5px solid;
+  font-size: 1.2rem;
+  background-color: black;
+  color: var(--logo-blue-color);
 }
 
 .person-score {
-  color: black;
+  color: rgb(199, 218, 230);
   padding: 5px;
   margin: 5px;
-  border: 2px solid rgb(11, 153, 82);
+  border: 2px solid var(--logo-blue-color);
 }
 
 .current-player-separator {
-  background-color: rgb(100, 180, 171);
-  border-top: black 5px solid;
-  color: black;
+  color: lightgray;
 }
 
 .currentPlayer {
-  background-color: rgb(47, 116, 95);
-  border: rgb(0, 0, 0) 3px solid;
+  background-color: var(--logo-blue-color);
+  color: black;
 }
 
 .delete-score-btn {
