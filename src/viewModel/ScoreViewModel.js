@@ -263,7 +263,7 @@ export class ScoreViewModel {
     }
   };
 
-  saveScore = async (score) => {
+  addScore = async (score) => {
     if (score == 0) return;
     else {
       this.webGejmikaService

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-const ScoreBoard = ({ people, currentPlayer, scoreViewModel }) => {
+const ScoreBoard = ({ people, currentPlayer, viewModel, scoreViewModel }) => {
   const [scoreView, setScoreView] = useState({
     classPlayer11: "",
     classDeleteBtn: "",
@@ -49,10 +49,10 @@ const ScoreBoard = ({ people, currentPlayer, scoreViewModel }) => {
           if (
             window.confirm("Are you sure you want to delete your username?")
           ) {
-            scoreViewModel.deleteUsername().then((msg) => {
-              console.log(msg.message);
+            scoreViewModel.deleteUsername().then(() => {
+              // console.log(msg.message);
               scoreViewModel.refreshScoreBoard();
-              scoreViewModel.startGame();
+              viewModel.startGame();
             });
             console.log("Username deleted.");
           } else {

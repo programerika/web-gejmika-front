@@ -100,7 +100,7 @@ const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
               );
               setState(s1);
               setSaveStatus(s2);
-              viewModel.refreshScoreBoard();
+              scoreViewModel.refreshScoreBoard();
             }}
           >
             Save score!

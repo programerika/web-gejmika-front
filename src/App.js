@@ -64,6 +64,7 @@ function App() {
             people={topPlayers}
             currentPlayer={currentPlayer}
             scoreViewModel={scoreViewModel}
+            viewModel={viewModel}
           ></ScoreBoard>
         </div>
       ) : (
@@ -82,6 +83,7 @@ function App() {
             people={topPlayers}
             currentPlayer={currentPlayer}
             scoreViewModel={scoreViewModel}
+            viewModel={viewModel}
           ></ScoreBoard>
         </div>
       )}

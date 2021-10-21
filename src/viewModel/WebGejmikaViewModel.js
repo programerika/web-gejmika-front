@@ -197,7 +197,7 @@ export class WebGejmikaViewModel {
 
     if (newStateModel.gameOver && !this.storage.isItemInStorageEmpty("username")) {
       console.log("USAO U IF GAME OVER " + this.viewState.gameOver);
-      this.scoreViewModel.saveScore(newStateModel.score);
+      this.scoreViewModel.addScore(newStateModel.score);
     }
   }
 
