@@ -17,7 +17,11 @@ export class WebGejmikaModel {
    * 2 - guess is in right place
    */
 
-  compareCode = (attpInProgress) => {
+  combinationLength = () => {
+    return 4;
+  };
+
+  makeAGuess = (attpInProgress) => {
     var combination = [...this.modelState.secretComb];
     var attempt = [...attpInProgress];
     let outcome = [];
@@ -52,7 +56,7 @@ export class WebGejmikaModel {
     };
 
     if (this.isTargetReached(newState.attempts)) {
-      newState.score = this.score(newState.attempts);
+      newState.score = this.calculateScore(newState.attempts);
       newState.gameOver = true;
     }
 
@@ -65,7 +69,7 @@ export class WebGejmikaModel {
    * This method generates random secret combination of size 4 from letters K,H,P,T,L,S
    */
 
-  secretCode = () => {
+  generateSecretCode = () => {
     let combArr = ["K", "H", "P", "T", "L", "S"];
     let combination = [];
     for (let index = 0; index <= 3; index++) {
@@ -113,7 +117,7 @@ export class WebGejmikaModel {
    * This method calculates score based on correct code guess attempt number
    */
 
-  score = (attempts) => {
+  calculateScore = (attempts) => {
     var lastAttp = attempts[attempts.length - 1];
     var check = true;
     lastAttp.attemptOutcome.forEach((el) => {

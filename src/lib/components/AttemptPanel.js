@@ -4,17 +4,19 @@ const AttemptPanel = (props) => {
   return (
     <>
       {[0, 1, 2, 3].map((num, index) => {
-        return (
-          <img
-            key={index}
-            className="circle"
-            src={
-              typeof props.comb[num] == "undefined"
-                ? "./icons/circle.png"
-                : props.comb[num]
-            }
-            alt="kombinacija"
-          />
+        return (        
+            <img
+              key={index}
+              className={typeof props.comb[num] == "undefined"
+                ? `circle ` + props.attemptIncomplete
+                : `circle`}
+              src={
+                typeof props.comb[num] == "undefined"
+                  ? "./icons/circle.png"
+                  : props.comb[num]
+              }
+              alt="kombinacija"
+            />
         );
       })}
     </>

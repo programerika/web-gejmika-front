@@ -169,7 +169,21 @@ export class ScoreViewModel {
         initialVelocityY: 10,
       };
     } else if (score === 0) {
-      return {};
+      return {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        tweenDuration: 3000,
+        recycle: false,
+        numberOfPieces: 0,
+        wind: 0.05,
+        gravity: 0.2,
+        x: 0,
+        y: 0,
+        w: window.innerWidth,
+        h: window.innerHeight,
+        initialVelocityX: 10,
+        initialVelocityY: 10,
+      };
     }
   };
 
@@ -250,13 +264,11 @@ export class ScoreViewModel {
   };
 
   saveScore = async (score) => {
-    console.log("SAVE SCORE " + score + " " + this.viewState.gameOver);
     if (score == 0) return;
     else {
       this.webGejmikaService
         .addScore(this.storage.getItem("username"), score)
         .then((msg) => {
-          console.log("U THEN: " + msg + " " + this.viewState.gameOver);
           this.refreshScoreBoard();
         });
     }

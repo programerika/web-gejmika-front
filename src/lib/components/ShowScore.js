@@ -37,7 +37,7 @@ const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
 
       <div className="correct">
         <h5>Correct combination:</h5>
-        <AttemptPanel comb={correctView}></AttemptPanel>
+        <AttemptPanel comb={correctView} attemptIncomplete={""}></AttemptPanel>
       </div>
       <div className="saveScore">
         {scoreViewModel.checkStorageAndScore(score) ? (

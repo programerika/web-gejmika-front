@@ -49,7 +49,7 @@ const InputPanel = (props) => {
           className="input"
           src="/icons/checked.png"
           onClick={() => {
-            viewModel.readyToCodeGuess();
+            viewModel.codeGuessIfReady();
           }}
         />
 
