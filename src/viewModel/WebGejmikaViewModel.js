@@ -195,7 +195,10 @@ export class WebGejmikaViewModel {
     this.dispatchUpdate(newStateModel, newStateView);
     console.dir(this.inputDeleteLast);
 
-    if (newStateModel.gameOver && !this.storage.isItemInStorageEmpty("username")) {
+    if (
+      newStateModel.gameOver &&
+      !this.storage.isItemInStorageEmpty("username")
+    ) {
       console.log("USAO U IF GAME OVER " + this.viewState.gameOver);
       this.scoreViewModel.addScore(newStateModel.score);
     }
@@ -326,24 +329,33 @@ export class WebGejmikaViewModel {
    */
 
   outcomeToColor = (outcome) => {
-    let colors = [];
-    let out = [...outcome];
-    out.sort().reverse();
-    for (let index = 0; index < out.length; index++) {
-      switch (out[index]) {
-        case 2:
-          colors[index] = "green";
-          break;
-        case 1:
-          colors[index] = "yellow";
-          break;
-        case 0:
-          colors[index] = "gray";
-          break;
-        default:
-          break;
-      }
+    let { inPlace, correctCode } = outcome;
+    let noGuess =
+      this.webGejmikaModel.combinationLength() - inPlace - correctCode;
+    console.log(
+      "IN PLACE: " +
+        inPlace +
+        " CORRECT CODE " +
+        correctCode +
+        " NOGUESS " +
+        noGuess
+    );
+    let colors = [
+      ...Array(this.webGejmikaModel.combinationLength()).fill("gray", 0),
+    ];
+
+    console.log(colors.length);
+    console.log(colors);
+
+    for (let i = 0; i < inPlace; i++) {
+      colors[i] = "green";
     }
+
+    for (let k = inPlace; k < inPlace + correctCode; k++) {
+      colors[k] = "yellow";
+    }
+
+    console.log(colors);
 
     return colors;
   };

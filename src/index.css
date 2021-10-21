@@ -315,6 +315,18 @@ h5 {
   border-color: white transparent transparent transparent;
 }
 
+.messageGreen {
+  color: green;
+}
+
+.messageRed {
+  color: red;
+}
+
+.messageWhite {
+  color: white;
+}
+
 /* SHOWSCORE - END */
 
 /* SCOREBOARD - BEGIN */
@@ -379,7 +391,6 @@ td {
   padding: 5px 10px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 12px;
   margin: 10px 3px 3px 4px;
   cursor: pointer;
@@ -415,18 +426,6 @@ path {
 }
 
 /* SVG INDICATOR - END*/
-
-.messageGreen {
-  color: green;
-}
-
-.messageRed {
-  color: red;
-}
-
-.messageWhite {
-  color: white;
-}
 
 /* MEDIA QUERRIES - BEGIN */
 

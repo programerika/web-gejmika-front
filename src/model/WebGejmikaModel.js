@@ -7,6 +7,14 @@ export class WebGejmikaModel {
     this.modelState = modelState;
   }
 
+  combinationLength = () => {
+    return 4;
+  };
+
+  attemptsLength = () => {
+    return 5;
+  };
+
   /**
    *
    * @param {Array} attpInProgress
@@ -17,31 +25,37 @@ export class WebGejmikaModel {
    * 2 - guess is in right place
    */
 
-  combinationLength = () => {
-    return 4;
-  };
-
   makeAGuess = (attpInProgress) => {
     var combination = [...this.modelState.secretComb];
     var attempt = [...attpInProgress];
     let outcome = [];
+    let outcome_NEW = {
+      inPlace: 0,
+      correctCode: 0,
+    };
+    console.log("OUTCOME NEW: " + JSON.stringify(outcome_NEW));
     for (let index = 0; index < attempt.length; index++) {
       if (attempt[index] === combination[index]) {
         outcome[index] = 2;
+        outcome_NEW.inPlace += 1;
         combination[index] = "";
+        attempt[index] = "";
       } else {
         outcome[index] = -1;
       }
     }
 
+    console.log("AFTER FIRST LOOP : " + JSON.stringify(outcome_NEW));
     for (let index = 0; index < attempt.length; index++) {
-      if (outcome[index] !== -1) continue;
+      if (attempt[index] == "") continue;
       if (combination.indexOf(attempt[index]) !== -1) {
-        outcome[index] = 1;
+        outcome_NEW.correctCode += 1;
         let ind = combination.indexOf(attempt[index]);
         combination[ind] = "";
-      } else outcome[index] = 0;
+      }
     }
+
+    console.log("AFTER SECOND LOOP : " + JSON.stringify(outcome_NEW));
 
     const newState = {
       ...this.modelState,
@@ -50,7 +64,7 @@ export class WebGejmikaModel {
         ...this.modelState.attempts,
         {
           attemptCode: [...attpInProgress],
-          attemptOutcome: outcome,
+          attemptOutcome: outcome_NEW,
         },
       ],
     };
@@ -97,13 +111,8 @@ export class WebGejmikaModel {
   isTargetReached = (attempts) => {
     if (attempts.length === 0) return false;
     var lastAttp = attempts[attempts.length - 1];
-    var check = true;
-    lastAttp.attemptOutcome.forEach((el) => {
-      if (el != "2") {
-        check = false;
-      }
-    });
-    if (attempts.length === 5) {
+    var check = lastAttp.attemptOutcome.inPlace == this.combinationLength();
+    if (attempts.length === this.attemptsLength()) {
       return true;
     } else if (check) {
       return true;
@@ -119,12 +128,7 @@ export class WebGejmikaModel {
 
   calculateScore = (attempts) => {
     var lastAttp = attempts[attempts.length - 1];
-    var check = true;
-    lastAttp.attemptOutcome.forEach((el) => {
-      if (el != "2") {
-        check = false;
-      }
-    });
+    var check = lastAttp.attemptOutcome.inPlace === this.combinationLength();
     if (!check && attempts.length === 5) return 0;
     else {
       switch (attempts.length) {
