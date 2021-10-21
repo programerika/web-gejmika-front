@@ -27,16 +27,11 @@ export class WebGejmikaViewModel {
    */
 
   dispatchUpdate = (newStateModel, newStateView) => {
-    console.log("FROM DISPATCH: " + JSON.stringify(newStateView));
     this.dispatcher(
       allActions.inputActions.update(newStateModel, newStateView)
     );
   };
-  /**
-   *
-   * @param {Object} newStateBoard
-   * This method dispatches scoreBoard state to reducer
-   */
+ 
 
   /**
    * Methods for each button icon clicked BEGIN
@@ -144,19 +139,19 @@ export class WebGejmikaViewModel {
   codeGuessIfReady() {
     if (
       this.viewState.combInProgress.length !==
-      this.webGejmikaModel.combinationLength()
+      this.viewState.gameDifficulty.combinationLength
     ) {
       this.setAttemptIncomplete(true);
       return;
     } else {
-      this.setAttemptIncomplete(true);
+      this.setAttemptIncomplete(false);
       this.codeGuess();
     }
   }
 
   isAttemptFull() {
     return this.viewState.combInProgress.length >=
-      this.webGejmikaModel.combinationLength()
+      this.viewState.gameDifficulty.combinationLength
       ? true
       : false;
   }
@@ -193,13 +188,11 @@ export class WebGejmikaViewModel {
     };
 
     this.dispatchUpdate(newStateModel, newStateView);
-    console.dir(this.inputDeleteLast);
 
     if (
       newStateModel.gameOver &&
       !this.storage.isItemInStorageEmpty("username")
     ) {
-      console.log("USAO U IF GAME OVER " + this.viewState.gameOver);
       this.scoreViewModel.addScore(newStateModel.score);
     }
   }
@@ -237,6 +230,10 @@ export class WebGejmikaViewModel {
       attemptsView: [],
       correctView: this.combToIcon(newStateModel.secretComb),
       attemptIncomplete: false,
+      gameDifficulty: {
+        attemptsLength: this.webGejmikaModel.attemptsLength(),
+        combinationLength: this.webGejmikaModel.combinationLength(),
+      },
       id: -1,
     });
     this.scoreViewModel.dispatchUpdateScoreBoard({
@@ -320,28 +317,18 @@ export class WebGejmikaViewModel {
 
   /**
    *
-   * @param {Array} outcome
+   * @param {Object} outcome
    * @returns {Array} colors
-   * This method takes in array of numbers [0-2] and transforms is into array of color names for view state
-   * 0 - gray
-   * 1 - yellow
-   * 2 - green
+   * This method takes in object which containes number of guesses in place and number of correct guesses and transforms it into array of color names for view state
+    green - for in place guess
+    yellow - for correct guess
    */
 
   outcomeToColor = (outcome) => {
     let { inPlace, correctCode } = outcome;
-    let noGuess =
-      this.webGejmikaModel.combinationLength() - inPlace - correctCode;
-    console.log(
-      "IN PLACE: " +
-        inPlace +
-        " CORRECT CODE " +
-        correctCode +
-        " NOGUESS " +
-        noGuess
-    );
+
     let colors = [
-      ...Array(this.webGejmikaModel.combinationLength()).fill("gray", 0),
+      ...Array(this.viewState.gameDifficulty.combinationLength).fill("gray", 0),
     ];
 
     for (let i = 0; i < inPlace; i++) {
@@ -352,9 +339,14 @@ export class WebGejmikaViewModel {
       colors[k] = "yellow";
     }
 
-    console.log(colors);
+    let SVGpieOrder = [2, 3, 0, 1];
+    let colorsRearrangedforSVG = [...colors];
 
-    return colors;
+    for (let i = 0; i < colors.length; i++) {
+      colorsRearrangedforSVG[i] = colors[SVGpieOrder[i]];
+    }
+
+    return colorsRearrangedforSVG;
   };
 
   prepareGameView = () => {

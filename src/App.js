@@ -21,8 +21,14 @@ function App() {
     topPlayers: { topPlayers, currentPlayer },
   } = scoreState;
 
-  const { combInProgress, attemptsView, correctView, id, attemptIncomplete } =
-    viewState;
+  const {
+    combInProgress,
+    attemptsView,
+    correctView,
+    id,
+    attemptIncomplete,
+    gameDifficulty: { attemptsLength, combinationLength },
+  } = viewState;
 
   const scoreViewModel = new ScoreViewModel(scoreState, dispatch);
 
@@ -52,12 +58,15 @@ function App() {
               attemptsView={attemptsView}
               id={id}
               attemptIncomplete={attemptIncomplete}
+              attemptsLength={attemptsLength}
+              combinationLength={combinationLength}
             ></GamePanel>
             <ShowScore
               score={score}
               viewModel={viewModel}
               correctView={correctView}
               scoreViewModel={scoreViewModel}
+              combinationLength={combinationLength}
             ></ShowScore>
           </div>
           <ScoreBoard
@@ -76,6 +85,8 @@ function App() {
               attemptsView={attemptsView}
               id={id}
               attemptIncomplete={attemptIncomplete}
+              attemptsLength={attemptsLength}
+              combinationLength={combinationLength}
             ></GamePanel>
             <InputPanel viewModel={viewModel}></InputPanel>
           </div>

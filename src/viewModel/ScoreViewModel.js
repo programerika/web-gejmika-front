@@ -13,6 +13,12 @@ export class ScoreViewModel {
     this.scoreState = scoreState;
   }
 
+  /**
+   *
+   * @param {Object} newStateBoard
+   * This method dispatches scoreBoard state to reducer
+   */
+
   dispatchUpdateScoreBoard = (newStateBoard) => {
     this.dispatcher(allActions.inputActions.updateScoreBoard(newStateBoard));
   };
@@ -188,10 +194,8 @@ export class ScoreViewModel {
   };
 
   calculateScoreMsg = (score) => {
-
     if (score == 0) return "Sorry, better luck next time! :(";
     else return `You got ${score} points!!!`;
-    
   };
 
   refreshScoreBoard = async () => {
@@ -221,14 +225,12 @@ export class ScoreViewModel {
   };
 
   isUserInTopTen = () => {
-    console.log("IS IN TOP TEN: " + JSON.stringify(this.scoreState.topPlayers));
     let isUsernameInTopTen = false;
     this.scoreState.topPlayers.topPlayers.map((person, i) => {
       if (person.username == this.storage.getItem("username")) {
         isUsernameInTopTen = true;
       }
     });
-    console.log("IS USERNAME IN TOP TEN: " + isUsernameInTopTen);
     return isUsernameInTopTen;
   };
 
@@ -244,7 +246,9 @@ export class ScoreViewModel {
   };
 
   is11PlayerOnTheBoard = () => {
-    return !this.isUserInTopTen() && !this.storage.isItemInStorageEmpty("username");
+    return (
+      !this.isUserInTopTen() && !this.storage.isItemInStorageEmpty("username")
+    );
   };
 
   deleteUsername = async () => {
@@ -277,7 +281,9 @@ export class ScoreViewModel {
   setScoreView = () => {
     return {
       classPlayer11: this.is11PlayerOnTheBoard() ? "showTblRow" : "hide",
-      classDeleteBtn: !this.storage.isItemInStorageEmpty("username") ? "show" : "hide",
+      classDeleteBtn: !this.storage.isItemInStorageEmpty("username")
+        ? "show"
+        : "hide",
     };
   };
   changeClassesOnSaveButtonClick = (state) => {
@@ -289,15 +295,14 @@ export class ScoreViewModel {
     };
   };
 
-  setSaveStatus = async (username,score) => {
-    await this.saveUserScore(username, score)
-  }
+  setSaveStatus = async (username, score) => {
+    await this.saveUserScore(username, score);
+  };
 
-  saveScoreState = async(state,username,score) => {
+  saveScoreState = async (state, username, score) => {
     return [
       this.changeClassesOnSaveButtonClick(state),
-      await this.setSaveStatus(username,score)
-    ]
-  }
-
+      await this.setSaveStatus(username, score),
+    ];
+  };
 }

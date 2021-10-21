@@ -2,12 +2,17 @@ import React from "react";
 import AttemptPanel from "./AttemptPanel";
 import SVGIndicator from "./SVGIndicator";
 
-const GamePanel = ({ combInProgress, attemptsView, id, attemptIncomplete }) => {
-  const attps = [0, 1, 2, 3, 4];
-
+const GamePanel = ({
+  combInProgress,
+  attemptsView,
+  id,
+  attemptIncomplete,
+  attemptsLength,
+  combinationLength,
+}) => {
   return (
     <>
-      {attps.map((e, i) => {
+      {[...Array(attemptsLength).keys()].map((e, i) => {
         return (
           <div key={e} className="flex-cont">
             <AttemptPanel
@@ -24,6 +29,7 @@ const GamePanel = ({ combInProgress, attemptsView, id, attemptIncomplete }) => {
                     ]
               }
               attemptIncomplete={id + 1 == e ? attemptIncomplete : ""}
+              combinationLength={combinationLength}
             ></AttemptPanel>
             <SVGIndicator
               colors={

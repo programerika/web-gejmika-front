@@ -429,15 +429,29 @@ path {
 
 /* MEDIA QUERRIES - BEGIN */
 
+@media screen and (min-width: 1300px) {
+  .wrapper {
+    margin-top: 10px;
+    padding-top: 50px;
+  }
+
+  .score-board {
+    margin-top: 30px;
+    width: 25%;
+  }
+}
+
 @media screen and (max-width: 800px) {
   .wrapper {
-    margin-top: 0px;
+    margin-top: 30px;
+    padding-top: 0px;
     flex-direction: column;
   }
 
   .score-board {
     margin-top: 30px;
-    width: 50%;
+    margin-bottom: 30px;
+    width: 45%;
   }
 }
 
@@ -452,7 +466,7 @@ path {
   }
 
   .score-board {
-    width: 50%;
+    width: 70%;
   }
 }
 

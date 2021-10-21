@@ -19,10 +19,9 @@ export class WebGejmikaModel {
    *
    * @param {Array} attpInProgress
    * @returns {Object} Model state with added attempt and set attemptOutcome
-   * This method compares attpInProgress with secretComb and generates attemptOutcome - array of numbers [0-2]
-   * 0 - guess not in secret comb
-   * 1 - guess exists in secret combination but is not in right place
-   * 2 - guess is in right place
+   * This method compares attpInProgress with secretComb and generates attemptOutcome - object with two variables:
+   * inPlace - number of guesses in place
+   * correctCode - number of correct guesses, but not in place
    */
 
   makeAGuess = (attpInProgress) => {
@@ -32,7 +31,7 @@ export class WebGejmikaModel {
       inPlace: 0,
       correctCode: 0,
     };
-    console.log("OUTCOME NEW: " + JSON.stringify(outcome));
+
     for (let index = 0; index < attempt.length; index++) {
       if (attempt[index] === combination[index]) {
         outcome.inPlace += 1;
@@ -41,7 +40,6 @@ export class WebGejmikaModel {
       }
     }
 
-    console.log("AFTER FIRST LOOP : " + JSON.stringify(outcome));
     for (let index = 0; index < attempt.length; index++) {
       if (attempt[index] == "") continue;
       if (combination.indexOf(attempt[index]) !== -1) {
@@ -51,9 +49,7 @@ export class WebGejmikaModel {
       }
     }
 
-    console.log("AFTER SECOND LOOP : " + JSON.stringify(outcome));
-
-    const newState = {
+    const newModelState = {
       ...this.modelState,
       attpInProgress: [],
       attempts: [
@@ -65,12 +61,12 @@ export class WebGejmikaModel {
       ],
     };
 
-    if (this.isTargetReached(newState.attempts)) {
-      newState.score = this.calculateScore(newState.attempts);
-      newState.gameOver = true;
+    if (this.isTargetReached(newModelState.attempts)) {
+      newModelState.score = this.calculateScore(newModelState.attempts);
+      newModelState.gameOver = true;
     }
 
-    return newState;
+    return newModelState;
   };
 
   /**
@@ -82,11 +78,11 @@ export class WebGejmikaModel {
   generateSecretCode = () => {
     let combArr = ["K", "H", "P", "T", "L", "S"];
     let combination = [];
-    for (let index = 0; index <= 3; index++) {
+    for (let index = 0; index < this.combinationLength(); index++) {
       let rand = Math.floor(Math.random() * combArr.length);
       combination[index] = combArr[rand];
     }
-    const newState = {
+    const newModelState = {
       ...this.modelState,
       attpInProgress: [],
       attempts: [],
@@ -94,7 +90,7 @@ export class WebGejmikaModel {
       secretComb: combination,
       gameOver: false,
     };
-    return newState;
+    return newModelState;
   };
 
   /**
@@ -123,7 +119,7 @@ export class WebGejmikaModel {
   calculateScore = (attempts) => {
     var lastAttp = attempts[attempts.length - 1];
     var check = lastAttp.attemptOutcome.inPlace === this.combinationLength();
-    if (!check && attempts.length === 5) return 0;
+    if (!check && attempts.length === this.attemptsLength()) return 0;
     else {
       switch (attempts.length) {
         case 1:
