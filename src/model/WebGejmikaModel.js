@@ -28,34 +28,30 @@ export class WebGejmikaModel {
   makeAGuess = (attpInProgress) => {
     var combination = [...this.modelState.secretComb];
     var attempt = [...attpInProgress];
-    let outcome = [];
-    let outcome_NEW = {
+    let outcome = {
       inPlace: 0,
       correctCode: 0,
     };
-    console.log("OUTCOME NEW: " + JSON.stringify(outcome_NEW));
+    console.log("OUTCOME NEW: " + JSON.stringify(outcome));
     for (let index = 0; index < attempt.length; index++) {
       if (attempt[index] === combination[index]) {
-        outcome[index] = 2;
-        outcome_NEW.inPlace += 1;
+        outcome.inPlace += 1;
         combination[index] = "";
         attempt[index] = "";
-      } else {
-        outcome[index] = -1;
       }
     }
 
-    console.log("AFTER FIRST LOOP : " + JSON.stringify(outcome_NEW));
+    console.log("AFTER FIRST LOOP : " + JSON.stringify(outcome));
     for (let index = 0; index < attempt.length; index++) {
       if (attempt[index] == "") continue;
       if (combination.indexOf(attempt[index]) !== -1) {
-        outcome_NEW.correctCode += 1;
+        outcome.correctCode += 1;
         let ind = combination.indexOf(attempt[index]);
         combination[ind] = "";
       }
     }
 
-    console.log("AFTER SECOND LOOP : " + JSON.stringify(outcome_NEW));
+    console.log("AFTER SECOND LOOP : " + JSON.stringify(outcome));
 
     const newState = {
       ...this.modelState,
@@ -64,7 +60,7 @@ export class WebGejmikaModel {
         ...this.modelState.attempts,
         {
           attemptCode: [...attpInProgress],
-          attemptOutcome: outcome_NEW,
+          attemptOutcome: outcome,
         },
       ],
     };
@@ -114,9 +110,7 @@ export class WebGejmikaModel {
     var check = lastAttp.attemptOutcome.inPlace == this.combinationLength();
     if (attempts.length === this.attemptsLength()) {
       return true;
-    } else if (check) {
-      return true;
-    } else return false;
+    } else return check;
   };
 
   /**

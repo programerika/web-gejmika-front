@@ -344,9 +344,6 @@ export class WebGejmikaViewModel {
       ...Array(this.webGejmikaModel.combinationLength()).fill("gray", 0),
     ];
 
-    console.log(colors.length);
-    console.log(colors);
-
     for (let i = 0; i < inPlace; i++) {
       colors[i] = "green";
     }
