@@ -167,7 +167,7 @@ export class WebGejmikaViewModel {
     this.dispatchUpdate(newStateModel, newStateView);
     console.dir(this.inputDeleteLast);
 
-    if (newStateModel.gameOver && !this.storage.isStorageEmpty()) {
+    if (newStateModel.gameOver && !this.storage.isItemInStorageEmpty("username")) {
       console.log("USAO U IF GAME OVER " + this.viewState.gameOver);
       this.saveScore(newStateModel.score);
     }
@@ -368,7 +368,7 @@ export class WebGejmikaViewModel {
   };
 
   is11PlayerOnTheBoard = () => {
-    return !this.isUserInTopTen() && !this.storage.isStorageEmpty();
+    return !this.isUserInTopTen() && !this.storage.isItemInStorageEmpty("username");
   };
 
   deleteUsername = async () => {
@@ -404,7 +404,7 @@ export class WebGejmikaViewModel {
   setScoreView = () => {
     return {
       classPlayer11: this.is11PlayerOnTheBoard() ? "showTblRow" : "hide",
-      classDeleteBtn: !this.storage.isStorageEmpty() ? "show" : "hide",
+      classDeleteBtn: !this.storage.isItemInStorageEmpty("username") ? "show" : "hide",
     };
   };
 

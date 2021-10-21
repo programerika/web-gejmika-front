@@ -56,7 +56,7 @@ const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
                 }
                 onChange={async (e) => {
                   setState(
-                    await scoreViewModel.usernameValidation(e.target.value)
+                    await scoreViewModel.validateUsername(e.target.value)
                   );
                   setUsername(e.target.value);
                 }}
@@ -93,15 +93,13 @@ const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
               score
             )}
             onClick={async () => {
-              setState({
-                ...state,
-                isSaveButtonDisabled: true,
-                messageColor: "messageGreen",
-                hide: "hide",
-              });
-              setSaveStatus(
-                await scoreViewModel.saveUserScore(username, score)
+              let [s1, s2] = await scoreViewModel.saveScoreState(
+                state,
+                username,
+                score
               );
+              setState(s1);
+              setSaveStatus(s2);
               viewModel.refreshScoreBoard();
             }}
           >

@@ -17,8 +17,8 @@ export class StorageService {
     localStorage.removeItem(key);
   };
 
-  isStorageEmpty = () => {
-    if(localStorage.getItem("username")==null){
+  isItemInStorageEmpty = (item) => {
+    if(localStorage.getItem(item)==null){
       return true;
     }else{
       return false;
