@@ -11,8 +11,7 @@ export class WebGejmikaService {
    */
 
   checkIfUsernameExists = async (username) => {
-    const response = await fetch(
-      "http://localhost:8080/api/v1/player-scores/" + username,
+    const response = await fetch(`/api/v1/player-scores/${username}`,
       {
         method: "GET",
       }
@@ -38,7 +37,7 @@ export class WebGejmikaService {
    */
 
   saveScore = async (username, score) => {
-    const response = await fetch("http://localhost:8080/api/v1/player-scores", {
+    const response = await fetch("/api/v1/player-scores", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +49,11 @@ export class WebGejmikaService {
     });
 
     const resp = await response;
-    return resp;
+    if(resp.status===201){
+      return resp
+    } else{
+      return null
+    }
   };
 
   /**
@@ -64,8 +67,7 @@ export class WebGejmikaService {
    */
 
   addScore = async (username, score) => {
-    const response = await fetch(
-      "http://localhost:8080/api/v1/player-scores/" + username + "/add-score",
+    const response = await fetch(`/api/v1/player-scores/${username}/add-score`,
       {
         method: "POST",
         headers: {
@@ -88,7 +90,7 @@ export class WebGejmikaService {
    */
 
   getTopPlayers = async () => {
-    const response = await fetch("http://localhost:8080/api/v1/top-score");
+    const response = await fetch("/api/v1/top-score");
     const resp = await response.json();
     console.log("From method: " + JSON.stringify(resp));
     console.log(response.status);
@@ -104,8 +106,7 @@ export class WebGejmikaService {
    */
 
   deleteScore = async (uid) => {
-    const response = await fetch(
-      "http://localhost:8080/api/v1/player-scores/" + uid,
+    const response = await fetch(`/api/v1/player-scores/${uid}`,
       {
         method: "DELETE",
       }
@@ -115,7 +116,7 @@ export class WebGejmikaService {
 
   getCurrentPlayer = async (username) => {
     const response = await fetch(
-      "http://localhost:8080/api/v1/player-scores/" + username,
+      `/api/v1/player-scores/${username}`,
       {
         method: "GET",
       }
