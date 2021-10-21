@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-const ScoreBoard = ({ people, currentPlayer, viewModel }) => {
+const ScoreBoard = ({ people, currentPlayer, scoreViewModel }) => {
   const [scoreView, setScoreView] = useState({
     classPlayer11: "",
     classDeleteBtn: "",
@@ -10,7 +10,7 @@ const ScoreBoard = ({ people, currentPlayer, viewModel }) => {
     console.log(
       "SCORE VIEW: " + scoreView.classPlayer11 + " " + scoreView.classDeleteBtn
     );
-    setScoreView(viewModel.setScoreView());
+    setScoreView(scoreViewModel.setScoreView());
   }, [people]);
   return (
     <table className="score-board ">
@@ -20,7 +20,7 @@ const ScoreBoard = ({ people, currentPlayer, viewModel }) => {
         <th>Points</th>
       </tr>
       {people.map((person, i) => {
-        let { rowColor } = viewModel.highlightCurrentUser(person.username);
+        let { rowColor } = scoreViewModel.highlightCurrentUser(person.username);
         return (
           <tr key={i} className={`person-score ` + rowColor}>
             <td>
@@ -49,10 +49,10 @@ const ScoreBoard = ({ people, currentPlayer, viewModel }) => {
           if (
             window.confirm("Are you sure you want to delete your username?")
           ) {
-            viewModel.deleteUsername().then((msg) => {
+            scoreViewModel.deleteUsername().then((msg) => {
               console.log(msg.message);
-              viewModel.refreshScoreBoard();
-              viewModel.startGame();
+              scoreViewModel.refreshScoreBoard();
+              scoreViewModel.startGame();
             });
             console.log("Username deleted.");
           } else {

@@ -5,7 +5,7 @@ import allActions from "../redux/actions";
 import { WebGejmikaModel } from "../model/WebGejmikaModel";
 import { WebGejmikaService } from "../services/WebGejmikaService";
 import { StorageService } from "../services/StorageService";
-import { tsMethodSignature } from "@babel/types";
+import { ScoreViewModel } from "./ScoreViewModel";
 
 export class WebGejmikaViewModel {
   constructor(modelState, viewState, scoreState, dispatcher) {
@@ -15,6 +15,7 @@ export class WebGejmikaViewModel {
     this.dispatcher = dispatcher;
     this.webGejmikaModel = new WebGejmikaModel(modelState);
     this.WebGejmikaService = new WebGejmikaService();
+    this.scoreViewModel = new ScoreViewModel(scoreState, dispatcher);
     this.storage = new StorageService();
   }
 
@@ -36,10 +37,6 @@ export class WebGejmikaViewModel {
    * @param {Object} newStateBoard
    * This method dispatches scoreBoard state to reducer
    */
-
-  dispatchUpdateScoreBoard = (newStateBoard) => {
-    this.dispatcher(allActions.inputActions.updateScoreBoard(newStateBoard));
-  };
 
   /**
    * Methods for each button icon clicked BEGIN
@@ -206,8 +203,8 @@ export class WebGejmikaViewModel {
       correctView: this.combToIcon(newStateModel.secretComb),
       id: -1,
     });
-    this.dispatchUpdateScoreBoard({
-      topPlayers: await this.getTopPlayers(),
+    this.scoreViewModel.dispatchUpdateScoreBoard({
+      topPlayers: await this.scoreViewModel.getTopPlayers(),
     });
   }
 
@@ -316,96 +313,6 @@ export class WebGejmikaViewModel {
     }
 
     return colors;
-  };
-
-  refreshScoreBoard = async () => {
-    this.getTopPlayers().then((players) => {
-      this.dispatchUpdateScoreBoard({
-        ...this.scoreState,
-        topPlayers: { ...players },
-      });
-    });
-  };
-
-  /**
-   * @returns {Array} - array of top players
-   */
-
-  getTopPlayers = async () => {
-    const topPlayers = await this.WebGejmikaService.getTopPlayers();
-
-    const currentPlayer = await this.WebGejmikaService.getCurrentPlayer(
-      localStorage.getItem("username")
-    );
-
-    return {
-      topPlayers: [...topPlayers],
-      currentPlayer: { ...currentPlayer },
-    };
-  };
-
-  isUserInTopTen = () => {
-    console.log("IS IN TOP TEN: " + JSON.stringify(this.scoreState.topPlayers));
-    let isUsernameInTopTen = false;
-    this.scoreState.topPlayers.topPlayers.map((person, i) => {
-      if (person.username == this.storage.getItem("username")) {
-        isUsernameInTopTen = true;
-      }
-    });
-    console.log("IS USERNAME IN TOP TEN: " + isUsernameInTopTen);
-    return isUsernameInTopTen;
-  };
-
-  highlightCurrentUser = (username) => {
-    const isEqual = username == this.storage.getItem("username");
-    return {
-      rowColor: isEqual ? "currentPlayer" : "",
-    };
-  };
-
-  isLocalStorageEmpty = () => {
-    return this.storage.getItem("username") == null;
-  };
-
-  is11PlayerOnTheBoard = () => {
-    return !this.isUserInTopTen() && !this.storage.isStorageEmpty();
-  };
-
-  deleteUsername = async () => {
-    if (this.storage.getItem("uid") != null) {
-      const resp = await this.WebGejmikaService.deleteScore(
-        this.storage.getItem("uid")
-      );
-      console.log("STATUS - " + resp);
-      if (resp === 204) {
-        this.storage.removeItem("uid");
-        this.storage.removeItem("username");
-        return "User has been successfully deleted";
-      } else {
-        return "Something went wrong";
-      }
-    }
-  };
-
-  saveScore = async (score) => {
-    console.log("SAVE SCORE " + score + " " + this.viewState.gameOver);
-    if (score == 0) return;
-    else {
-      this.WebGejmikaService.addScore(
-        this.storage.getItem("username"),
-        score
-      ).then((msg) => {
-        console.log("U THEN: " + msg + " " + this.viewState.gameOver);
-        this.refreshScoreBoard();
-      });
-    }
-  };
-
-  setScoreView = () => {
-    return {
-      classPlayer11: this.is11PlayerOnTheBoard() ? "showTblRow" : "hide",
-      classDeleteBtn: !this.storage.isStorageEmpty() ? "show" : "hide",
-    };
   };
 
   prepareGameView = () => {

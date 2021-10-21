@@ -23,13 +23,14 @@ function App() {
 
   const { combInProgress, attemptsView, correctView, id } = viewState;
 
+  const scoreViewModel = new ScoreViewModel(scoreState, dispatch);
+
   const viewModel = new WebGejmikaViewModel(
     modelState,
     viewState,
     scoreState,
     dispatch
   );
-  const scoreViewModel = new ScoreViewModel();
 
   useEffect(() => {
     viewModel.startGame();
@@ -60,7 +61,7 @@ function App() {
           <ScoreBoard
             people={topPlayers}
             currentPlayer={currentPlayer}
-            viewModel={viewModel}
+            scoreViewModel={scoreViewModel}
           ></ScoreBoard>
         </div>
       ) : (
@@ -77,7 +78,7 @@ function App() {
           <ScoreBoard
             people={topPlayers}
             currentPlayer={currentPlayer}
-            viewModel={viewModel}
+            scoreViewModel={scoreViewModel}
           ></ScoreBoard>
         </div>
       )}

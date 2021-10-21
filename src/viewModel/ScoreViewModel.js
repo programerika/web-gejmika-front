@@ -1,15 +1,21 @@
 /**
  * @author Programerika
  */
-
+import allActions from "../redux/actions";
 import { StorageService } from "../services/StorageService";
 import { WebGejmikaService } from "../services/WebGejmikaService";
 
 export class ScoreViewModel {
-  constructor() {
+  constructor(scoreState, dispatcher) {
     this.webGejmikaService = new WebGejmikaService();
     this.storage = new StorageService();
+    this.dispatcher = dispatcher;
+    this.scoreState = scoreState;
   }
+
+  dispatchUpdateScoreBoard = (newStateBoard) => {
+    this.dispatcher(allActions.inputActions.updateScoreBoard(newStateBoard));
+  };
 
   saveUserScore = async (username, score) => {
     if (this.storage.isStorageEmpty()) {
@@ -177,5 +183,92 @@ export class ScoreViewModel {
     else return `You got ${score} points!!!`;
   };
 
- 
+  refreshScoreBoard = async () => {
+    this.getTopPlayers().then((players) => {
+      this.dispatchUpdateScoreBoard({
+        ...this.scoreState,
+        topPlayers: { ...players },
+      });
+    });
+  };
+
+  /**
+   * @returns {Array} - array of top players
+   */
+
+  getTopPlayers = async () => {
+    const topPlayers = await this.webGejmikaService.getTopPlayers();
+
+    const currentPlayer = await this.webGejmikaService.getCurrentPlayer(
+      localStorage.getItem("username")
+    );
+
+    return {
+      topPlayers: [...topPlayers],
+      currentPlayer: { ...currentPlayer },
+    };
+  };
+
+  isUserInTopTen = () => {
+    console.log("IS IN TOP TEN: " + JSON.stringify(this.scoreState.topPlayers));
+    let isUsernameInTopTen = false;
+    this.scoreState.topPlayers.topPlayers.map((person, i) => {
+      if (person.username == this.storage.getItem("username")) {
+        isUsernameInTopTen = true;
+      }
+    });
+    console.log("IS USERNAME IN TOP TEN: " + isUsernameInTopTen);
+    return isUsernameInTopTen;
+  };
+
+  highlightCurrentUser = (username) => {
+    const isEqual = username == this.storage.getItem("username");
+    return {
+      rowColor: isEqual ? "currentPlayer" : "",
+    };
+  };
+
+  isLocalStorageEmpty = () => {
+    return this.storage.getItem("username") == null;
+  };
+
+  is11PlayerOnTheBoard = () => {
+    return !this.isUserInTopTen() && !this.storage.isStorageEmpty();
+  };
+
+  deleteUsername = async () => {
+    if (this.storage.getItem("uid") != null) {
+      const resp = await this.webGejmikaService.deleteScore(
+        this.storage.getItem("uid")
+      );
+      console.log("STATUS - " + resp);
+      if (resp === 204) {
+        this.storage.removeItem("uid");
+        this.storage.removeItem("username");
+        return "User has been successfully deleted";
+      } else {
+        return "Something went wrong";
+      }
+    }
+  };
+
+  saveScore = async (score) => {
+    console.log("SAVE SCORE " + score + " " + this.viewState.gameOver);
+    if (score == 0) return;
+    else {
+      this.webGejmikaService
+        .addScore(this.storage.getItem("username"), score)
+        .then((msg) => {
+          console.log("U THEN: " + msg + " " + this.viewState.gameOver);
+          this.refreshScoreBoard();
+        });
+    }
+  };
+
+  setScoreView = () => {
+    return {
+      classPlayer11: this.is11PlayerOnTheBoard() ? "showTblRow" : "hide",
+      classDeleteBtn: !this.storage.isStorageEmpty() ? "show" : "hide",
+    };
+  };
 }
