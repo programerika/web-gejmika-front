@@ -5,6 +5,7 @@ const viewReducers = (
     combInProgress: [],
     attemptsView: [],
     correctView: [],
+    attemptIncomplete: "",
     id: -1,
   },
   action

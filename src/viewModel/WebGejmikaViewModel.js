@@ -45,43 +45,49 @@ export class WebGejmikaViewModel {
    * */
 
   heartButtonClicked() {
-    if (this.viewState.combInProgress.length >= 4) {
+    if (this.isAttemptFull()) {
       return;
     }
+    this.setAttemptIncomplete(false);
     const newStateView = {
       ...this.viewState,
       combInProgress: [...this.viewState.combInProgress, "/icons/heart.png"],
+      attemptIncomplete: "",
     };
 
     this.dispatchUpdate({ ...this.modelState }, newStateView);
   }
 
   starButtonClicked() {
-    if (this.viewState.combInProgress.length >= 4) {
+    if (this.isAttemptFull()) {
       return;
     }
+    this.setAttemptIncomplete(false);
     const newStateView = {
       ...this.viewState,
       combInProgress: [...this.viewState.combInProgress, "/icons/star.png"],
+      attemptIncomplete: "",
     };
 
     this.dispatchUpdate({ ...this.modelState }, newStateView);
   }
 
   diamondButtonClicked() {
-    if (this.viewState.combInProgress.length >= 4) {
+    if (this.isAttemptFull()) {
       return;
     }
+    this.setAttemptIncomplete(false);
     const newStateView = {
       ...this.viewState,
       combInProgress: [...this.viewState.combInProgress, "/icons/diamond.png"],
+      attemptIncomplete: "",
     };
 
     this.dispatchUpdate({ ...this.modelState }, newStateView);
   }
 
   spadesButtonClicked() {
-    if (this.viewState.combInProgress.length >= 4) {
+    if (this.isAttemptFull()) {
       return;
     }
     const newStateView = {
@@ -90,13 +96,14 @@ export class WebGejmikaViewModel {
         ...this.viewState.combInProgress,
         "/icons/symbol-of-spades.png",
       ],
+      attemptIncomplete: "",
     };
 
     this.dispatchUpdate({ ...this.modelState }, newStateView);
   }
 
   trafficLightButtonClicked() {
-    if (this.viewState.combInProgress.length >= 4) {
+    if (this.isAttemptFull()) {
       return;
     }
     const newStateView = {
@@ -105,18 +112,20 @@ export class WebGejmikaViewModel {
         ...this.viewState.combInProgress,
         "/icons/traffic-light.png",
       ],
+      attemptIncomplete: "",
     };
 
     this.dispatchUpdate({ ...this.modelState }, newStateView);
   }
 
   clubsButtonClicked() {
-    if (this.viewState.combInProgress.length >= 4) {
+    if (this.isAttemptFull()) {
       return;
     }
     const newStateView = {
       ...this.viewState,
       combInProgress: [...this.viewState.combInProgress, "/icons/clubs.png"],
+      attemptIncomplete: "",
     };
 
     this.dispatchUpdate({ ...this.modelState }, newStateView);
@@ -132,13 +141,35 @@ export class WebGejmikaViewModel {
    * Gets new model state from webGejmikaModel and calls dispatchUpdate function
    */
 
-  readyToCodeGuess() {
-    if (this.viewState.combInProgress.length !== 4) return;
-    else this.codeGuess();
+  codeGuessIfReady() {
+    if (
+      this.viewState.combInProgress.length !==
+      this.webGejmikaModel.combinationLength()
+    ) {
+      this.setAttemptIncomplete(true);
+      return;
+    } else {
+      this.setAttemptIncomplete(true);
+      this.codeGuess();
+    }
+  }
+
+  isAttemptFull() {
+    return this.viewState.combInProgress.length >=
+      this.webGejmikaModel.combinationLength()
+      ? true
+      : false;
+  }
+
+  setAttemptIncomplete(isIncomplete) {
+    this.dispatchUpdate(
+      { ...this.modelState },
+      { ...this.viewState, attemptIncomplete: isIncomplete ? "flashColor" : "" }
+    );
   }
 
   codeGuess() {
-    const newStateModel = this.webGejmikaModel.compareCode(
+    const newStateModel = this.webGejmikaModel.makeAGuess(
       this.iconToComb(this.viewState.combInProgress)
     );
 
@@ -166,7 +197,7 @@ export class WebGejmikaViewModel {
 
     if (newStateModel.gameOver && !this.storage.isStorageEmpty()) {
       console.log("USAO U IF GAME OVER " + this.viewState.gameOver);
-      this.saveScore(newStateModel.score);
+      this.scoreViewModel.saveScore(newStateModel.score);
     }
   }
 
@@ -186,6 +217,7 @@ export class WebGejmikaViewModel {
         {
           ...this.viewState,
           combInProgress: combInProg,
+          attemptIncomplete: "",
         }
       );
     }
@@ -196,11 +228,12 @@ export class WebGejmikaViewModel {
    */
 
   async startGame() {
-    const newStateModel = this.webGejmikaModel.secretCode();
+    const newStateModel = this.webGejmikaModel.generateSecretCode();
     this.dispatchUpdate(newStateModel, {
       combInProgress: [],
       attemptsView: [],
       correctView: this.combToIcon(newStateModel.secretComb),
+      attemptIncomplete: false,
       id: -1,
     });
     this.scoreViewModel.dispatchUpdateScoreBoard({

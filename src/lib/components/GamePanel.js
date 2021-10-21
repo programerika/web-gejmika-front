@@ -2,7 +2,7 @@ import React from "react";
 import AttemptPanel from "./AttemptPanel";
 import SVGIndicator from "./SVGIndicator";
 
-const GamePanel = ({ combInProgress, attemptsView, id }) => {
+const GamePanel = ({ combInProgress, attemptsView, id, attemptIncomplete }) => {
   const attps = [0, 1, 2, 3, 4];
 
   return (
@@ -23,6 +23,7 @@ const GamePanel = ({ combInProgress, attemptsView, id }) => {
                       "./icons/circle.png",
                     ]
               }
+              attemptIncomplete={id + 1 == e ? attemptIncomplete : ""}
             ></AttemptPanel>
             <SVGIndicator
               colors={

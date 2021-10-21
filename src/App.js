@@ -21,7 +21,8 @@ function App() {
     topPlayers: { topPlayers, currentPlayer },
   } = scoreState;
 
-  const { combInProgress, attemptsView, correctView, id } = viewState;
+  const { combInProgress, attemptsView, correctView, id, attemptIncomplete } =
+    viewState;
 
   const scoreViewModel = new ScoreViewModel(scoreState, dispatch);
 
@@ -50,6 +51,7 @@ function App() {
               combInProgress={combInProgress}
               attemptsView={attemptsView}
               id={id}
+              attemptIncomplete={attemptIncomplete}
             ></GamePanel>
             <ShowScore
               score={score}
@@ -72,6 +74,7 @@ function App() {
               combInProgress={combInProgress}
               attemptsView={attemptsView}
               id={id}
+              attemptIncomplete={attemptIncomplete}
             ></GamePanel>
             <InputPanel viewModel={viewModel}></InputPanel>
           </div>
