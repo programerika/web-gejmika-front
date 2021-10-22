@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import AttemptPanel from "./AttemptPanel";
 
-const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
+const ShowScore = ({
+  score,
+  correctView,
+  viewModel,
+  scoreViewModel,
+  combinationLength,
+}) => {
   const [state, setState] = useState({});
   const [saveStatus, setSaveStatus] = useState();
   const [username, setUsername] = useState("");
@@ -37,7 +43,12 @@ const ShowScore = ({ score, correctView, viewModel, scoreViewModel }) => {
 
       <div className="correct">
         <h5>Correct combination:</h5>
-        <AttemptPanel comb={correctView} attemptIncomplete={""}></AttemptPanel>
+        <AttemptPanel
+          comb={correctView}
+          attemptIncomplete={""}
+          combinationLength={combinationLength}
+          viewModel={viewModel}
+        ></AttemptPanel>
       </div>
       <div className="saveScore">
         {scoreViewModel.checkStorageAndScore(score) ? (

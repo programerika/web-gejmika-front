@@ -315,6 +315,18 @@ h5 {
   border-color: white transparent transparent transparent;
 }
 
+.messageGreen {
+  color: green;
+}
+
+.messageRed {
+  color: red;
+}
+
+.messageWhite {
+  color: white;
+}
+
 /* SHOWSCORE - END */
 
 /* SCOREBOARD - BEGIN */
@@ -379,7 +391,6 @@ td {
   padding: 5px 10px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 12px;
   margin: 10px 3px 3px 4px;
   cursor: pointer;
@@ -416,29 +427,31 @@ path {
 
 /* SVG INDICATOR - END*/
 
-.messageGreen {
-  color: green;
-}
-
-.messageRed {
-  color: red;
-}
-
-.messageWhite {
-  color: white;
-}
-
 /* MEDIA QUERRIES - BEGIN */
+
+@media screen and (min-width: 1300px) {
+  .wrapper {
+    margin-top: 10px;
+    padding-top: 50px;
+  }
+
+  .score-board {
+    margin-top: 30px;
+    width: 25%;
+  }
+}
 
 @media screen and (max-width: 800px) {
   .wrapper {
-    margin-top: 0px;
+    margin-top: 30px;
+    padding-top: 0px;
     flex-direction: column;
   }
 
   .score-board {
     margin-top: 30px;
-    width: 50%;
+    margin-bottom: 30px;
+    width: 45%;
   }
 }
 
@@ -453,7 +466,7 @@ path {
   }
 
   .score-board {
-    width: 50%;
+    width: 70%;
   }
 }
 

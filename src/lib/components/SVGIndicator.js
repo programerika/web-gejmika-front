@@ -6,7 +6,6 @@ const SVGIndicator = (props) => {
   const reference = useRef(props.indID);
   var fromAngle, toAngle, fromCoordX, fromCoordY, toCoordX, toCoordY, path, d;
   function createPie(cx, cy, r, slices) {
-    let c = [2, 3, 0, 1];
     for (var i = 0; i < slices; i++) {
       path = document.createElementNS("http://www.w3.org/2000/svg", "path");
       fromAngle = (i * 360) / slices;
@@ -35,7 +34,7 @@ const SVGIndicator = (props) => {
         toCoordY +
         "z";
       path.setAttributeNS(null, "d", d);
-      path.setAttributeNS(null, "fill", props.colors[c[i]]);
+      path.setAttributeNS(null, "fill", props.colors[i]);
       reference.current.appendChild(path);
     }
   }

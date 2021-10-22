@@ -6,6 +6,7 @@ const viewReducers = (
     attemptsView: [],
     correctView: [],
     attemptIncomplete: "",
+    gameDifficulty: {},
     id: -1,
   },
   action

@@ -7,43 +7,49 @@ export class WebGejmikaModel {
     this.modelState = modelState;
   }
 
-  /**
-   *
-   * @param {Array} attpInProgress
-   * @returns {Object} Model state with added attempt and set attemptOutcome
-   * This method compares attpInProgress with secretComb and generates attemptOutcome - array of numbers [0-2]
-   * 0 - guess not in secret comb
-   * 1 - guess exists in secret combination but is not in right place
-   * 2 - guess is in right place
-   */
-
   combinationLength = () => {
     return 4;
   };
 
+  attemptsLength = () => {
+    return 5;
+  };
+
+  /**
+   *
+   * @param {Array} attpInProgress
+   * @returns {Object} Model state with added attempt and set attemptOutcome
+   * This method compares attpInProgress with secretComb and generates attemptOutcome - object with two variables:
+   * inPlace - number of guesses in place
+   * correctCode - number of correct guesses, but not in place
+   */
+
   makeAGuess = (attpInProgress) => {
     var combination = [...this.modelState.secretComb];
     var attempt = [...attpInProgress];
-    let outcome = [];
+    let outcome = {
+      inPlace: 0,
+      correctCode: 0,
+    };
+
     for (let index = 0; index < attempt.length; index++) {
       if (attempt[index] === combination[index]) {
-        outcome[index] = 2;
+        outcome.inPlace += 1;
         combination[index] = "";
-      } else {
-        outcome[index] = -1;
+        attempt[index] = "";
       }
     }
 
     for (let index = 0; index < attempt.length; index++) {
-      if (outcome[index] !== -1) continue;
+      if (attempt[index] == "") continue;
       if (combination.indexOf(attempt[index]) !== -1) {
-        outcome[index] = 1;
+        outcome.correctCode += 1;
         let ind = combination.indexOf(attempt[index]);
         combination[ind] = "";
-      } else outcome[index] = 0;
+      }
     }
 
-    const newState = {
+    const newModelState = {
       ...this.modelState,
       attpInProgress: [],
       attempts: [
@@ -55,12 +61,12 @@ export class WebGejmikaModel {
       ],
     };
 
-    if (this.isTargetReached(newState.attempts)) {
-      newState.score = this.calculateScore(newState.attempts);
-      newState.gameOver = true;
+    if (this.isTargetReached(newModelState.attempts)) {
+      newModelState.score = this.calculateScore(newModelState.attempts);
+      newModelState.gameOver = true;
     }
 
-    return newState;
+    return newModelState;
   };
 
   /**
@@ -72,11 +78,11 @@ export class WebGejmikaModel {
   generateSecretCode = () => {
     let combArr = ["K", "H", "P", "T", "L", "S"];
     let combination = [];
-    for (let index = 0; index <= 3; index++) {
+    for (let index = 0; index < this.combinationLength(); index++) {
       let rand = Math.floor(Math.random() * combArr.length);
       combination[index] = combArr[rand];
     }
-    const newState = {
+    const newModelState = {
       ...this.modelState,
       attpInProgress: [],
       attempts: [],
@@ -84,7 +90,7 @@ export class WebGejmikaModel {
       secretComb: combination,
       gameOver: false,
     };
-    return newState;
+    return newModelState;
   };
 
   /**
@@ -97,17 +103,10 @@ export class WebGejmikaModel {
   isTargetReached = (attempts) => {
     if (attempts.length === 0) return false;
     var lastAttp = attempts[attempts.length - 1];
-    var check = true;
-    lastAttp.attemptOutcome.forEach((el) => {
-      if (el != "2") {
-        check = false;
-      }
-    });
-    if (attempts.length === 5) {
+    var check = lastAttp.attemptOutcome.inPlace == this.combinationLength();
+    if (attempts.length === this.attemptsLength()) {
       return true;
-    } else if (check) {
-      return true;
-    } else return false;
+    } else return check;
   };
 
   /**
@@ -119,13 +118,8 @@ export class WebGejmikaModel {
 
   calculateScore = (attempts) => {
     var lastAttp = attempts[attempts.length - 1];
-    var check = true;
-    lastAttp.attemptOutcome.forEach((el) => {
-      if (el != "2") {
-        check = false;
-      }
-    });
-    if (!check && attempts.length === 5) return 0;
+    var check = lastAttp.attemptOutcome.inPlace === this.combinationLength();
+    if (!check && attempts.length === this.attemptsLength()) return 0;
     else {
       switch (attempts.length) {
         case 1:
