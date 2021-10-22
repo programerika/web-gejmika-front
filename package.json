@@ -1,5 +1,5 @@
 {
-  "name": "web-gejmika-front",
+  "name": "web-gejmika-front-test10",
   "version": "0.1.0",
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
@@ -22,6 +22,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "buildgejmika": "SET NODE_ENV=production && babel src/lib --out-dir dist --copy-files"
+    
   },
   "eslintConfig": {
     "extends": [

@@ -14,7 +14,8 @@ const updateScoreBoard = (newStateScoreBoard) => {
   };
 };
 
-export default {
-  update,
-  updateScoreBoard,
+const actions = {
+  update,updateScoreBoard
 };
+
+export default actions;
