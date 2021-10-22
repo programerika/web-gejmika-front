@@ -47,6 +47,7 @@ const ShowScore = ({
           comb={correctView}
           attemptIncomplete={""}
           combinationLength={combinationLength}
+          viewModel={viewModel}
         ></AttemptPanel>
       </div>
       <div className="saveScore">

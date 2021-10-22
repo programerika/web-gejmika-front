@@ -1,21 +1,17 @@
 import React from "react";
-import { useState, useEffect } from "react";
 
-const AttemptPanel = ({ comb, combinationLength, attemptIncomplete }) => {
+const AttemptPanel = ({ comb, combinationLength, viewModel }) => {
   return (
     <>
       {[...Array(combinationLength).keys()].map((num, index) => {
+        let { imgClassName, imgSrc } = viewModel.prepareAttemptPanelView(
+          comb[num]
+        );
         return (
           <img
             key={index}
-            className={
-              typeof comb[num] == "undefined"
-                ? `circle ` + attemptIncomplete
-                : `circle`
-            }
-            src={
-              typeof comb[num] == "undefined" ? "./icons/circle.png" : comb[num]
-            }
+            className={imgClassName}
+            src={imgSrc}
             alt="kombinacija"
           />
         );

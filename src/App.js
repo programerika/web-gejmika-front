@@ -60,6 +60,7 @@ function App() {
               attemptIncomplete={attemptIncomplete}
               attemptsLength={attemptsLength}
               combinationLength={combinationLength}
+              viewModel={viewModel}
             ></GamePanel>
             <ShowScore
               score={score}
@@ -87,6 +88,7 @@ function App() {
               attemptIncomplete={attemptIncomplete}
               attemptsLength={attemptsLength}
               combinationLength={combinationLength}
+              viewModel={viewModel}
             ></GamePanel>
             <InputPanel viewModel={viewModel}></InputPanel>
           </div>

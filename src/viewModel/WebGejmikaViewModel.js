@@ -31,7 +31,6 @@ export class WebGejmikaViewModel {
       allActions.inputActions.update(newStateModel, newStateView)
     );
   };
- 
 
   /**
    * Methods for each button icon clicked BEGIN
@@ -353,6 +352,45 @@ export class WebGejmikaViewModel {
     return {
       classShowScore: this.modelState.gameOver ? "show" : "hide",
       classInputPanel: this.modelState.gameOver ? "hide" : "show",
+    };
+  };
+
+  prepareAttemptPanelView = (comb) => {
+    const prepared = {
+      imgClassName:
+        typeof comb == "undefined"
+          ? `circle ` + this.viewState.attemptIncomplete
+          : `circle`,
+      imgSrc: typeof comb == "undefined" ? "./icons/circle.png" : comb,
+    };
+    console.log("ATTP VIEW: " + JSON.stringify(prepared));
+    return prepared;
+  };
+
+  prepareGamePanelView = (
+    combInProgress,
+    attemptsView,
+    id,
+    attemptIncomplete,
+    e
+  ) => {
+    return {
+      comb:
+        id + 1 == e
+          ? combInProgress
+          : typeof attemptsView[e] !== "undefined"
+          ? attemptsView[e].attemptViewComb
+          : [
+              "./icons/circle.png",
+              "./icons/circle.png",
+              "./icons/circle.png",
+              "./icons/circle.png",
+            ],
+      attemptIncpl: id + 1 == e ? attemptIncomplete : "",
+      colors:
+        typeof attemptsView[e] !== "undefined"
+          ? attemptsView[e].attemptViewOutcome
+          : ["lightgray", "lightgray", "lightgray", "lightgray"],
     };
   };
 }

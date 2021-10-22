@@ -9,35 +9,27 @@ const GamePanel = ({
   attemptIncomplete,
   attemptsLength,
   combinationLength,
+  viewModel,
 }) => {
   return (
     <>
       {[...Array(attemptsLength).keys()].map((e, i) => {
+        let { comb, attemptIncpl, colors } = viewModel.prepareGamePanelView(
+          combInProgress,
+          attemptsView,
+          id,
+          attemptIncomplete,
+          e
+        );
         return (
           <div key={e} className="flex-cont">
             <AttemptPanel
-              comb={
-                id + 1 == e
-                  ? combInProgress
-                  : typeof attemptsView[e] !== "undefined"
-                  ? attemptsView[e].attemptViewComb
-                  : [
-                      "./icons/circle.png",
-                      "./icons/circle.png",
-                      "./icons/circle.png",
-                      "./icons/circle.png",
-                    ]
-              }
-              attemptIncomplete={id + 1 == e ? attemptIncomplete : ""}
+              comb={comb}
+              attemptIncomplete={attemptIncpl}
               combinationLength={combinationLength}
+              viewModel={viewModel}
             ></AttemptPanel>
-            <SVGIndicator
-              colors={
-                typeof attemptsView[e] !== "undefined"
-                  ? attemptsView[e].attemptViewOutcome
-                  : ["lightgray", "lightgray", "lightgray", "lightgray"]
-              }
-            ></SVGIndicator>
+            <SVGIndicator colors={colors}></SVGIndicator>
           </div>
         );
       })}
