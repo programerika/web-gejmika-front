@@ -57,7 +57,7 @@ export class ScoreViewModel {
       };
     }
 
-    let regex = new RegExp("[a-zA-Z]{4,6}[0-9]{2}$");
+    let regex = new RegExp("[a-zA-Z0-9]{4,6}[0-9]{2}$");
     if (regex.test(username) && this.storage.isItemInStorageEmpty("username")) {
       if (
         (await this.webGejmikaService.checkIfUsernameExists(username)) === true

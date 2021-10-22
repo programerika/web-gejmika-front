@@ -9,42 +9,45 @@ import Header from "./Header";
 import { ScoreViewModel } from "../../viewModel/ScoreViewModel";
 
 const Game = () => {
+  const dispatch = useDispatch();
+  const modelState = useSelector((state) => state.model);
+  const viewState = useSelector((state) => state.view);
+  const scoreState = useSelector((state) => state.score);
 
-    const dispatch = useDispatch();
-    const modelState = useSelector((state) => state.model);
-    const viewState = useSelector((state) => state.view);
-    const scoreState = useSelector((state) => state.score);
-  
-    const { score, gameOver } = modelState;
-  
-    const {
-      topPlayers: { topPlayers, currentPlayer },
-    } = scoreState;
-  
-    const { combInProgress, attemptsView, correctView, id, attemptIncomplete } =
-      viewState;
-  
-    const scoreViewModel = new ScoreViewModel(scoreState, dispatch);
-  
-    const viewModel = new WebGejmikaViewModel(
-      modelState,
-      viewState,
-      scoreState,
-      dispatch
-    );
-  
-    useEffect(() => {
-      viewModel.startGame();
-    }, []);
-  
-    useEffect(() => {
-      console.log("SECRET: " + JSON.stringify(modelState));
-    }, [modelState]);
-  
+  const { score, gameOver } = modelState;
 
+  const {
+    topPlayers: { topPlayers, currentPlayer },
+  } = scoreState;
+
+  const {
+    combInProgress,
+    attemptsView,
+    correctView,
+    id,
+    attemptIncomplete,
+    gameDifficulty: { combinationLength, attemptsLength },
+  } = viewState;
+
+  const scoreViewModel = new ScoreViewModel(scoreState, dispatch);
+
+  const viewModel = new WebGejmikaViewModel(
+    modelState,
+    viewState,
+    scoreState,
+    dispatch
+  );
+
+  useEffect(() => {
+    viewModel.startGame();
+  }, []);
+
+  useEffect(() => {
+    console.log("SECRET: " + JSON.stringify(modelState));
+  }, [modelState]);
 
   return (
-        <>
+    <>
       {gameOver ? (
         <div className="wrapper">
           <div className="container">
@@ -54,12 +57,16 @@ const Game = () => {
               attemptsView={attemptsView}
               id={id}
               attemptIncomplete={attemptIncomplete}
+              viewModel={viewModel}
+              combinationLength={combinationLength}
+              attemptsLength={attemptsLength}
             ></GamePanel>
             <ShowScore
               score={score}
               viewModel={viewModel}
               correctView={correctView}
               scoreViewModel={scoreViewModel}
+              combinationLength={combinationLength}
             ></ShowScore>
           </div>
           <ScoreBoard
@@ -78,6 +85,9 @@ const Game = () => {
               attemptsView={attemptsView}
               id={id}
               attemptIncomplete={attemptIncomplete}
+              combinationLength={combinationLength}
+              viewModel={viewModel}
+              attemptsLength={attemptsLength}
             ></GamePanel>
             <InputPanel viewModel={viewModel}></InputPanel>
           </div>
@@ -89,7 +99,7 @@ const Game = () => {
           ></ScoreBoard>
         </div>
       )}
-   </>
+    </>
   );
 };
 export default Game;
