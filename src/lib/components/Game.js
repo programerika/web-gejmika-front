@@ -28,7 +28,6 @@ const Game = () => {
     gameDifficulty: { combinationLength, attemptsLength },
   } = viewState;
 
-
   const scoreViewModel = new ScoreViewModel(scoreState, dispatch);
 
   const viewModel = new WebGejmikaViewModel(
@@ -40,6 +39,7 @@ const Game = () => {
 
   //TODO move to WebGejmikaViewModel
   const correctView2 = viewModel.prepareAttemptPanelView(correctView);
+  const attempts = viewModel.prepareGameView();
 
   useEffect(() => {
     viewModel.startGame();
@@ -55,14 +55,7 @@ const Game = () => {
         <div className="wrapper">
           <div className="container">
             <Header></Header>
-            <GamePanel
-              combInProgress={combInProgress}
-              attemptsView={attemptsView}
-              id={id}
-              viewModel={viewModel}
-              combinationLength={combinationLength}
-              attemptsLength={attemptsLength}
-            ></GamePanel>
+            <GamePanel attempts={attempts}></GamePanel>
             <ShowScore
               score={score}
               viewModel={viewModel}
@@ -82,14 +75,7 @@ const Game = () => {
         <div className="wrapper">
           <div className="container">
             <Header></Header>
-            <GamePanel
-              combInProgress={combInProgress}
-              attemptsView={attemptsView}
-              id={id}
-              combinationLength={combinationLength}
-              viewModel={viewModel}
-              attemptsLength={attemptsLength}
-            ></GamePanel>
+            <GamePanel attempts={attempts}></GamePanel>
             <InputPanel viewModel={viewModel}></InputPanel>
           </div>
           <ScoreBoard

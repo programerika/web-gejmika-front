@@ -2,11 +2,11 @@ import React from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
 
-const SVGIndicator = (props) => {
-  const reference = useRef(props.indID);
-  
+const SVGIndicator = ({ colors, indID }) => {
+  const reference = useRef(indID);
+
   function createPie(cx, cy, r) {
-    const slices = props.colors.length;
+    const slices = colors.length;
     var fromAngle, toAngle, fromCoordX, fromCoordY, toCoordX, toCoordY, path, d;
     for (var i = 0; i < slices; i++) {
       path = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -36,7 +36,7 @@ const SVGIndicator = (props) => {
         toCoordY +
         "z";
       path.setAttributeNS(null, "d", d);
-      path.setAttributeNS(null, "fill", props.colors[i]);
+      path.setAttributeNS(null, "fill", colors[i]);
       reference.current.appendChild(path);
     }
   }

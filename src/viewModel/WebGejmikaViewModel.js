@@ -222,7 +222,7 @@ export class WebGejmikaViewModel {
    * This method sets  model, view  and score state to default parameters and calls dispatchUpdate function
    */
 
-  async startGame() {
+  startGame() {
     const newStateModel = this.webGejmikaModel.generateSecretCode();
     this.dispatchUpdate(newStateModel, {
       combInProgress: [],
@@ -235,9 +235,7 @@ export class WebGejmikaViewModel {
       },
       id: -1,
     });
-    this.scoreViewModel.dispatchUpdateScoreBoard({
-      topPlayers: await this.scoreViewModel.getTopPlayers(),
-    });
+    this.scoreViewModel.initializeScoreGameStart();
   }
 
   /**
@@ -356,59 +354,63 @@ export class WebGejmikaViewModel {
   };
 
   prepareAttemptPanelView = (comb) => {
-    const fullComb = [...Array(this.viewState.gameDifficulty.combinationLength).keys()]
+    const fullComb = [
+      ...Array(this.viewState.gameDifficulty.combinationLength).keys(),
+    ];
 
     return fullComb.map((index) => {
       const prepared = {
         imgClassName:
           typeof comb[index] == "undefined"
-            ? 
-              `circle ` + this.viewState.attemptIncomplete
-            : 
-              `circle`,
-        imgSrc: 
-          typeof comb[index] == "undefined" 
-            ? 
-              "./icons/circle.png" 
-            : 
-              comb[index]
+            ? `circle ` + this.viewState.attemptIncomplete
+            : `circle`,
+        imgSrc:
+          typeof comb[index] == "undefined"
+            ? "./icons/circle.png"
+            : comb[index],
       };
       return prepared;
-    });    
+    });
+  };
+
+  prepareGameView = () => {
+    const fullAttp = [
+      ...Array(this.viewState.gameDifficulty.attemptsLength).keys(),
+    ];
+    const preparedAttp = [
+      ...Array(this.viewState.gameDifficulty.attemptsLength).keys(),
+    ];
+    fullAttp.forEach((e) => {
+      preparedAttp[e] = this.prepareGamePanelView(
+        this.viewState.combInProgress,
+        this.viewState.attemptsView,
+        this.viewState.id,
+        e
+      );
+    });
+    return preparedAttp;
   };
 
   areWeAtAttemptInProgress = (id, e) => id + 1 == e;
 
-  prepareGamePanelView = (
-    combInProgress,
-    attemptsView,
-    id,
-    e
-  ) => {
+  prepareGamePanelView = (combInProgress, attemptsView, id, e) => {
     return {
-      comb:
-        this.prepareAttemptPanelView(
-          this.areWeAtAttemptInProgress(id,e)
-            ? 
-              combInProgress
-            : 
-              typeof attemptsView[e] !== "undefined"
-                ? 
-                  attemptsView[e].attemptViewComb
-                : 
-                  [
-                    "./icons/circle.png",
-                    "./icons/circle.png",
-                    "./icons/circle.png",
-                    "./icons/circle.png",
-                  ]
-        ),
+      comb: this.prepareAttemptPanelView(
+        this.areWeAtAttemptInProgress(id, e)
+          ? combInProgress
+          : typeof attemptsView[e] !== "undefined"
+          ? attemptsView[e].attemptViewComb
+          : [
+              "./icons/circle.png",
+              "./icons/circle.png",
+              "./icons/circle.png",
+              "./icons/circle.png",
+            ]
+      ),
       colors:
         typeof attemptsView[e] !== "undefined"
-          ? 
-            attemptsView[e].attemptViewOutcome
-          : 
-            ["lightgray", "lightgray", "lightgray", "lightgray"],
+          ? attemptsView[e].attemptViewOutcome
+          : ["lightgray", "lightgray", "lightgray", "lightgray"],
     };
   };
 }

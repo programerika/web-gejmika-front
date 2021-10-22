@@ -1,17 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
-const ScoreBoard = ({ people, currentPlayer, viewModel, scoreViewModel }) => {
-  const [scoreView, setScoreView] = useState({
-    classPlayer11: "",
-    classDeleteBtn: "",
-  });
-  useEffect(() => {
-    console.log(
-      "SCORE VIEW: " + scoreView.classPlayer11 + " " + scoreView.classDeleteBtn
-    );
-    setScoreView(scoreViewModel.setScoreView());
-  }, [people]);
+const ScoreBoard = ({ viewModel, scoreViewModel }) => {
+  const { ...scoreState } = useSelector((state) => state.score);
+  const {
+    topPlayers: { topPlayers, currentPlayer },
+    boardView: { classPlayer11, classDeleteBtn },
+  } = scoreState;
   return (
     <>
       <table className="score-board ">
@@ -23,7 +19,7 @@ const ScoreBoard = ({ people, currentPlayer, viewModel, scoreViewModel }) => {
           </tr>
         </thead>
         <tbody>
-          {people.map((person, i) => {
+          {topPlayers.map((person, i) => {
             let { rowColor } = scoreViewModel.highlightCurrentUser(
               person.username
             );
@@ -38,21 +34,19 @@ const ScoreBoard = ({ people, currentPlayer, viewModel, scoreViewModel }) => {
             );
           })}
 
-          <tr className={`current-player-separator ` + scoreView.classPlayer11}>
+          <tr className={`current-player-separator ` + classPlayer11}>
             <td></td>
             <td>...</td>
             <td></td>
           </tr>
-          <tr
-            className={`person-score currentPlayer ` + scoreView.classPlayer11}
-          >
+          <tr className={`person-score currentPlayer ` + classPlayer11}>
             <td>11.</td>
             <td>{currentPlayer.username}</td>
             <td>{currentPlayer.score}</td>
           </tr>
 
           <button
-            className={"delete-score-btn " + scoreView.classDeleteBtn}
+            className={"delete-score-btn " + classDeleteBtn}
             onClick={async () => {
               if (
                 window.confirm("Are you sure you want to delete your username?")

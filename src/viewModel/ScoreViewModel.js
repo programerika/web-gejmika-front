@@ -278,13 +278,28 @@ export class ScoreViewModel {
     }
   };
 
+  initializeScoreGameStart = async () => {
+    this.dispatchUpdateScoreBoard({
+      topPlayers: await this.getTopPlayers(),
+      boardView: {
+        classPlayer11: this.is11PlayerOnTheBoard() ? "showTblRow" : "hide",
+        classDeleteBtn: !this.storage.isItemInStorageEmpty("username")
+          ? "show"
+          : "hide",
+      },
+    });
+  };
+
   setScoreView = () => {
-    return {
-      classPlayer11: this.is11PlayerOnTheBoard() ? "showTblRow" : "hide",
-      classDeleteBtn: !this.storage.isItemInStorageEmpty("username")
-        ? "show"
-        : "hide",
-    };
+    this.dispatchUpdateScoreBoard({
+      ...this.scoreState,
+      boardView: {
+        classPlayer11: this.is11PlayerOnTheBoard() ? "showTblRow" : "hide",
+        classDeleteBtn: !this.storage.isItemInStorageEmpty("username")
+          ? "show"
+          : "hide",
+      },
+    });
   };
   changeClassesOnSaveButtonClick = (state) => {
     return {

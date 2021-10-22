@@ -2,29 +2,14 @@ import React from "react";
 import AttemptPanel from "./AttemptPanel";
 import SVGIndicator from "./SVGIndicator";
 
-const GamePanel = ({
-  combInProgress,
-  attemptsView,
-  id,
-  attemptsLength,
-  combinationLength,
-  viewModel,
-}) => {
+const GamePanel = ({ attempts }) => {
   return (
     <>
-      {[...Array(attemptsLength).keys()].map((e, i) => {
-        let { comb, colors } = viewModel.prepareGamePanelView(
-          combInProgress,
-          attemptsView,
-          id,
-          e
-        );
+      {attempts.map((attempt, i) => {
         return (
-          <div key={e} className="flex-cont">
-            <AttemptPanel
-              comb={comb}
-            ></AttemptPanel>
-            <SVGIndicator colors={colors}></SVGIndicator>
+          <div key={i} className="flex-cont">
+            <AttemptPanel comb={attempt.comb}></AttemptPanel>
+            <SVGIndicator colors={attempt.colors}></SVGIndicator>
           </div>
         );
       })}

@@ -1,8 +1,6 @@
 import React from "react";
 
-const InputPanel = (props) => {
-  const viewModel = props.viewModel;
-
+const InputPanel = ({ viewModel }) => {
   return (
     <div className="input-panel">
       <div className="input-icons-wrapper">
