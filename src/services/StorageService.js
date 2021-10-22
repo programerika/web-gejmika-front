@@ -3,7 +3,6 @@
  */
 
 export class StorageService {
-  constructor() {}
 
   setItem = (key, value) => {
     localStorage.setItem(key, value);

@@ -363,7 +363,6 @@ export class WebGejmikaViewModel {
           : `circle`,
       imgSrc: typeof comb == "undefined" ? "./icons/circle.png" : comb,
     };
-    console.log("ATTP VIEW: " + JSON.stringify(prepared));
     return prepared;
   };
 

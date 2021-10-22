@@ -41,7 +41,7 @@ export class WebGejmikaModel {
     }
 
     for (let index = 0; index < attempt.length; index++) {
-      if (attempt[index] == "") continue;
+      if (attempt[index] === "") continue;
       if (combination.indexOf(attempt[index]) !== -1) {
         outcome.correctCode += 1;
         let ind = combination.indexOf(attempt[index]);
@@ -103,7 +103,7 @@ export class WebGejmikaModel {
   isTargetReached = (attempts) => {
     if (attempts.length === 0) return false;
     var lastAttp = attempts[attempts.length - 1];
-    var check = lastAttp.attemptOutcome.inPlace == this.combinationLength();
+    var check = lastAttp.attemptOutcome.inPlace === this.combinationLength();
     if (attempts.length === this.attemptsLength()) {
       return true;
     } else return check;

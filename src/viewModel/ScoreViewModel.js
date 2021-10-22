@@ -118,7 +118,7 @@ export class ScoreViewModel {
   };
 
   disableSaveScoreButton = (isSaveButtonDisabled, score) => {
-    if (isSaveButtonDisabled || score == 0) {
+    if (isSaveButtonDisabled || score === 0) {
       return true;
     } else {
       return false;
@@ -142,7 +142,7 @@ export class ScoreViewModel {
         initialVelocityX: 20,
         initialVelocityY: 20,
       };
-    } else if (score == 13) {
+    } else if (score === 13) {
       return {
         width: window.innerWidth,
         height: window.innerHeight,
@@ -158,7 +158,7 @@ export class ScoreViewModel {
         initialVelocityX: 10,
         initialVelocityY: 10,
       };
-    } else if (score == 8) {
+    } else if (score === 8) {
       return {
         width: window.innerWidth,
         height: window.innerHeight,
@@ -194,7 +194,7 @@ export class ScoreViewModel {
   };
 
   calculateScoreMsg = (score) => {
-    if (score == 0) return "Sorry, better luck next time! :(";
+    if (score === 0) return "Sorry, better luck next time! :(";
     else return `You got ${score} points!!!`;
   };
 
@@ -227,7 +227,7 @@ export class ScoreViewModel {
   isUserInTopTen = () => {
     let isUsernameInTopTen = false;
     this.scoreState.topPlayers.topPlayers.map((person, i) => {
-      if (person.username == this.storage.getItem("username")) {
+      if (person.username === this.storage.getItem("username")) {
         isUsernameInTopTen = true;
       }
     });
@@ -235,14 +235,14 @@ export class ScoreViewModel {
   };
 
   highlightCurrentUser = (username) => {
-    const isEqual = username == this.storage.getItem("username");
+    const isEqual = username === this.storage.getItem("username");
     return {
       rowColor: isEqual ? "currentPlayer" : "",
     };
   };
 
   isLocalStorageEmpty = () => {
-    return this.storage.getItem("username") == null;
+    return this.storage.getItem("username") === null;
   };
 
   is11PlayerOnTheBoard = () => {
@@ -252,7 +252,7 @@ export class ScoreViewModel {
   };
 
   deleteUsername = async () => {
-    if (this.storage.getItem("uid") != null) {
+    if (this.storage.getItem("uid") !== null) {
       const resp = await this.webGejmikaService.deleteScore(
         this.storage.getItem("uid")
       );
@@ -268,7 +268,7 @@ export class ScoreViewModel {
   };
 
   addScore = async (score) => {
-    if (score == 0) return;
+    if (score === 0) return;
     else {
       this.webGejmikaService
         .addScore(this.storage.getItem("username"), score)

@@ -3,19 +3,15 @@
  */
 
 export class WebGejmikaService {
-  constructor() {}
-
   /**
    *  @param {String} username - passing username we want to check
    *  @returns {Boolean} true if username already exists
    */
 
   checkIfUsernameExists = async (username) => {
-    const response = await fetch(`/api/v1/player-scores/${username}`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await fetch(`/api/v1/player-scores/${username}`, {
+      method: "GET",
+    });
 
     const status = await response.status;
 
@@ -49,10 +45,10 @@ export class WebGejmikaService {
     });
 
     const resp = await response;
-    if(resp.status===201){
-      return resp
-    } else{
-      return null
+    if (resp.status === 201) {
+      return resp;
+    } else {
+      return null;
     }
   };
 
@@ -67,7 +63,8 @@ export class WebGejmikaService {
    */
 
   addScore = async (username, score) => {
-    const response = await fetch(`/api/v1/player-scores/${username}/add-score`,
+    const response = await fetch(
+      `/api/v1/player-scores/${username}/add-score`,
       {
         method: "POST",
         headers: {
@@ -94,7 +91,7 @@ export class WebGejmikaService {
     const resp = await response.json();
     console.log("From method: " + JSON.stringify(resp));
     console.log(response.status);
-    if (response.status == 200) {
+    if (response.status === 200) {
       return resp;
     } else {
       return [];
@@ -106,25 +103,20 @@ export class WebGejmikaService {
    */
 
   deleteScore = async (uid) => {
-    const response = await fetch(`/api/v1/player-scores/${uid}`,
-      {
-        method: "DELETE",
-      }
-    );
+    const response = await fetch(`/api/v1/player-scores/${uid}`, {
+      method: "DELETE",
+    });
     return await response.status;
   };
 
   getCurrentPlayer = async (username) => {
-    const response = await fetch(
-      `/api/v1/player-scores/${username}`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await fetch(`/api/v1/player-scores/${username}`, {
+      method: "GET",
+    });
 
     const res = await response.json();
     console.log("LOG RES: " + JSON.stringify(res));
-    if (response.status == 200) {
+    if (response.status === 200) {
       return res;
     } else {
       return {};

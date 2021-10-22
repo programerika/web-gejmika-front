@@ -48,6 +48,7 @@ const InputPanel = (props) => {
         <img
           className="input"
           src="/icons/checked.png"
+          alt="confirm"
           onClick={() => {
             viewModel.codeGuessIfReady();
           }}
@@ -56,6 +57,7 @@ const InputPanel = (props) => {
         <img
           className="input"
           src="/icons/close.png"
+          alt="delete"
           onClick={() => {
             viewModel.inputDeleteLast();
           }}

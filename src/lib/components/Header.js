@@ -1,16 +1,11 @@
-import React from 'react';
+import React from "react";
 
 const Header = () => {
   return (
-    <div className='header'>
+    <div className="header">
       <h2>Webgejmika</h2>
-      <div className='help-wrapper'>
-        <img 
-          className='input'
-          src="/icons/question-mark.png" 
-          onClick=''
-          alt="help" 
-        />
+      <div className="help-wrapper">
+        <img className="input" src="/icons/question-mark.png" alt="help" />
       </div>
     </div>
   );
