@@ -4,8 +4,10 @@ import { useRef } from "react";
 
 const SVGIndicator = (props) => {
   const reference = useRef(props.indID);
-  var fromAngle, toAngle, fromCoordX, fromCoordY, toCoordX, toCoordY, path, d;
-  function createPie(cx, cy, r, slices) {
+  
+  function createPie(cx, cy, r) {
+    const slices = props.colors.length;
+    var fromAngle, toAngle, fromCoordX, fromCoordY, toCoordX, toCoordY, path, d;
     for (var i = 0; i < slices; i++) {
       path = document.createElementNS("http://www.w3.org/2000/svg", "path");
       fromAngle = (i * 360) / slices;
@@ -40,7 +42,7 @@ const SVGIndicator = (props) => {
   }
 
   useEffect(() => {
-    createPie(55, 55, 50, 4);
+    createPie(55, 55, 50);
   });
 
   return (

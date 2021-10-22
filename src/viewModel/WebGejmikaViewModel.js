@@ -356,40 +356,59 @@ export class WebGejmikaViewModel {
   };
 
   prepareAttemptPanelView = (comb) => {
-    const prepared = {
-      imgClassName:
-        typeof comb == "undefined"
-          ? `circle ` + this.viewState.attemptIncomplete
-          : `circle`,
-      imgSrc: typeof comb == "undefined" ? "./icons/circle.png" : comb,
-    };
-    return prepared;
+    const fullComb = [...Array(this.viewState.gameDifficulty.combinationLength).keys()]
+
+    return fullComb.map((index) => {
+      const prepared = {
+        imgClassName:
+          typeof comb[index] == "undefined"
+            ? 
+              `circle ` + this.viewState.attemptIncomplete
+            : 
+              `circle`,
+        imgSrc: 
+          typeof comb[index] == "undefined" 
+            ? 
+              "./icons/circle.png" 
+            : 
+              comb[index]
+      };
+      return prepared;
+    });    
   };
+
+  areWeAtAttemptInProgress = (id, e) => id + 1 == e;
 
   prepareGamePanelView = (
     combInProgress,
     attemptsView,
     id,
-    attemptIncomplete,
     e
   ) => {
     return {
       comb:
-        id + 1 == e
-          ? combInProgress
-          : typeof attemptsView[e] !== "undefined"
-          ? attemptsView[e].attemptViewComb
-          : [
-              "./icons/circle.png",
-              "./icons/circle.png",
-              "./icons/circle.png",
-              "./icons/circle.png",
-            ],
-      attemptIncpl: id + 1 == e ? attemptIncomplete : "",
+        this.prepareAttemptPanelView(
+          this.areWeAtAttemptInProgress(id,e)
+            ? 
+              combInProgress
+            : 
+              typeof attemptsView[e] !== "undefined"
+                ? 
+                  attemptsView[e].attemptViewComb
+                : 
+                  [
+                    "./icons/circle.png",
+                    "./icons/circle.png",
+                    "./icons/circle.png",
+                    "./icons/circle.png",
+                  ]
+        ),
       colors:
         typeof attemptsView[e] !== "undefined"
-          ? attemptsView[e].attemptViewOutcome
-          : ["lightgray", "lightgray", "lightgray", "lightgray"],
+          ? 
+            attemptsView[e].attemptViewOutcome
+          : 
+            ["lightgray", "lightgray", "lightgray", "lightgray"],
     };
   };
 }

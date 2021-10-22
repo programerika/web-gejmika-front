@@ -6,7 +6,6 @@ const GamePanel = ({
   combInProgress,
   attemptsView,
   id,
-  attemptIncomplete,
   attemptsLength,
   combinationLength,
   viewModel,
@@ -14,20 +13,16 @@ const GamePanel = ({
   return (
     <>
       {[...Array(attemptsLength).keys()].map((e, i) => {
-        let { comb, attemptIncpl, colors } = viewModel.prepareGamePanelView(
+        let { comb, colors } = viewModel.prepareGamePanelView(
           combInProgress,
           attemptsView,
           id,
-          attemptIncomplete,
           e
         );
         return (
           <div key={e} className="flex-cont">
             <AttemptPanel
               comb={comb}
-              attemptIncomplete={attemptIncpl}
-              combinationLength={combinationLength}
-              viewModel={viewModel}
             ></AttemptPanel>
             <SVGIndicator colors={colors}></SVGIndicator>
           </div>

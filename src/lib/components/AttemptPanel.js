@@ -1,17 +1,14 @@
 import React from "react";
 
-const AttemptPanel = ({ comb, combinationLength, viewModel }) => {
+const AttemptPanel = ({ comb }) => {
   return (
     <>
-      {[...Array(combinationLength).keys()].map((num, index) => {
-        let { imgClassName, imgSrc } = viewModel.prepareAttemptPanelView(
-          comb[num]
-        );
+      {comb.map((item, index) => {
         return (
           <img
             key={index}
-            className={imgClassName}
-            src={imgSrc}
+            className={item.imgClassName}
+            src={item.imgSrc}
             alt="kombinacija"
           />
         );
