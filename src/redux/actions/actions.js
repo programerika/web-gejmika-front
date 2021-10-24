@@ -1,4 +1,4 @@
-import { UPDATE, UPDATE_BOARD } from "../types";
+import { UPDATE, UPDATE_BOARD, UPDATE_VIEW } from "../types";
 
 const update = (newStateModel, newStateView) => {
   return {
@@ -14,8 +14,17 @@ const updateScoreBoard = (newStateScoreBoard) => {
   };
 };
 
+const updateViewModel = (newViewModelState) => {
+  return {
+    type: UPDATE_VIEW,
+    payload: { newViewModelState },
+  };
+};
+
 const actions = {
-  update,updateScoreBoard
+  update,
+  updateScoreBoard,
+  updateViewModel,
 };
 
 export default actions;

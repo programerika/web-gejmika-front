@@ -1,11 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import AttemptPanel from "./AttemptPanel";
 import SVGIndicator from "./SVGIndicator";
 
-const GamePanel = ({ attempts }) => {
+const GamePanel = () => {
+  const { preparedAttempts } = useSelector((state) => state.view);
   return (
     <>
-      {attempts.map((attempt, i) => {
+      {preparedAttempts.map((attempt, i) => {
         return (
           <div key={i} className="flex-cont">
             <AttemptPanel comb={attempt.comb}></AttemptPanel>

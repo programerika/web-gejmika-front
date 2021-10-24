@@ -3,11 +3,10 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const ScoreBoard = ({ viewModel, scoreViewModel }) => {
-  const { ...scoreState } = useSelector((state) => state.score);
   const {
     topPlayers: { topPlayers, currentPlayer },
     boardView: { classPlayer11, classDeleteBtn },
-  } = scoreState;
+  } = useSelector((state) => state.score);
   return (
     <>
       <table className="score-board ">
@@ -20,11 +19,8 @@ const ScoreBoard = ({ viewModel, scoreViewModel }) => {
         </thead>
         <tbody>
           {topPlayers.map((person, i) => {
-            let { rowColor } = scoreViewModel.highlightCurrentUser(
-              person.username
-            );
             return (
-              <tr key={i} className={`person-score ` + rowColor}>
+              <tr key={i} className={`person-score ` + person.rowColor}>
                 <td>
                   <b>{i + 1}.</b>
                 </td>
@@ -47,19 +43,7 @@ const ScoreBoard = ({ viewModel, scoreViewModel }) => {
 
           <button
             className={"delete-score-btn " + classDeleteBtn}
-            onClick={async () => {
-              if (
-                window.confirm("Are you sure you want to delete your username?")
-              ) {
-                scoreViewModel.deleteUsername().then(() => {
-                  scoreViewModel.refreshScoreBoard();
-                  viewModel.startGame();
-                });
-                console.log("Username deleted.");
-              } else {
-                console.log("Username not deleted.");
-              }
-            }}
+            onClick={() => scoreViewModel.deleteButtonClicked(viewModel)}
           >
             Delete
           </button>

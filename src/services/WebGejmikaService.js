@@ -89,8 +89,6 @@ export class WebGejmikaService {
   getTopPlayers = async () => {
     const response = await fetch("/api/v1/top-score");
     const resp = await response.json();
-    console.log("From method: " + JSON.stringify(resp));
-    console.log(response.status);
     if (response.status === 200) {
       return resp;
     } else {
@@ -115,7 +113,6 @@ export class WebGejmikaService {
     });
 
     const res = await response.json();
-    console.log("LOG RES: " + JSON.stringify(res));
     if (response.status === 200) {
       return res;
     } else {

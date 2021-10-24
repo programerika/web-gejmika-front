@@ -17,15 +17,8 @@ const Game = () => {
   const { score, gameOver } = modelState;
 
   const {
-    topPlayers: { topPlayers, currentPlayer },
-  } = scoreState;
-
-  const {
-    combInProgress,
-    attemptsView,
     correctView,
-    id,
-    gameDifficulty: { combinationLength, attemptsLength },
+    gameDifficulty: { combinationLength },
   } = viewState;
 
   const scoreViewModel = new ScoreViewModel(scoreState, dispatch);
@@ -39,14 +32,13 @@ const Game = () => {
 
   //TODO move to WebGejmikaViewModel
   const correctView2 = viewModel.prepareAttemptPanelView(correctView);
-  const attempts = viewModel.prepareGameView();
 
   useEffect(() => {
     viewModel.startGame();
   }, []);
 
   useEffect(() => {
-    console.log("SECRET: " + JSON.stringify(modelState));
+    console.log("SECRET: " + JSON.stringify(modelState.secretComb));
   }, [modelState]);
 
   return (
@@ -55,7 +47,7 @@ const Game = () => {
         <div className="wrapper">
           <div className="container">
             <Header></Header>
-            <GamePanel attempts={attempts}></GamePanel>
+            <GamePanel></GamePanel>
             <ShowScore
               score={score}
               viewModel={viewModel}
@@ -65,8 +57,6 @@ const Game = () => {
             ></ShowScore>
           </div>
           <ScoreBoard
-            people={topPlayers}
-            currentPlayer={currentPlayer}
             scoreViewModel={scoreViewModel}
             viewModel={viewModel}
           ></ScoreBoard>
@@ -75,12 +65,10 @@ const Game = () => {
         <div className="wrapper">
           <div className="container">
             <Header></Header>
-            <GamePanel attempts={attempts}></GamePanel>
+            <GamePanel></GamePanel>
             <InputPanel viewModel={viewModel}></InputPanel>
           </div>
           <ScoreBoard
-            people={topPlayers}
-            currentPlayer={currentPlayer}
             scoreViewModel={scoreViewModel}
             viewModel={viewModel}
           ></ScoreBoard>

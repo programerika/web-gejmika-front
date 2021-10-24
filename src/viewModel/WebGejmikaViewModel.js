@@ -32,6 +32,11 @@ export class WebGejmikaViewModel {
     );
   };
 
+  dispatchUpdateView = (newViewState) => {
+    console.log("FROM DISPATCH VIEW: " + JSON.stringify(newViewState));
+    this.dispatcher(allActions.inputActions.updateViewModel(newViewState));
+  };
+
   /**
    * Methods for each button icon clicked BEGIN
    *
@@ -48,8 +53,18 @@ export class WebGejmikaViewModel {
       combInProgress: [...this.viewState.combInProgress, "/icons/heart.png"],
       attemptIncomplete: "",
     };
-
-    this.dispatchUpdate({ ...this.modelState }, newStateView);
+    console.log(
+      "NW STATE VIEW: " + JSON.stringify(newStateView.combInProgress)
+    );
+    const preparedAttempts = this.prepareGameView(
+      newStateView.combInProgress,
+      this.viewState.attemptsView,
+      this.viewState.id
+    );
+    this.dispatchUpdate(
+      { ...this.modelState },
+      { ...newStateView, preparedAttempts: preparedAttempts }
+    );
   }
 
   starButtonClicked() {
@@ -62,8 +77,15 @@ export class WebGejmikaViewModel {
       combInProgress: [...this.viewState.combInProgress, "/icons/star.png"],
       attemptIncomplete: "",
     };
-
-    this.dispatchUpdate({ ...this.modelState }, newStateView);
+    const preparedAttempts = this.prepareGameView(
+      newStateView.combInProgress,
+      this.viewState.attemptsView,
+      this.viewState.id
+    );
+    this.dispatchUpdate(
+      { ...this.modelState },
+      { ...newStateView, preparedAttempts: preparedAttempts }
+    );
   }
 
   diamondButtonClicked() {
@@ -76,8 +98,15 @@ export class WebGejmikaViewModel {
       combInProgress: [...this.viewState.combInProgress, "/icons/diamond.png"],
       attemptIncomplete: "",
     };
-
-    this.dispatchUpdate({ ...this.modelState }, newStateView);
+    const preparedAttempts = this.prepareGameView(
+      newStateView.combInProgress,
+      this.viewState.attemptsView,
+      this.viewState.id
+    );
+    this.dispatchUpdate(
+      { ...this.modelState },
+      { ...newStateView, preparedAttempts: preparedAttempts }
+    );
   }
 
   spadesButtonClicked() {
@@ -92,8 +121,15 @@ export class WebGejmikaViewModel {
       ],
       attemptIncomplete: "",
     };
-
-    this.dispatchUpdate({ ...this.modelState }, newStateView);
+    const preparedAttempts = this.prepareGameView(
+      newStateView.combInProgress,
+      this.viewState.attemptsView,
+      this.viewState.id
+    );
+    this.dispatchUpdate(
+      { ...this.modelState },
+      { ...newStateView, preparedAttempts: preparedAttempts }
+    );
   }
 
   trafficLightButtonClicked() {
@@ -108,8 +144,15 @@ export class WebGejmikaViewModel {
       ],
       attemptIncomplete: "",
     };
-
-    this.dispatchUpdate({ ...this.modelState }, newStateView);
+    const preparedAttempts = this.prepareGameView(
+      newStateView.combInProgress,
+      this.viewState.attemptsView,
+      this.viewState.id
+    );
+    this.dispatchUpdate(
+      { ...this.modelState },
+      { ...newStateView, preparedAttempts: preparedAttempts }
+    );
   }
 
   clubsButtonClicked() {
@@ -121,8 +164,15 @@ export class WebGejmikaViewModel {
       combInProgress: [...this.viewState.combInProgress, "/icons/clubs.png"],
       attemptIncomplete: "",
     };
-
-    this.dispatchUpdate({ ...this.modelState }, newStateView);
+    const preparedAttempts = this.prepareGameView(
+      newStateView.combInProgress,
+      this.viewState.attemptsView,
+      this.viewState.id
+    );
+    this.dispatchUpdate(
+      { ...this.modelState },
+      { ...newStateView, preparedAttempts: preparedAttempts }
+    );
   }
 
   /**
@@ -186,7 +236,16 @@ export class WebGejmikaViewModel {
       gameOver: newStateModel.gameOver,
     };
 
-    this.dispatchUpdate(newStateModel, newStateView);
+    const preparedAttempts = this.prepareGameView(
+      newStateView.combInProgress,
+      newStateView.attemptsView,
+      newStateView.id
+    );
+
+    this.dispatchUpdate(newStateModel, {
+      ...newStateView,
+      preparedAttempts: preparedAttempts,
+    });
 
     if (
       newStateModel.gameOver &&
@@ -205,15 +264,20 @@ export class WebGejmikaViewModel {
       let combInProg = [...this.viewState.combInProgress];
       combInProg.pop();
 
+      const newViewState = {
+        ...this.viewState,
+        combInProgress: combInProg,
+        attemptIncomplete: "",
+      };
+
+      const preparedAttempts = this.prepareGameView(
+        newViewState.combInProgress,
+        this.viewState.attemptsView,
+        this.viewState.id
+      );
       this.dispatchUpdate(
-        {
-          ...this.modelState,
-        },
-        {
-          ...this.viewState,
-          combInProgress: combInProg,
-          attemptIncomplete: "",
-        }
+        { ...this.modelState },
+        { ...newViewState, preparedAttempts: preparedAttempts }
       );
     }
   }
@@ -228,6 +292,7 @@ export class WebGejmikaViewModel {
       combInProgress: [],
       attemptsView: [],
       correctView: this.combToIcon(newStateModel.secretComb),
+      preparedAttempts: this.prepareGameView([], [], -1),
       attemptIncomplete: false,
       gameDifficulty: {
         attemptsLength: this.webGejmikaModel.attemptsLength(),
@@ -346,12 +411,12 @@ export class WebGejmikaViewModel {
     return colorsRearrangedforSVG;
   };
 
-  prepareGameView = () => {
-    return {
-      classShowScore: this.modelState.gameOver ? "show" : "hide",
-      classInputPanel: this.modelState.gameOver ? "hide" : "show",
-    };
-  };
+  // prepareGameView = () => {
+  //   return {
+  //     classShowScore: this.modelState.gameOver ? "show" : "hide",
+  //     classInputPanel: this.modelState.gameOver ? "hide" : "show",
+  //   };
+  // };
 
   prepareAttemptPanelView = (comb) => {
     const fullComb = [
@@ -373,7 +438,7 @@ export class WebGejmikaViewModel {
     });
   };
 
-  prepareGameView = () => {
+  prepareGameView = (combInProgress, attemptsView, id) => {
     const fullAttp = [
       ...Array(this.viewState.gameDifficulty.attemptsLength).keys(),
     ];
@@ -382,9 +447,9 @@ export class WebGejmikaViewModel {
     ];
     fullAttp.forEach((e) => {
       preparedAttp[e] = this.prepareGamePanelView(
-        this.viewState.combInProgress,
-        this.viewState.attemptsView,
-        this.viewState.id,
+        combInProgress,
+        attemptsView,
+        id,
         e
       );
     });

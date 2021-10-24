@@ -4,6 +4,7 @@
 import allActions from "../redux/actions";
 import { StorageService } from "../services/StorageService";
 import { WebGejmikaService } from "../services/WebGejmikaService";
+import { WebGejmikaViewModel } from "./WebGejmikaViewModel";
 
 export class ScoreViewModel {
   constructor(scoreState, dispatcher) {
@@ -224,9 +225,9 @@ export class ScoreViewModel {
     };
   };
 
-  isUserInTopTen = () => {
+  isUserInTopTen = (topPlayers) => {
     let isUsernameInTopTen = false;
-    this.scoreState.topPlayers.topPlayers.map((person, i) => {
+    topPlayers.map((person, i) => {
       if (person.username === this.storage.getItem("username")) {
         isUsernameInTopTen = true;
       }
@@ -234,20 +235,24 @@ export class ScoreViewModel {
     return isUsernameInTopTen;
   };
 
-  highlightCurrentUser = (username) => {
-    const isEqual = username === this.storage.getItem("username");
-    return {
-      rowColor: isEqual ? "currentPlayer" : "",
-    };
+  highlightCurrentUser = (topPlayers) => {
+    return topPlayers.map((person, i) => {
+      person.rowColor =
+        person.username === this.storage.getItem("username")
+          ? "currentPlayer"
+          : "";
+      return person;
+    });
   };
 
   isLocalStorageEmpty = () => {
     return this.storage.getItem("username") === null;
   };
 
-  is11PlayerOnTheBoard = () => {
+  is11PlayerOnTheBoard = (topPlayers) => {
     return (
-      !this.isUserInTopTen() && !this.storage.isItemInStorageEmpty("username")
+      !this.isUserInTopTen(topPlayers) &&
+      !this.storage.isItemInStorageEmpty("username")
     );
   };
 
@@ -279,10 +284,16 @@ export class ScoreViewModel {
   };
 
   initializeScoreGameStart = async () => {
+    const topPlayers = await this.getTopPlayers();
     this.dispatchUpdateScoreBoard({
-      topPlayers: await this.getTopPlayers(),
+      topPlayers: {
+        topPlayers: this.highlightCurrentUser(topPlayers.topPlayers),
+        currentPlayer: topPlayers.currentPlayer,
+      },
       boardView: {
-        classPlayer11: this.is11PlayerOnTheBoard() ? "showTblRow" : "hide",
+        classPlayer11: this.is11PlayerOnTheBoard(topPlayers.topPlayers)
+          ? "showTblRow"
+          : "hide",
         classDeleteBtn: !this.storage.isItemInStorageEmpty("username")
           ? "show"
           : "hide",
@@ -301,6 +312,19 @@ export class ScoreViewModel {
       },
     });
   };
+
+  deleteButtonClicked = async (viewModel) => {
+    if (window.confirm("Are you sure you want to delete your username?")) {
+      this.deleteUsername().then(() => {
+        this.refreshScoreBoard();
+        viewModel.startGame();
+      });
+      console.log("Username deleted.");
+    } else {
+      console.log("Username not deleted.");
+    }
+  };
+
   changeClassesOnSaveButtonClick = (state) => {
     return {
       ...state,

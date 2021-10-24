@@ -1,9 +1,10 @@
-import { UPDATE } from "../types";
+import { UPDATE, UPDATE_VIEW } from "../types";
 
 const viewReducers = (
   state = {
     combInProgress: [],
     attemptsView: [],
+    preparedAttempts: [],
     correctView: [],
     attemptIncomplete: "",
     gameDifficulty: {
@@ -20,6 +21,11 @@ const viewReducers = (
       if (!newStateView) {
         return { ...state };
       } else return newStateView;
+    }
+    case UPDATE_VIEW: {
+      const { newStateView } = action.payload;
+      if (!newStateView) return { ...state };
+      else return newStateView;
     }
     default: {
       return state;
