@@ -1,7 +1,6 @@
 /**
  * @author Programerika
  */
-import { WebGejmikaModel } from "../model/WebGejmikaModel";
 import allActions from "../redux/actions";
 import { StorageService } from "../services/StorageService";
 import { WebGejmikaService } from "../services/WebGejmikaService";
@@ -24,8 +23,7 @@ export class ScoreViewModel {
     this.dispatcher(allActions.inputActions.updateScoreBoard(newStateBoard));
   };
 
-  saveUserScore = async (score) => {
-    const username = this.scoreState.showScoreView.username;
+  saveUserScore = async (username, score) => {
     if (this.storage.isItemInStorageEmpty("username")) {
       this.storage.setItem("username", username);
       const resp = await this.webGejmikaService.saveScore(
@@ -48,16 +46,14 @@ export class ScoreViewModel {
    */
 
   validateUsername = async (username) => {
-    let newShowScoreView = { ...this.scoreState.showScoreView };
     if (username.length === 0) {
-      newShowScoreView = {
+      return {
         message: "Please enter an username",
         isSaveButtonDisabled: true,
         isUsernameValid: "",
         toolTipStatus: "toolTipVisible",
         messageStatus: "visible",
         messageColor: "messageWhite",
-        username: username,
       };
     }
 
@@ -66,35 +62,28 @@ export class ScoreViewModel {
       if (
         (await this.webGejmikaService.checkIfUsernameExists(username)) === true
       ) {
-        newShowScoreView = {
+        return {
           message: "*Username already exists",
           isSaveButtonDisabled: true,
           isUsernameValid: "isNotValidInput",
           messageColor: "messageRed",
-          username: username,
         };
       } else {
-        newShowScoreView = {
+        return {
           message: "*Username is correct",
           isSaveButtonDisabled: false,
           isUsernameValid: "isValidInput",
           messageColor: "messageGreen",
-          username: username,
         };
       }
     } else {
-      newShowScoreView = {
+      return {
         message: "*Your username is not in valid format",
         isSaveButtonDisabled: true,
         isUsernameValid: "isNotValidInput",
         messageColor: "messageRed",
-        username: username,
       };
     }
-    this.dispatchUpdateScoreBoard({
-      ...this.scoreState,
-      showScoreView: newShowScoreView,
-    });
   };
 
   checkStorageAndScore = (score) => {
@@ -106,71 +95,27 @@ export class ScoreViewModel {
   };
 
   initializeView = (score) => {
-    this.dispatchUpdateScoreBoard({
-      ...this.scoreState,
-      conffetiView: this.confettiPerScore(score),
-      showScoreView: {
-        ...this.scoreState.showScoreView,
-        toolTipStatus: "toolTipHidden",
-        isUsernameValid: "",
-        saveButtonStatus: this.checkStorageAndScore(score) ? "show" : "hide",
-        message: "Please enter an username",
-        messageStatus: this.checkStorageAndScore(score) ? "visible" : "hidden",
-        messageColor: "messageWhite",
-        scoreMsg: this.calculateScoreMsg(score),
-      },
-    });
+    return {
+      toolTipStatus: "toolTipHidden",
+      isUsernameValid: "",
+      isSaveButtonDisabled: this.storage.isItemInStorageEmpty("username"),
+      message: "Please enter an username",
+      messageStatus: "visible",
+      messageColor: "messageWhite",
+      hide: "show",
+      scoreMsg: this.calculateScoreMsg(score),
+    };
   };
 
-  hideToolTip = () => {
-    this.dispatchUpdateScoreBoard({
-      ...this.scoreState,
-      showScoreView: {
-        ...this.scoreState.showScoreView,
-        toolTipStatus: "toolTipHidden",
-      },
-    });
+  hide = (score) => {
+    if (!this.storage.isItemInStorageEmpty("username") && score >= 0) {
+      console.log("Hide Save Button");
+      return "hide";
+    } else {
+      console.log("Show Save BUTTON");
+      return "show";
+    }
   };
-
-  showToolTip = () => {
-    this.dispatchUpdateScoreBoard({
-      ...this.scoreState,
-      showScoreView: {
-        ...this.scoreState.showScoreView,
-        toolTipStatus: "toolTipVisible",
-      },
-    });
-  };
-
-  // showSaveButton = () => {
-  //   this.dispatchUpdateScoreBoard({
-  //     ...this.scoreState,
-  //     showScoreView: {
-  //       ...this.scoreState.showScoreView,
-  //       saveButtonStatus: "show",
-  //     },
-  //   });
-  // };
-
-  // hideSaveButton = () => {
-  //   this.dispatchUpdateScoreBoard({
-  //     ...this.scoreState,
-  //     showScoreView: {
-  //       ...this.scoreState.showScoreView,
-  //       saveButtonStatus: "hide",
-  //     },
-  //   });
-  // };
-
-  // hide = (score) => {
-  //   if (!this.storage.isItemInStorageEmpty("username") && score >= 0) {
-  //     console.log("Hide Save Button");
-  //     return "hide";
-  //   } else {
-  //     console.log("Show Save BUTTON");
-  //     return "show";
-  //   }
-  // };
 
   disableSaveScoreButton = (isSaveButtonDisabled, score) => {
     if (isSaveButtonDisabled || score === 0) {
@@ -253,6 +198,15 @@ export class ScoreViewModel {
     else return `You got ${score} points!!!`;
   };
 
+  refreshScoreBoard = async () => {
+    this.getTopPlayers().then((players) => {
+      this.dispatchUpdateScoreBoard({
+        ...this.scoreState,
+        topPlayers: { ...players },
+      });
+    });
+  };
+
   /**
    * @returns {Array} - array of top players
    */
@@ -270,9 +224,9 @@ export class ScoreViewModel {
     };
   };
 
-  isUserInTopTen = (topPlayers) => {
+  isUserInTopTen = () => {
     let isUsernameInTopTen = false;
-    topPlayers.forEach((person) => {
+    this.scoreState.topPlayers.topPlayers.map((person, i) => {
       if (person.username === this.storage.getItem("username")) {
         isUsernameInTopTen = true;
       }
@@ -294,10 +248,9 @@ export class ScoreViewModel {
     return this.storage.getItem("username") === null;
   };
 
-  is11PlayerOnTheBoard = (topPlayers) => {
+  is11PlayerOnTheBoard = () => {
     return (
-      !this.isUserInTopTen(topPlayers) &&
-      !this.storage.isItemInStorageEmpty("username")
+      !this.isUserInTopTen() && !this.storage.isItemInStorageEmpty("username")
     );
   };
 
@@ -323,10 +276,37 @@ export class ScoreViewModel {
       this.webGejmikaService
         .addScore(this.storage.getItem("username"), score)
         .then((msg) => {
-          this.initializeScoreBoardView();
-          //    this.initializeView(score);
+          this.refreshScoreBoard();
         });
     }
+  };
+
+  setScoreView = () => {
+    return {
+      classPlayer11: this.is11PlayerOnTheBoard() ? "showTblRow" : "hide",
+      classDeleteBtn: !this.storage.isItemInStorageEmpty("username")
+        ? "show"
+        : "hide",
+    };
+  };
+  changeClassesOnSaveButtonClick = (state) => {
+    return {
+      ...state,
+      isSaveButtonDisabled: true,
+      messageColor: "messageGreen",
+      hide: "hide",
+    };
+  };
+
+  setSaveStatus = async (username, score) => {
+    await this.saveUserScore(username, score);
+  };
+
+  saveScoreState = async (state, username, score) => {
+    return [
+      this.changeClassesOnSaveButtonClick(state),
+      await this.setSaveStatus(username, score),
+    ];
   };
 
   initializeScoreBoardView = async () => {
@@ -357,35 +337,5 @@ export class ScoreViewModel {
     } else {
       console.log("Username not deleted.");
     }
-  };
-
-  changeClassesOnSaveButtonClick = (state) => {
-    return {
-      ...state,
-      isSaveButtonDisabled: true,
-      messageColor: "messageGreen",
-      hide: "hide",
-    };
-  };
-
-  setSaveStatus = async (username, score) => {
-    await this.saveUserScore(username, score);
-  };
-
-  saveScoreState = async (score) => {
-    // return [
-    //   this.changeClassesOnSaveButtonClick(state),
-    //   await this.setSaveStatus(username, score),
-    // ];
-    this.dispatchUpdateScoreBoard({
-      ...this.scoreState,
-      showScoreView: {
-        ...this.scoreState.showScoreView,
-        isSaveButtonDisabled: true,
-        saveButtonStatus: "hide",
-        messageColor: "messageGreen",
-        saveStatus: this.saveUserScore(score),
-      },
-    });
   };
 }
