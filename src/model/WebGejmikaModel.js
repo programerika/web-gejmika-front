@@ -51,7 +51,6 @@ export class WebGejmikaModel {
 
     const newModelState = {
       ...this.modelState,
-      attpInProgress: [],
       attempts: [
         ...this.modelState.attempts,
         {
@@ -84,7 +83,6 @@ export class WebGejmikaModel {
     }
     const newModelState = {
       ...this.modelState,
-      attpInProgress: [],
       attempts: [],
       score: -1,
       secretComb: combination,

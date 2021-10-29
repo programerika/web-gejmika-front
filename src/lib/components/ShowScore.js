@@ -1,51 +1,49 @@
 import React, { useEffect, useState } from "react";
 import Confetti from "react-confetti";
+import { useSelector } from "react-redux";
 import AttemptPanel from "./AttemptPanel";
 
-const ShowScore = ({
-  score,
-  correctView,
-  viewModel,
-  scoreViewModel,
-  combinationLength,
-}) => {
+const ShowScore = ({ score, viewModel, scoreViewModel, correctView }) => {
   const [state, setState] = useState({});
   const [saveStatus, setSaveStatus] = useState();
   const [username, setUsername] = useState("");
-  const [confetti, setConfetti] = useState({});
+  // const [confetti, setConfetti] = useState({});
+
+  const { showScoreView, conffetiView } = useSelector((state) => state.score);
+
+  // const { correctView } = useSelector((state) => state.view);
 
   useEffect(() => {
-    setConfetti(scoreViewModel.confettiPerScore(score));
-    setState(scoreViewModel.initializeView(score));
+    scoreViewModel.initializeView(score);
   }, []);
+
+  console.log("SHOW SCORE: " + JSON.stringify(showScoreView));
 
   return (
     <div className="score">
-      <h1>{state.scoreMsg}</h1>
+      <h1>{showScoreView.scoreMsg}</h1>
 
       <Confetti
-        width={confetti.width}
-        height={confetti.height}
-        tweenDuration={confetti.tweenDuration}
-        recycle={confetti.recycle}
-        numberOfPieces={confetti.numberOfPieces}
-        wind={confetti.wind}
-        gravity={confetti.gravity}
+        width={conffetiView.width}
+        height={conffetiView.height}
+        tweenDuration={conffetiView.tweenDuration}
+        recycle={conffetiView.recycle}
+        numberOfPieces={conffetiView.numberOfPieces}
+        wind={conffetiView.wind}
+        gravity={conffetiView.gravity}
         confettiSource={{
-          x: confetti.x,
-          y: confetti.y,
+          x: conffetiView.x,
+          y: conffetiView.y,
           w: window.innerWidth,
           h: window.innerHeight,
         }}
-        initialVelocityX={confetti.initialVelocityX}
-        initialVelocityY={confetti.initialVelocityY}
+        initialVelocityX={conffetiView.initialVelocityX}
+        initialVelocityY={conffetiView.initialVelocityY}
       />
 
       <div className="correct">
         <h5>Correct combination:</h5>
-        <AttemptPanel
-          comb={correctView}
-        ></AttemptPanel>
+        <AttemptPanel comb={correctView}></AttemptPanel>
       </div>
       <div className="saveScore">
         {scoreViewModel.checkStorageAndScore(score) ? (
@@ -53,34 +51,39 @@ const ShowScore = ({
             <div className="tooltip">
               <input
                 type="text"
-                className={state.isUsernameValid}
+                className={showScoreView.isUsernameValid}
                 maxLength="8"
                 placeholder="Username - eg. MyName12"
                 onMouseLeave={() => {
-                  setState({ ...state, toolTipStatus: "toolTipHidden" });
+                  scoreViewModel.hideToolTip();
                 }}
-                onMouseEnter={() =>
-                  setState({ ...state, toolTipStatus: "toolTipVisible" })
-                }
+                onMouseEnter={() => {
+                  scoreViewModel.showToolTip();
+                }}
                 onChange={async (e) => {
-                  setState(
-                    await scoreViewModel.validateUsername(e.target.value)
-                  );
-                  setUsername(e.target.value);
+                  scoreViewModel.validateUsername(e.target.value);
                 }}
               />
 
-              <div className={"tooltiptext " + state.toolTipStatus}>
+              <div className={"tooltiptext " + showScoreView.toolTipStatus}>
                 Username has to have 4 - 6 characters with last two numbers
               </div>
             </div>
-            <p className={state.messageStatus + " " + state.messageColor}>
-              {state.message}
+            <p
+              className={
+                showScoreView.messageStatus + " " + showScoreView.messageColor
+              }
+            >
+              {showScoreView.message}
             </p>
           </>
         ) : (
-          <p className={state.messageStatus + " " + state.messageColor}>
-            {saveStatus}
+          <p
+            className={
+              showScoreView.messageStatus + " " + showScoreView.messageColor
+            }
+          >
+            {scoreViewModel.saveStatus}
           </p>
         )}
 
@@ -95,20 +98,15 @@ const ShowScore = ({
           </button>
 
           <button
-            className={"saveScoreBtn " + scoreViewModel.hide(score)}
-            disabled={scoreViewModel.disableSaveScoreButton(
-              state.isSaveButtonDisabled,
-              score
-            )}
+            className={"saveScoreBtn " + showScoreView.saveButtonStatus}
+            // disabled={scoreViewModel.disableSaveScoreButton(
+            //   showScoreView.isSaveButtonDisabled,
+            //   score
+            // )}
             onClick={async () => {
-              let [s1, s2] = await scoreViewModel.saveScoreState(
-                state,
-                username,
-                score
-              );
-              setState(s1);
-              setSaveStatus(s2);
-              scoreViewModel.refreshScoreBoard();
+              scoreViewModel.saveScoreState(score).then(() => {
+                // scoreViewModel.initializeScoreBoardView();
+              });
             }}
           >
             Save score!

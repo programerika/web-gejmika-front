@@ -41,8 +41,8 @@ test("Testing iconToComb() function with incorrect picture links", () => {
 
 // customized arrays for testing purposes
 
-const combinationInProgress = ["S", "L", "", ""];
-const combinationFull = ["S", "L", "H", "K"];
+const combinationInProgress2 = ["S", "L", "", ""];
+const combinationFull2 = ["S", "L", "H", "K"];
 
 /**
  * @param {Array} Strings of code combination letters (H,K,S,L,T,P)
@@ -51,7 +51,7 @@ const combinationFull = ["S", "L", "H", "K"];
  */
 
 test("Testing combToIcon() function with combination in progress", () => {
-  expect(wgVM.combToIcon(combinationInProgress)).toStrictEqual([
+  expect(wgVM.combToIcon(combinationInProgress2)).toStrictEqual([
     "/icons/traffic-light.png",
     "/icons/star.png",
     "/icons/circle.png",
@@ -66,7 +66,7 @@ test("Testing combToIcon() function with combination in progress", () => {
  */
 
 test("Testing combToIcon() function with full combination", () => {
-  expect(wgVM.combToIcon(combinationFull)).toStrictEqual([
+  expect(wgVM.combToIcon(combinationFull2)).toStrictEqual([
     "/icons/traffic-light.png",
     "/icons/star.png",
     "/icons/heart.png",
@@ -76,18 +76,32 @@ test("Testing combToIcon() function with full combination", () => {
 
 // customized arrays for testing purposes
 
-const outcomeAllInPlace = [2, 2, 2, 2];
-const outcomeNoGuess = [0, 0, 0, 0];
-const outcomeSomeInPlace = [1, 2, 1, 2];
+const outcomeAllInPlace = { inPlace: 4, correctCode: 0 };
+const outcomeNoGuess = { inPlace: 0, correctCode: 0 };
+const outcomeSomeInPlace = { inPlace: 2, correctCode: 2 };
+
+const viewState = {
+  preparedAttempts: [],
+  correctView: [],
+  attemptIncomplete: false,
+  gameDifficulty: {
+    attemptsLength: 5,
+    combinationLength: 4,
+  },
+  id: -1,
+  combID: -1,
+};
+
+const wgVM2 = new WebGejmikaViewModel(null, viewState, null, null);
 
 /**
- * @param {Array} Numbers from 0 - 2 which show guess outcome
+ * @param {Object} Object with inPlace and codeCorrect values
  * @returns {Array} Strings of color names for SVG Indicator (green, yellow or gray)
  * This test tests outcomeToColor() function with all guesses in place
  */
 
 test("Testing outcomeToColor() function with all guesses in place", () => {
-  expect(wgVM.outcomeToColor(outcomeAllInPlace)).toStrictEqual([
+  expect(wgVM2.outcomeToColor(outcomeAllInPlace)).toStrictEqual([
     "green",
     "green",
     "green",
@@ -96,13 +110,13 @@ test("Testing outcomeToColor() function with all guesses in place", () => {
 });
 
 /**
- * @param {Array} Numbers from 0 - 2 which show guess outcome
+ * @param {Array} Numbers Object with inPlace and codeCorrect values
  * @returns {Array} Strings of color names for SVG Indicator (green, yellow or gray)
  * This test tests outcomeToColor() function with 0 guesses
  */
 
 test("Testing outcomeToColor() function with 0 guesses", () => {
-  expect(wgVM.outcomeToColor(outcomeNoGuess)).toStrictEqual([
+  expect(wgVM2.outcomeToColor(outcomeNoGuess)).toStrictEqual([
     "gray",
     "gray",
     "gray",
@@ -111,16 +125,16 @@ test("Testing outcomeToColor() function with 0 guesses", () => {
 });
 
 /**
- * @param {Array} Numbers from 0 - 2 which show guess outcome
+ * @param {Array} Numbers Object with inPlace and codeCorrect values
  * @returns {Array} Strings of color names for SVG Indicator (green, yellow or gray)
  * This test tests outcomeToColor() function with some guesses in place, some out of place
  */
 
 test("Testing outcomeToColor() function with some in place guesses", () => {
-  expect(wgVM.outcomeToColor(outcomeSomeInPlace)).toStrictEqual([
-    "green",
-    "green",
+  expect(wgVM2.outcomeToColor(outcomeSomeInPlace)).toStrictEqual([
     "yellow",
     "yellow",
+    "green",
+    "green",
   ]);
 });
