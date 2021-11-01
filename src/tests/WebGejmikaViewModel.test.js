@@ -2,20 +2,27 @@
     @author Programerika
 */
 
-import { WebGejmikaViewModel } from "../viewModel/WebGejmikaViewModel";
+import { WebGejmikaViewModel } from "../lib/viewModel/WebGejmikaViewModel";
+import heart from '../lib/icons/heart.png';
+import star from '../lib/icons/star.png';
+import diamond from '../lib/icons/diamond.png';
+import spades from '../lib/icons/symbol-of-spades.png';
+import trafficLight from '../lib/icons/traffic-light.png';
+import clubs from '../lib/icons/clubs.png';
+import circle from '../lib/icons/circle.png';
 
 // customized arrays for testing purposes
 
 const wgVM = new WebGejmikaViewModel();
 
 const iconsCorrect = [
-  "/icons/diamond.png",
-  "/icons/diamond.png",
-  "/icons/star.png",
-  "/icons/heart.png",
+  diamond,
+  diamond,
+  star,
+  heart,
 ];
 
-const iconsIncorrect = ["/icons/circle.png", "12345", "", "/icons/heart.png"];
+const iconsIncorrect = [circle, "12345", "", heart];
 
 /**
  * @param {Array} Strings of icon picture links
@@ -52,10 +59,10 @@ const combinationFull2 = ["S", "L", "H", "K"];
 
 test("Testing combToIcon() function with combination in progress", () => {
   expect(wgVM.combToIcon(combinationInProgress2)).toStrictEqual([
-    "/icons/traffic-light.png",
-    "/icons/star.png",
-    "/icons/circle.png",
-    "/icons/circle.png",
+    trafficLight,
+    star,
+    circle,
+    circle,
   ]);
 });
 
@@ -67,10 +74,10 @@ test("Testing combToIcon() function with combination in progress", () => {
 
 test("Testing combToIcon() function with full combination", () => {
   expect(wgVM.combToIcon(combinationFull2)).toStrictEqual([
-    "/icons/traffic-light.png",
-    "/icons/star.png",
-    "/icons/heart.png",
-    "/icons/diamond.png",
+    trafficLight,
+    star,
+    heart,
+    diamond,
   ]);
 });
 

@@ -1,4 +1,12 @@
 import React from "react";
+import heart from '../icons/heart.png';
+import star from '../icons/star.png';
+import diamond from '../icons/diamond.png';
+import spades from '../icons/symbol-of-spades.png';
+import trafficLight from '../icons/traffic-light.png';
+import clubs from '../icons/clubs.png';
+import checked from '../icons/checked.png';
+import close from '../icons/close.png';
 
 const InputPanel = ({ viewModel }) => {
   return (
@@ -6,46 +14,46 @@ const InputPanel = ({ viewModel }) => {
       <div className="input-icons-wrapper">
         <img
           className="input"
-          src="/icons/clubs.png"
+          src={clubs}
           onClick={() => viewModel.clubsButtonClicked()}
-          alt="tref"
+          alt="clubs"
         />
         <img
           className="input"
-          src="/icons/diamond.png"
+          src={diamond}
           onClick={() => viewModel.diamondButtonClicked()}
-          alt="karo"
+          alt="diamond"
         />
         <img
           className="input"
-          src="/icons/heart.png"
+          src={heart}
           onClick={() => viewModel.heartButtonClicked()}
-          alt="herc"
+          alt="heart"
         />
         <img
           className="input"
-          src="/icons/star.png"
+          src={star}
           onClick={() => viewModel.starButtonClicked()}
-          alt="zvezda"
+          alt="star"
         />
         <img
           className="input"
-          src="/icons/symbol-of-spades.png"
+          src={spades}
           onClick={() => viewModel.spadesButtonClicked()}
-          alt="pik"
+          alt="spades"
         />
         <img
           className="input"
-          src="/icons/traffic-light.png"
+          src={trafficLight}
           onClick={() => viewModel.trafficLightButtonClicked()}
-          alt="semafor"
+          alt="traffic light"
         />
       </div>
 
       <div className="confirm-cancel-wrapper">
         <img
           className="input"
-          src="/icons/checked.png"
+          src={checked}
           alt="confirm"
           onClick={() => {
             viewModel.codeGuessIfReady();
@@ -54,14 +62,14 @@ const InputPanel = ({ viewModel }) => {
 
         <img
           className="input"
-          src="/icons/close.png"
+          src={close}
           alt="delete"
           onClick={() => {
             viewModel.inputDeleteLast();
           }}
         />
       </div>
-    </div>
+  </div>
   );
 };
 

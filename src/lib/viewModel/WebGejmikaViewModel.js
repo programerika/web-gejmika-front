@@ -6,6 +6,13 @@ import { WebGejmikaModel } from "../model/WebGejmikaModel";
 import { WebGejmikaService } from "../services/WebGejmikaService";
 import { StorageService } from "../services/StorageService";
 import { ScoreViewModel } from "./ScoreViewModel";
+import heart from '../icons/heart.png';
+import star from '../icons/star.png';
+import diamond from '../icons/diamond.png';
+import spades from '../icons/symbol-of-spades.png';
+import trafficLight from '../icons/traffic-light.png';
+import clubs from '../icons/clubs.png';
+import circle from '../icons/circle.png';
 
 export class WebGejmikaViewModel {
   constructor(modelState, viewState, scoreState, dispatcher) {
@@ -50,7 +57,7 @@ export class WebGejmikaViewModel {
       return;
     }
 
-    let combInProg = [...this.viewState.combInProgress, "/icons/heart.png"];
+    let combInProg = [...this.viewState.combInProgress, heart];
 
     const preparedAttempts = this.prepareGameView(
       combInProg,
@@ -73,7 +80,7 @@ export class WebGejmikaViewModel {
       return;
     }
 
-    let combInProg = [...this.viewState.combInProgress, "/icons/star.png"];
+    let combInProg = [...this.viewState.combInProgress, star];
 
     const preparedAttempts = this.prepareGameView(
       combInProg,
@@ -95,7 +102,7 @@ export class WebGejmikaViewModel {
       return;
     }
 
-    let combInProg = [...this.viewState.combInProgress, "/icons/diamond.png"];
+    let combInProg = [...this.viewState.combInProgress, diamond];
 
     const preparedAttempts = this.prepareGameView(
       combInProg,
@@ -119,7 +126,7 @@ export class WebGejmikaViewModel {
 
     let combInProg = [
       ...this.viewState.combInProgress,
-      "/icons/symbol-of-spades.png",
+      spades,
     ];
     const preparedAttempts = this.prepareGameView(
       combInProg,
@@ -144,7 +151,7 @@ export class WebGejmikaViewModel {
 
     let combInProg = [
       ...this.viewState.combInProgress,
-      "/icons/traffic-light.png",
+      trafficLight,
     ];
 
     const preparedAttempts = this.prepareGameView(
@@ -168,7 +175,7 @@ export class WebGejmikaViewModel {
       return;
     }
 
-    let combInProg = [...this.viewState.combInProgress, "/icons/clubs.png"];
+    let combInProg = [...this.viewState.combInProgress, clubs];
 
     const preparedAttempts = this.prepareGameView(
       combInProg,
@@ -323,25 +330,25 @@ export class WebGejmikaViewModel {
     for (let index = 0; index < icons.length; index++) {
       switch (comb[index]) {
         case "K":
-          icons[index] = "/icons/diamond.png";
+          icons[index] = diamond;
           break;
         case "H":
-          icons[index] = "/icons/heart.png";
+          icons[index] = heart;
           break;
         case "P":
-          icons[index] = "/icons/symbol-of-spades.png";
+          icons[index] = spades;
           break;
         case "T":
-          icons[index] = "/icons/clubs.png";
+          icons[index] = clubs;
           break;
         case "L":
-          icons[index] = "/icons/star.png";
+          icons[index] = star;
           break;
         case "S":
-          icons[index] = "/icons/traffic-light.png";
+          icons[index] = trafficLight;
           break;
         default:
-          icons[index] = "/icons/circle.png";
+          icons[index] = circle;
           break;
       }
     }
@@ -359,22 +366,22 @@ export class WebGejmikaViewModel {
     var comb = ["", "", "", ""];
     for (let index = 0; index < comb.length; index++) {
       switch (icons[index]) {
-        case "/icons/diamond.png":
+        case diamond:
           comb[index] = "K";
           break;
-        case "/icons/heart.png":
+        case heart:
           comb[index] = "H";
           break;
-        case "/icons/symbol-of-spades.png":
+        case spades:
           comb[index] = "P";
           break;
-        case "/icons/clubs.png":
+        case clubs:
           comb[index] = "T";
           break;
-        case "/icons/star.png":
+        case star:
           comb[index] = "L";
           break;
-        case "/icons/traffic-light.png":
+        case trafficLight:
           comb[index] = "S";
           break;
         default:
@@ -444,10 +451,10 @@ export class WebGejmikaViewModel {
           : typeof attemptsView[e] !== "undefined"
           ? attemptsView[e].attemptViewComb
           : [
-              "./icons/circle.png",
-              "./icons/circle.png",
-              "./icons/circle.png",
-              "./icons/circle.png",
+              circle,
+              circle,
+              circle,
+              circle,
             ]
       ),
       colors:
@@ -470,7 +477,7 @@ export class WebGejmikaViewModel {
             : `circle`,
         imgSrc:
           typeof comb[index] == "undefined"
-            ? "./icons/circle.png"
+            ? circle
             : comb[index],
       };
       return prepared;

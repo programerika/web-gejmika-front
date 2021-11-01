@@ -1,7 +1,7 @@
 /** 
     @author Programerika
 */
-import { WebGejmikaModel } from "../model/WebGejmikaModel";
+import { WebGejmikaModel } from "../lib/model/WebGejmikaModel";
 
 // BEGIN of tests for function makeAGuess()
 

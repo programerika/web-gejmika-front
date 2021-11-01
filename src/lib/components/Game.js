@@ -1,12 +1,13 @@
+import React from "react";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import InputPanel from "./InputPanel";
 import GamePanel from "./GamePanel";
 import ShowScore from "./ShowScore";
 import ScoreBoard from "./ScoreBoard";
-import { WebGejmikaViewModel } from "../../viewModel/WebGejmikaViewModel";
+import { WebGejmikaViewModel } from "../viewModel/WebGejmikaViewModel";
 import Header from "./Header";
-import { ScoreViewModel } from "../../viewModel/ScoreViewModel";
+import { ScoreViewModel } from "../viewModel/ScoreViewModel";
 
 const Game = () => {
   const dispatch = useDispatch();
