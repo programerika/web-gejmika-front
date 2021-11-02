@@ -126,69 +126,37 @@ export class ScoreViewModel {
   };
 
   confettiPerScore = (score) => {
+    const defaultSettings = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      tweenDuration: 3000,
+      recycle: false,
+      numberOfPieces: 0,
+      wind: 0.05,
+      gravity: 0.2,
+      x: 0,
+      y: 0,
+      initialVelocityX: 20,
+      initialVelocityY: 20,
+    };
     if (score === 21) {
       return {
-        width: window.innerWidth + 50,
-        height: window.innerHeight,
-        tweenDuration: 3000,
-        recycle: false,
-        numberOfPieces: 600,
-        wind: 0.05,
-        gravity: 0.2,
-        x: 0,
-        y: 0,
-        w: window.innerWidth,
-        h: window.innerHeight,
-        initialVelocityX: 20,
-        initialVelocityY: 20,
+        ...defaultSettings,
+        numberOfPieces: 600
       };
     } else if (score === 13) {
       return {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        tweenDuration: 3000,
-        recycle: false,
-        numberOfPieces: 200,
-        wind: 0.05,
-        gravity: 0.2,
-        x: 0,
-        y: 0,
-        w: window.innerWidth,
-        h: window.innerHeight,
-        initialVelocityX: 10,
-        initialVelocityY: 10,
+        ...defaultSettings,
+        numberOfPieces: 200
       };
     } else if (score === 8) {
       return {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        tweenDuration: 3000,
-        recycle: false,
-        numberOfPieces: 100,
-        wind: 0.05,
-        gravity: 0.2,
-        x: 0,
-        y: 0,
-        w: window.innerWidth,
-        h: window.innerHeight,
-        initialVelocityX: 10,
-        initialVelocityY: 10,
+        ...defaultSettings,
+        numberOfPieces: 100
       };
     } else if (score === 0) {
       return {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        tweenDuration: 3000,
-        recycle: false,
-        numberOfPieces: 0,
-        wind: 0.05,
-        gravity: 0.2,
-        x: 0,
-        y: 0,
-        w: window.innerWidth,
-        h: window.innerHeight,
-        initialVelocityX: 10,
-        initialVelocityY: 10,
+        ...defaultSettings
       };
     }
   };

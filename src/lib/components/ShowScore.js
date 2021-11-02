@@ -23,7 +23,7 @@ const ShowScore = ({
     <div className="score">
       <h1>{state.scoreMsg}</h1>
 
-      <Confetti
+      <Confetti      
         width={confetti.width}
         height={confetti.height}
         tweenDuration={confetti.tweenDuration}
@@ -33,9 +33,7 @@ const ShowScore = ({
         gravity={confetti.gravity}
         confettiSource={{
           x: confetti.x,
-          y: confetti.y,
-          w: window.innerWidth,
-          h: window.innerHeight,
+          y: confetti.y
         }}
         initialVelocityX={confetti.initialVelocityX}
         initialVelocityY={confetti.initialVelocityY}
