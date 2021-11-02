@@ -24,148 +24,10 @@
   display: table-row;
 }
 
-.hidden {
-  visibility: hidden;
-}
-
-.visible {
-  visibility: visible;
-}
-
 /* SHOW OR HIDE STYLES  - END*/
 
 
 
-/* SHOWSCORE - BEGIN */
-
-.score {
-  background-color: orange;
-  display: flex;
-  flex-direction: column;
-  height: max-content;
-  margin-top: 3px;
-  border-radius: 10px;
-}
-
-.score > h1,
-h5 {
-  font-size: 15px;
-  text-align: center;
-  margin: 0px;
-}
-
-.correct {
-  margin: auto;
-  width: fit-content;
-  height: 80px;
-}
-
-/* SHOWSCORE STYLES - BUTTONS AND TOOLTIPS */
-
-.deleteScoreBtn {
-  float: right;
-}
-
-.saveScore {
-  width: 100%;
-}
-
-.saveScore > p {
-  font-size: 13px;
-  margin-top: 0px;
-  text-align: center;
-}
-
-.delete-score {
-  margin-top: 10px;
-  margin-bottom: 10px; 
-}
-
-
-.isValidInput {
-  background-color: greenyellow;
-}
-
-.isNotValidInput {
-  background-color: rgb(247, 57, 57);
-}
-
-.toolTipVisible {
-  visibility: visible;
-  opacity: 1;
-  transition-duration: 0.5s;
-}
-
-.toolTipHidden {
-  visibility: hidden;
-  transition-duration: 0.5s;
-  opacity: 0;
-}
-
-.tooltip > input {
-  padding: 5px 28px;
-  font: 0.4em sans-serif;
-  border-radius: 10px;
-  border: 1px solid rgb(44, 44, 44);
-  text-align: center;
-  transition-duration: 0.4s;
-  margin-bottom: 10px;
-  font-size: small;
-  width: 76%;
-  margin: 0px auto;
-}
-
-.buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.tooltip {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.tooltip .tooltiptext {
-  width: 93%;
-  background-color: white;
-  text-align: center;
-  border-radius: 10px;
-  padding: 10px;
-  position: absolute;
-  z-index: 1;
-  bottom: 120%;
-  font-size: 11px;
-}
-
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: white transparent transparent transparent;
-}
-
-.messageGreen {
-  color: green;
-}
-
-.messageRed {
-  color: red;
-}
-
-.messageWhite {
-  color: white;
-}
-
-/* SHOWSCORE - END */
 
 /* SCOREBOARD - BEGIN */
 
@@ -187,6 +49,15 @@ td {
   font-weight: 500;
   margin-left: 30px;
   margin-right: 30px;
+}
+
+.delete-score {
+  margin-top: 10px;
+  margin-bottom: 10px; 
+}
+
+.deleteScoreBtn {
+  float: right;
 }
 
 .score-board-header {

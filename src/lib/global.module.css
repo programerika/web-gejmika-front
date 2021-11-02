@@ -37,3 +37,16 @@
   box-shadow: 0 5px #666;
   transform: translateY(3px);
 }
+
+
+/* SHOW OR HIDE STYLES  - BEGIN*/
+
+:local(.visible) {
+  visibility: visible;
+}
+
+:local(.hidden) {
+  visibility: hidden;
+}
+
+/* SHOW OR HIDE STYLES  - END*/

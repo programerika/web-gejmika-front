@@ -4,6 +4,8 @@
 import allActions from "../redux/actions";
 import { StorageService } from "../services/StorageService";
 import { WebGejmikaService } from "../services/WebGejmikaService";
+import globalStyles from "../global.module.css";
+import showScoreStyles from "../components/ShowScore.module.css";
 
 export class ScoreViewModel {
   constructor(scoreState, dispatcher) {
@@ -51,9 +53,9 @@ export class ScoreViewModel {
         message: "Please enter an username",
         isSaveButtonDisabled: true,
         isUsernameValid: "",
-        toolTipStatus: "toolTipVisible",
-        messageStatus: "visible",
-        messageColor: "messageWhite",
+        toolTipStatus: showScoreStyles.toolTipVisible,
+        messageStatus: globalStyles.visible,
+        messageColor: showScoreStyles.messageWhite,
       };
     }
 
@@ -65,23 +67,23 @@ export class ScoreViewModel {
         return {
           message: "*Username already exists",
           isSaveButtonDisabled: true,
-          isUsernameValid: "isNotValidInput",
-          messageColor: "messageRed",
+          isUsernameValid: showScoreStyles.isNotValidInput,
+          messageColor: showScoreStyles.messageRed,
         };
       } else {
         return {
           message: "*Username is correct",
           isSaveButtonDisabled: false,
-          isUsernameValid: "isValidInput",
-          messageColor: "messageGreen",
+          isUsernameValid: showScoreStyles.isValidInput,
+          messageColor: showScoreStyles.messageGreen,
         };
       }
     } else {
       return {
         message: "*Your username is not in valid format",
         isSaveButtonDisabled: true,
-        isUsernameValid: "isNotValidInput",
-        messageColor: "messageRed",
+        isUsernameValid: showScoreStyles.isNotValidInput,
+        messageColor: showScoreStyles.messageRed,
       };
     }
   };
@@ -96,13 +98,12 @@ export class ScoreViewModel {
 
   initializeView = (score) => {
     return {
-      toolTipStatus: "toolTipHidden",
+      toolTipStatus: showScoreStyles.toolTipHidden,
       isUsernameValid: "",
       isSaveButtonDisabled: this.storage.isItemInStorageEmpty("username"),
       message: "Please enter an username",
-      messageStatus: "visible",
-      messageColor: "messageWhite",
-      hide: "show",
+      messageStatus: globalStyles.visible,
+      messageColor: showScoreStyles.messageWhite,
       scoreMsg: this.calculateScoreMsg(score),
     };
   };
@@ -110,10 +111,10 @@ export class ScoreViewModel {
   hide = (score) => {
     if (!this.storage.isItemInStorageEmpty("username") && score >= 0) {
       console.log("Hide Save Button");
-      return "hide";
+      return globalStyles.hidden;
     } else {
       console.log("Show Save BUTTON");
-      return "show";
+      return globalStyles.visible;
     }
   };
 
@@ -257,12 +258,12 @@ export class ScoreViewModel {
         : "hide",
     };
   };
+  
   changeClassesOnSaveButtonClick = (state) => {
     return {
       ...state,
       isSaveButtonDisabled: true,
-      messageColor: "messageGreen",
-      hide: "hide",
+      messageColor: showScoreStyles.messageGreen,
     };
   };
 

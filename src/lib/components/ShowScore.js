@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import AttemptPanel from "./AttemptPanel";
 import globalStyles from "../global.module.css";
+import styles from "./ShowScore.module.css";
 
 const ShowScore = ({
   score,
@@ -21,7 +22,7 @@ const ShowScore = ({
   }, []);
 
   return (
-    <div className="score">
+    <div className={styles.score}>
       <h1>{state.scoreMsg}</h1>
 
       <Confetti      
@@ -40,26 +41,26 @@ const ShowScore = ({
         initialVelocityY={confetti.initialVelocityY}
       />
 
-      <div className="correct">
+      <div className={styles.correct}>
         <h5>Correct combination:</h5>
         <AttemptPanel
           comb={correctView}
         ></AttemptPanel>
       </div>
-      <div className="saveScore">
+      <div className={styles.saveScore}>
         {scoreViewModel.checkStorageAndScore(score) ? (
           <>
-            <div className="tooltip">
+            <div className={styles.tooltip}>
               <input
                 type="text"
                 className={state.isUsernameValid}
                 maxLength="8"
                 placeholder="Username - eg. MyName12"
                 onMouseLeave={() => {
-                  setState({ ...state, toolTipStatus: "toolTipHidden" });
+                  setState({ ...state, toolTipStatus: styles.toolTipHidden });
                 }}
                 onMouseEnter={() =>
-                  setState({ ...state, toolTipStatus: "toolTipVisible" })
+                  setState({ ...state, toolTipStatus: styles.toolTipVisible })
                 }
                 onChange={async (e) => {
                   setState(
@@ -69,7 +70,7 @@ const ShowScore = ({
                 }}
               />
 
-              <div className={"tooltiptext " + state.toolTipStatus}>
+              <div className={styles.tooltiptext + " " + state.toolTipStatus}>
                 Username has to have 4 - 6 characters with last two numbers
               </div>
             </div>
@@ -83,7 +84,7 @@ const ShowScore = ({
           </p>
         )}
 
-        <div className="buttons">
+        <div className={styles.buttons}>
           <button
             className={globalStyles.gameBtn}
             onClick={() => {
