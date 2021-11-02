@@ -13,6 +13,8 @@ import spades from '../icons/symbol-of-spades.png';
 import trafficLight from '../icons/traffic-light.png';
 import clubs from '../icons/clubs.png';
 import circle from '../icons/circle.png';
+import attemptStyles from "../components/AttemptPanel.module.css";
+
 
 export class WebGejmikaViewModel {
   constructor(modelState, viewState, scoreState, dispatcher) {
@@ -225,7 +227,7 @@ export class WebGejmikaViewModel {
   // setAttemptIncomplete(isIncomplete) {
   //   this.dispatchUpdate(
   //     { ...this.modelState },
-  //     { ...this.viewState, attemptIncomplete: isIncomplete ? "flashColor" : "" }
+  //     { ...this.viewState, attemptIncomplete: isIncomplete ? attemptStyles.flashColor : "" }
   //   );
   // }
 
@@ -473,8 +475,8 @@ export class WebGejmikaViewModel {
       const prepared = {
         imgClassName:
           typeof comb[index] == "undefined"
-            ? `circle ` + this.viewState.attemptIncomplete
-            : `circle`,
+            ? attemptStyles.circle + ' ' + this.viewState.attemptIncomplete
+            : attemptStyles.circle,
         imgSrc:
           typeof comb[index] == "undefined"
             ? circle

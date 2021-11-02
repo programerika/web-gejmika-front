@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./AttemptPanel.module.css";
 
 const AttemptPanel = ({ comb }) => {
   return (
