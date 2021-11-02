@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import globalStyles from "../global.module.css";
+import styles from "./ScoreBoard.module.css";
 
 const ScoreBoard = ({ viewModel, scoreViewModel }) => {
   const {
@@ -9,9 +10,9 @@ const ScoreBoard = ({ viewModel, scoreViewModel }) => {
   } = useSelector((state) => state.score);
   return (
     <>
-      <table className="score-board ">
+      <table className={styles.scoreBoard}>
         <thead>
-          <tr className="score-board-header">
+          <tr className={styles.scoreBoardHeader}>
             <th>Rank</th>
             <th>Username</th>
             <th>Points</th>
@@ -20,7 +21,7 @@ const ScoreBoard = ({ viewModel, scoreViewModel }) => {
         <tbody>
           {topPlayers.map((person, i) => {
             return (
-              <tr key={i} className={`person-score ` + person.rowColor}>
+              <tr key={i} className={`${styles.personScore} ${person.rowColor}`}>
                 <td>
                   <b>{i + 1}.</b>
                 </td>
@@ -30,12 +31,12 @@ const ScoreBoard = ({ viewModel, scoreViewModel }) => {
             );
           })}
 
-          <tr className={`current-player-separator ` + classPlayer11}>
+          <tr className={`${styles.currentPlayerSeparator} ${classPlayer11}`}>
             <td></td>
             <td>...</td>
             <td></td>
           </tr>
-          <tr className={`person-score currentPlayer ` + classPlayer11}>
+          <tr className={`${styles.personScore} ${styles.currentPlayer} ${classPlayer11}`}>
             <td>11.</td>
             <td>{currentPlayer.username}</td>
             <td>{currentPlayer.score}</td>
@@ -43,9 +44,9 @@ const ScoreBoard = ({ viewModel, scoreViewModel }) => {
 
         </tbody>
       </table>
-      <div className="score-board delete-score">
+      <div className={`${styles.scoreBoard} ${styles.deleteScore}`}>
         <button
-              className={`${globalStyles.gameBtn} deleteScoreBtn ${classDeleteBtn}`}
+              className={`${globalStyles.gameBtn} ${styles.deleteScoreBtn} ${classDeleteBtn}`}
               onClick={() => scoreViewModel.deleteButtonClicked(viewModel)}
             >
               Delete score!

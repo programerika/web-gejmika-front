@@ -1,0 +1,63 @@
+@import '../global.css';
+
+/* SCOREBOARD */
+
+:local(.scoreBoard) table, td, th {
+  border-bottom: 1px solid black;
+}
+  
+:local(.scoreBoard) td {
+  padding: 10px;
+}
+
+:local(.scoreBoard) {
+  border-collapse: collapse;
+  background-color: black;
+  text-align: center;
+  border-radius: 5%;
+  font-weight: 500;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+@media screen and (max-width: 800px) {
+    :local(.scoreBoard) {
+      margin-top: 30px;
+    }
+}
+
+:local(.deleteScore) {
+  margin-top: 10px;
+  margin-bottom: 10px; 
+}
+
+:local(.deleteScoreBtn) {
+  float: right;
+}
+
+:local(.scoreBoardHeader) {
+  border: 2px solid var(--wgm-theme-main-color);
+}
+
+:local(.scoreBoardHeader) th {
+  padding: 15px 5px;
+  font-size: 1.2rem;
+  background-color: black;
+  color: var(--wgm-theme-main-color);
+}
+
+:local(.personScore) {
+  color: rgb(199, 218, 230);
+  padding: 5px;
+  margin: 5px;
+  border: 2px solid var(--wgm-theme-main-color);
+}
+
+:local(.currentPlayerSeparator) {
+  color: lightgray;
+}
+
+:local(.currentPlayer) {
+  background-color: var(--wgm-theme-main-color);
+  color: black;
+}
