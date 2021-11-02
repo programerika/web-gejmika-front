@@ -1,0 +1,24 @@
+@import '../global.css';
+
+/* GAME HEADER */
+
+:local(.header) {
+    display: flex;
+    justify-content: space-between;
+    background-color: black;
+    border-radius: 10px 10px 4px 4px;
+    align-items: center;
+    padding: 0px 5px 0px 10px;
+    box-sizing: border-box;
+    border: solid 3px var(--wgm-theme-main-color);
+    margin-bottom: 1px;
+}
+
+:local(.header) h2 {
+    color: var(--wgm-theme-main-color);
+}
+
+/* TODO move to Help component */
+:local(.helpWrapper) {
+    /*TODO*/
+}
