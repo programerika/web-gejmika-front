@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import AttemptPanel from "./AttemptPanel";
+import globalStyles from "../global.module.css";
 
 const ShowScore = ({
   score,
@@ -84,7 +85,7 @@ const ShowScore = ({
 
         <div className="buttons">
           <button
-            className="playAgainBtn"
+            className={globalStyles.gameBtn}
             onClick={() => {
               viewModel.startGame();
             }}
@@ -93,7 +94,7 @@ const ShowScore = ({
           </button>
 
           <button
-            className={"saveScoreBtn " + scoreViewModel.hide(score)}
+            className={`${globalStyles.gameBtn} ${scoreViewModel.hide(score)}`}
             disabled={scoreViewModel.disableSaveScoreButton(
               state.isSaveButtonDisabled,
               score

@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import globalStyles from "../global.module.css";
 
 const ScoreBoard = ({ viewModel, scoreViewModel }) => {
   const {
@@ -44,7 +45,7 @@ const ScoreBoard = ({ viewModel, scoreViewModel }) => {
       </table>
       <div className="score-board delete-score">
         <button
-              className={"deleteScoreBtn " + classDeleteBtn}
+              className={`${globalStyles.gameBtn} deleteScoreBtn ${classDeleteBtn}`}
               onClick={() => scoreViewModel.deleteButtonClicked(viewModel)}
             >
               Delete score!

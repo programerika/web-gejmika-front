@@ -1,0 +1,17 @@
+@import './global.css';
+
+:local(.gameBtn) {
+  padding: 5px 20px;
+  font: 0.7em sans-serif;
+  border-radius: 10px;
+  border: 1px solid rgb(44, 44, 44);
+  text-align: center;
+  transition-duration: 0.4s;
+  font-size: large;
+}
+
+:local(.gameBtn):hover:enabled {
+  background-color: #1d011b;
+  color: white;
+  cursor: pointer;
+}
