@@ -168,15 +168,6 @@ export class ScoreViewModel {
     else return `You got ${score} points!!!`;
   };
 
-  refreshScoreBoard = async () => {
-    this.getTopPlayers().then((players) => {
-      this.dispatchUpdateScoreBoard({
-        ...this.scoreState,
-        topPlayers: { ...players },
-      });
-    });
-  };
-
   /**
    * @returns {Array} - array of top players
    */
@@ -194,7 +185,7 @@ export class ScoreViewModel {
     };
   };
 
-  isUserInTopTen = (topPlayers) => {
+  isUserInTopList = (topPlayers) => {
     let isUsernameInTopTen = false;
     topPlayers.forEach((person) => {
       if (person.username === this.storage.getItem("username")) {
@@ -213,13 +204,6 @@ export class ScoreViewModel {
       return person;
     });
   };
-
-  is11PlayerOnTheBoard = (topPlayers) => {
-    return (
-      !this.isUserInTopTen(topPlayers) &&
-      this.isUsernameRegistered()
-    );
-  };  
 
   isUsernameRegistered = () => {
     return !this.storage.isItemInStorageEmpty("username");
@@ -247,7 +231,7 @@ export class ScoreViewModel {
       this.webGejmikaService
         .addScore(this.storage.getItem("username"), score)
         .then((msg) => {
-          this.refreshScoreBoard();
+          this.initializeScoreBoardView();
         });
     }
   };
@@ -275,7 +259,7 @@ export class ScoreViewModel {
     try {
       topPlayers = await this.getTopPlayers();
     } catch (error) {
-      //TODO implementirati error handling u WebGejmikaService svim remote pozivima
+      //TODO implementirati standardan error handling u WebGejmikaService svim remote pozivima
       //vracati odgovarajuci rezultat
       console.log(error);
     }
@@ -287,12 +271,8 @@ export class ScoreViewModel {
         currentPlayer: topPlayers.currentPlayer,
       },
       boardView: {
-        classPlayer11: this.is11PlayerOnTheBoard(topPlayers.topPlayers)
-          ? ""
-          : globalStyles.hidden,
-        classDeleteBtn: this.isUsernameRegistered()
-          ? globalStyles.visible
-          : globalStyles.hidden,
+        isPlayerRegistered: this.isUsernameRegistered(),
+        showPlayerBelowTopList: this.isUsernameRegistered() && !this.isUserInTopList(topPlayers.topPlayers) 
       },
     });
   };

@@ -108,7 +108,7 @@ const ShowScore = ({
               );
               setState(s1);
               setSaveStatus(s2);
-              scoreViewModel.refreshScoreBoard();
+              scoreViewModel.initializeScoreBoardView();
             }}
           >
             Save score!
