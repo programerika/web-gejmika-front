@@ -8,6 +8,7 @@ import ScoreBoard from "./ScoreBoard";
 import { WebGejmikaViewModel } from "../viewModel/WebGejmikaViewModel";
 import Header from "./Header";
 import { ScoreViewModel } from "../viewModel/ScoreViewModel";
+import styles from "./Game.module.css";
 
 const Game = () => {
   const dispatch = useDispatch();
@@ -45,8 +46,8 @@ const Game = () => {
   return (
     <>
       {gameOver ? (
-        <div className="wrapper">
-          <div className="container">
+        <div className={styles.wrapper}>
+          <div className={styles.container}>
             <Header></Header>
             <GamePanel></GamePanel>
             <ShowScore
@@ -57,7 +58,7 @@ const Game = () => {
               combinationLength={combinationLength}
             ></ShowScore>
           </div>
-          <div className="container">
+          <div className={styles.container}>
             <ScoreBoard
               scoreViewModel={scoreViewModel}
               viewModel={viewModel}
@@ -65,13 +66,13 @@ const Game = () => {
           </div>
         </div>
       ) : (
-        <div className="wrapper">
-          <div className="container">
+        <div className={styles.wrapper}>
+          <div className={styles.container}>
             <Header></Header>
             <GamePanel></GamePanel>
             <InputPanel viewModel={viewModel}></InputPanel>
           </div>
-          <div className="container">
+          <div className={styles.container}>
             <ScoreBoard
               scoreViewModel={scoreViewModel}
               viewModel={viewModel}

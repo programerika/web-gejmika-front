@@ -1,31 +1,20 @@
 /* ROOT VARIABLES, BODY STYLES - BEGIN*/
 
 :root {
-  --logo-blue-color: rgb(21, 179, 160);
+  --wgm-theme-main-color: rgb(21, 179, 160);
 }
 
 /* ROOT VARIABLES, BODY STYLES - END*/
 
-/* GAMEPANEL - BEGIN */
+
 /* TODO - lokalizovati nazive klasa jer uticu na app gde se koristi komponenta  */
 
-.wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-}
-
-/* GAMEPANEL - END */
 
 /* ATTEMPT PANEL - BEGIN*/
 
 .flex-cont {
   display: flex;
-  background-color: var(--logo-blue-color);
+  background-color: var(--wgm-theme-main-color);
   margin-top: 1px;
   border: darkgreen 1px solid;
   border-radius: 4px;
@@ -71,11 +60,11 @@
   align-items: center;
   padding: 0px 5px 0px 10px;
   box-sizing: border-box;
-  border: solid 3px var(--logo-blue-color);
+  border: solid 3px var(--wgm-theme-main-color);
   margin-bottom: 1px;
 }
 .header h2 {
-  color: var(--logo-blue-color);
+  color: var(--wgm-theme-main-color);
 }
 
 /* GAME HEADER - END */
@@ -112,7 +101,7 @@
   margin-top: 3px;
   background-color: black;
   border-radius: 4px 4px 10px 10px;
-  border: solid 3px var(--logo-blue-color);
+  border: solid 3px var(--wgm-theme-main-color);
 }
 
 .input-icons-wrapper {
@@ -329,21 +318,21 @@ td {
 }
 
 .score-board-header {
-  border: 2px solid var(--logo-blue-color);
+  border: 2px solid var(--wgm-theme-main-color);
 }
 
 .score-board-header th {
   padding: 15px 5px;
   font-size: 1.2rem;
   background-color: black;
-  color: var(--logo-blue-color);
+  color: var(--wgm-theme-main-color);
 }
 
 .person-score {
   color: rgb(199, 218, 230);
   padding: 5px;
   margin: 5px;
-  border: 2px solid var(--logo-blue-color);
+  border: 2px solid var(--wgm-theme-main-color);
 }
 
 .current-player-separator {
@@ -351,7 +340,7 @@ td {
 }
 
 .currentPlayer {
-  background-color: var(--logo-blue-color);
+  background-color: var(--wgm-theme-main-color);
   color: black;
 }
 
@@ -398,21 +387,12 @@ path {
 /* MEDIA QUERRIES - BEGIN */
 
 @media screen and (max-width: 800px) {
-  .wrapper {
-    flex-direction: column;
-    align-items: center;
-  }
 
   .score-board {
     margin-top: 30px;
   }
 }
 
-@media screen and (max-width: 340px) {
-  .container {
-    transform: scale(0.7);
-    overflow: visible;
-  }
-}
+
 
 /* MEDIA QUERRIES - END */
