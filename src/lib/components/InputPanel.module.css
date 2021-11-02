@@ -1,0 +1,32 @@
+@import '../global.css';
+
+/* INPUT PANEL */
+
+:local(.inputPanel) {
+    display: flex;
+    padding: 10px;
+    margin-top: 3px;
+    background-color: black;
+    border-radius: 4px 4px 10px 10px;
+    border: solid 3px var(--wgm-theme-main-color);
+}
+
+:local(.inputIconsWrapper) {
+    display: grid;
+    grid-template-columns: 33.33% 33.33% 33.33%;
+    width: 75%;
+    border-right: 1px solid white;
+}
+
+:local(.confirmCancelWrapper) {
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    place-items: center;
+    margin: auto;
+    margin-right: 0px;
+}
+
+
+  
+  

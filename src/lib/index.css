@@ -34,56 +34,7 @@
 
 /* SHOW OR HIDE STYLES  - END*/
 
-/* INPUT PANEL - BEGIN */
 
-.input-panel {
-  display: flex;
-  padding: 10px;
-  margin-top: 3px;
-  background-color: black;
-  border-radius: 4px 4px 10px 10px;
-  border: solid 3px var(--wgm-theme-main-color);
-}
-
-.input-icons-wrapper {
-  display: grid;
-  grid-template-columns: 33.33% 33.33% 33.33%;
-  width: 75%;
-  border-right: 1px solid white;
-}
-
-.confirm-cancel-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: max-content;
-  place-items: center;
-  margin: auto;
-  margin-right: 0px;
-}
-
-.input {
-  border-radius: 50%;
-  height: 50px;
-  width: 50px;
-  border: rgb(53, 50, 50) 2px solid;
-  padding: 5px;
-  box-shadow: 1px 3.5px rgb(106, 109, 109);
-  background-color: rgb(199, 218, 230);
-  margin: 10px;
-  cursor: pointer;
-}
-
-.input:hover {
-  background-color: rgb(184, 192, 192);
-}
-
-.input:active {
-  background-color: #848f84;
-  box-shadow: 0 5px #666;
-  transform: translateY(3px);
-}
-
-/* INPUT PANEL - END */
 
 /* SHOWSCORE - BEGIN */
 

@@ -7,52 +7,54 @@ import trafficLight from '../icons/traffic-light.png';
 import clubs from '../icons/clubs.png';
 import checked from '../icons/checked.png';
 import close from '../icons/close.png';
+import styles from "./InputPanel.module.css";
+import globalStyles from "../global.module.css";
 
 const InputPanel = ({ viewModel }) => {
   return (
-    <div className="input-panel">
-      <div className="input-icons-wrapper">
+    <div className={styles.inputPanel}>
+      <div className={styles.inputIconsWrapper}>
         <img
-          className="input"
+          className={globalStyles.inputBtn}
           src={clubs}
           onClick={() => viewModel.clubsButtonClicked()}
           alt="clubs"
         />
         <img
-          className="input"
+          className={globalStyles.inputBtn}
           src={diamond}
           onClick={() => viewModel.diamondButtonClicked()}
           alt="diamond"
         />
         <img
-          className="input"
+          className={globalStyles.inputBtn}
           src={heart}
           onClick={() => viewModel.heartButtonClicked()}
           alt="heart"
         />
         <img
-          className="input"
+          className={globalStyles.inputBtn}
           src={star}
           onClick={() => viewModel.starButtonClicked()}
           alt="star"
         />
         <img
-          className="input"
+          className={globalStyles.inputBtn}
           src={spades}
           onClick={() => viewModel.spadesButtonClicked()}
           alt="spades"
         />
         <img
-          className="input"
+          className={globalStyles.inputBtn}
           src={trafficLight}
           onClick={() => viewModel.trafficLightButtonClicked()}
           alt="traffic light"
         />
       </div>
 
-      <div className="confirm-cancel-wrapper">
+      <div className={styles.confirmCancelWrapper}>
         <img
-          className="input"
+          className={globalStyles.inputBtn}
           src={checked}
           alt="confirm"
           onClick={() => {
@@ -61,7 +63,7 @@ const InputPanel = ({ viewModel }) => {
         />
 
         <img
-          className="input"
+          className={globalStyles.inputBtn}
           src={close}
           alt="delete"
           onClick={() => {

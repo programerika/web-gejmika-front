@@ -15,3 +15,25 @@
   color: white;
   cursor: pointer;
 }
+
+:local(.inputBtn) {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  border: rgb(53, 50, 50) 2px solid;
+  padding: 5px;
+  box-shadow: 1px 3.5px rgb(106, 109, 109);
+  background-color: rgb(199, 218, 230);
+  margin: 10px;
+  cursor: pointer;
+}
+
+:local(.inputBtn):hover {
+  background-color: rgb(184, 192, 192);
+}
+
+:local(.inputBtn):active {
+  background-color: #848f84;
+  box-shadow: 0 5px #666;
+  transform: translateY(3px);
+}
