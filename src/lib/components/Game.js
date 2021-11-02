@@ -57,10 +57,12 @@ const Game = () => {
               combinationLength={combinationLength}
             ></ShowScore>
           </div>
-          <ScoreBoard
-            scoreViewModel={scoreViewModel}
-            viewModel={viewModel}
-          ></ScoreBoard>
+          <div className="container">
+            <ScoreBoard
+              scoreViewModel={scoreViewModel}
+              viewModel={viewModel}
+            ></ScoreBoard>
+          </div>
         </div>
       ) : (
         <div className="wrapper">
@@ -69,10 +71,12 @@ const Game = () => {
             <GamePanel></GamePanel>
             <InputPanel viewModel={viewModel}></InputPanel>
           </div>
-          <ScoreBoard
-            scoreViewModel={scoreViewModel}
-            viewModel={viewModel}
-          ></ScoreBoard>
+          <div className="container">
+            <ScoreBoard
+              scoreViewModel={scoreViewModel}
+              viewModel={viewModel}
+            ></ScoreBoard>
+          </div>
         </div>
       )}
     </>

@@ -40,14 +40,17 @@ const ScoreBoard = ({ viewModel, scoreViewModel }) => {
             <td>{currentPlayer.score}</td>
           </tr>
 
-          <button
-            className={"delete-score-btn " + classDeleteBtn}
-            onClick={() => scoreViewModel.deleteButtonClicked(viewModel)}
-          >
-            Delete
-          </button>
         </tbody>
       </table>
+      <div className="score-board delete-score">
+        <button
+              className={"deleteScoreBtn " + classDeleteBtn}
+              onClick={() => scoreViewModel.deleteButtonClicked(viewModel)}
+            >
+              Delete score!
+        </button>
+      </div>
+
     </>
   );
 };
