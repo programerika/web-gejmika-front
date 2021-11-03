@@ -8,8 +8,7 @@ const ShowScore = ({
   score,
   correctView,
   viewModel,
-  scoreViewModel,
-  combinationLength,
+  scoreViewModel
 }) => {
   const [state, setState] = useState({});
   const [saveStatus, setSaveStatus] = useState();
@@ -107,8 +106,7 @@ const ShowScore = ({
                 score
               );
               setState(s1);
-              setSaveStatus(s2);
-              scoreViewModel.initializeScoreBoardView();
+              setSaveStatus(s2);        
             }}
           >
             Save score!

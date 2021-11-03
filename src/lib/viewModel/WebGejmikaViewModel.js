@@ -4,8 +4,6 @@
 import allActions from "../redux/actions";
 import { WebGejmikaModel } from "../model/WebGejmikaModel";
 import { WebGejmikaService } from "../services/WebGejmikaService";
-import { StorageService } from "../services/StorageService";
-import { ScoreViewModel } from "./ScoreViewModel";
 import heart from '../icons/heart.png';
 import star from '../icons/star.png';
 import diamond from '../icons/diamond.png';
@@ -17,14 +15,14 @@ import attemptStyles from "../components/AttemptPanel.module.css";
 
 
 export class WebGejmikaViewModel {
-  constructor(modelState, viewState, scoreViewModel, dispatcher) {
+  constructor(modelState, viewState, scoreViewModel, scoreBoardViewModel, dispatcher) {
     this.modelState = modelState;
     this.viewState = viewState;
     this.dispatcher = dispatcher;
     this.webGejmikaModel = new WebGejmikaModel(modelState);
     this.WebGejmikaService = new WebGejmikaService();
     this.scoreViewModel = scoreViewModel;
-    this.storage = new StorageService();
+    this.scoreBoardViewModel = scoreBoardViewModel;
   }
 
   /**
@@ -265,11 +263,8 @@ export class WebGejmikaViewModel {
       preparedAttempts: preparedAttempts,
     });
 
-    if (
-      newStateModel.gameOver &&
-      !this.storage.isItemInStorageEmpty("username")
-    ) {
-      this.scoreViewModel.addScore(newStateModel.score);
+    if (newStateModel.gameOver) {
+      this.scoreViewModel.addScoreIfPlayerIsRegistered(newStateModel.score);
     }
   }
 
@@ -316,7 +311,7 @@ export class WebGejmikaViewModel {
       },
       id: -1,
     });
-    this.scoreViewModel.initializeScoreBoardView();
+    this.scoreBoardViewModel.initializeScoreBoardView();
   }
 
   /**

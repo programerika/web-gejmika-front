@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import globalStyles from "../global.module.css";
 import styles from "./ScoreBoard.module.css";
 
-const ScoreBoard = ({ viewModel, scoreViewModel, scoreBoardViewModel }) => {
+const ScoreBoard = ({ scoreBoardViewModel }) => {
   const topPlayers = useSelector((state) => state.score.topPlayers.topPlayers);
   const isPlayerRegistered = useSelector((state) => state.score.boardView.isPlayerRegistered);
   const showPlayerBelowTopList = useSelector((state) => state.score.boardView.showPlayerBelowTopList);
@@ -55,7 +55,7 @@ const ScoreBoard = ({ viewModel, scoreViewModel, scoreBoardViewModel }) => {
         <div className={`${styles.scoreBoard} ${styles.deleteScore}`}>
           <button
             className={`${globalStyles.gameBtn} ${styles.deleteScoreBtn}`}
-            onClick={() => scoreViewModel.deleteButtonClicked(viewModel)}
+            onClick={() => scoreBoardViewModel.deleteButtonClicked()}
           >
             Delete score!
           </button>

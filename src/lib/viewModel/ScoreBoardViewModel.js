@@ -10,18 +10,12 @@ export class ScoreBoardViewModel {
   #dispatcher;
   #scoreState;
   #webGejmikaService;
-  #viewModel;
   #storage;  
   constructor(scoreState, dispatcher) {
     this.#dispatcher = dispatcher;
     this.#scoreState = scoreState;
     this.#webGejmikaService = new WebGejmikaService();
-    this.#viewModel = null;
     this.#storage = new StorageService();
-  }
-
-  setViewModel = (viewModel) => {
-    this.#viewModel = viewModel;
   }
 
   #dispatchUpdateScoreBoard = (newStateBoard) => {
@@ -95,7 +89,7 @@ export class ScoreBoardViewModel {
   deleteButtonClicked = async () => {
     if (window.confirm("Are you sure you want to delete your username?")) {
       this.#deleteUsername().then(() => {
-        this.#viewModel.startGame();
+        this.initializeScoreBoardView();
       });
       console.log("Username deleted.");
     } else {

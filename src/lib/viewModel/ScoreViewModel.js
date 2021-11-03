@@ -160,15 +160,15 @@ export class ScoreViewModel {
     return !this.storage.isItemInStorageEmpty("username");
   }
 
-  addScore = async (score) => {
+  addScoreIfPlayerIsRegistered = async (score) => {
+    if (!this.isUsernameRegistered()) return;
     if (score === 0) return;
-    else {
-      this.webGejmikaService
-        .addScore(this.storage.getItem("username"), score)
-        .then((msg) => {
-          this.initializeScoreBoardView();
-        });
-    }
+    
+    this.webGejmikaService.addScore(this.storage.getItem("username"), score)
+      .then((msg) => {
+        this.scoreBoardViewModel.initializeScoreBoardView();
+      });
+
   };
   
   changeClassesOnSaveButtonClick = (state) => {
@@ -180,17 +180,12 @@ export class ScoreViewModel {
   };
 
   saveScoreState = async (state, username, score) => {
-    return [
+    const newState =  [
       this.changeClassesOnSaveButtonClick(state),
       await this.saveUserScore(username, score),
     ];
-  };
-
-  initializeScoreBoardView = async () => {
     this.scoreBoardViewModel.initializeScoreBoardView();
+    return newState;
   };
 
-  deleteButtonClicked = async (viewModel) => {
-    this.scoreBoardViewModel.deleteButtonClicked();
-  };
 }
