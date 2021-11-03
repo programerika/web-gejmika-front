@@ -197,9 +197,9 @@ export class ScoreViewModel {
 
   highlightCurrentUser = (topPlayers) => {
     return topPlayers.map((person, i) => {
-      person.rowColor =
+      person.currentUserClass =
         person.username === this.storage.getItem("username")
-          ? scoreBoardStyles.currentPlayer
+          ? scoreBoardStyles.currentPlayerUsername
           : "";
       return person;
     });
@@ -253,8 +253,9 @@ export class ScoreViewModel {
 
   initializeScoreBoardView = async () => {
     var topPlayers = {
-      topPlayers: [],
-      currentPlayer: {},
+      topPlayers: [
+      ],
+      currentPlayer: {username: localStorage.getItem("username"), score: null},
     };
     try {
       topPlayers = await this.getTopPlayers();

@@ -15,44 +15,37 @@ const ScoreBoard = ({ viewModel, scoreViewModel }) => {
         <thead>
           <tr className={styles.scoreBoardHeader}>
             <th>Rank</th>
-            <th>Username</th>
+            <th>Player</th>
             <th>Points</th>
           </tr>
         </thead>
         <tbody>
           {topPlayers.map((person, i) => {
             return (
-              <tr key={i} className={`${styles.personScore} ${person.rowColor}`}>
-                <td>
-                  <b>{i + 1}.</b>
-                </td>
-                <td>{person.username}</td>
-                <td>{person.score}</td>
+              <tr key={i} className={styles.personScore}>
+                <td><span className={person.currentUserClass}><b>{i + 1}.</b></span></td>
+                <td><span className={person.currentUserClass}>{person.username}</span></td>
+                <td><span className={person.currentUserClass}>{person.score}</span></td>
               </tr>
             );
           })}
-
-          {
-            showPlayerBelowTopList
-            &&
-            <tr className={`${styles.currentPlayerSeparator}`}>
-              <td></td>
-              <td>...</td>
-              <td></td>
-            </tr>
-          }
-          {
-            showPlayerBelowTopList
-            &&
-            <tr className={`${styles.personScore} ${styles.currentPlayer}`}>
-              <td>...</td>
-              <td>{currentPlayer.username}</td>
-              <td>{currentPlayer.score}</td>
-            </tr>
-          }
-
         </tbody>
       </table>
+      {
+        showPlayerBelowTopList
+        &&
+        <div className={styles.scoreBoard}>
+          <div className={styles.currentPlayerSeparator}>...</div>
+          <div className={styles.currentPlayer}>
+            <span className={styles.currentPlayerUsername}>
+              {currentPlayer.username}
+            </span> your score is <span className={styles.currentPlayerScore}>
+              {currentPlayer.score}
+            </span> 
+            <br/>keep playing...
+          </div>
+        </div>
+      }
       {
         isPlayerRegistered
         &&
