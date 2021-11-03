@@ -9,10 +9,15 @@ export class ScoreViewModel {
   #webGejmikaService;
   #storage;
   #scoreBoardViewModel;
+  #gameViewModel;
   constructor(scoreBoardViewModel) {
     this.#webGejmikaService = new WebGejmikaService();
     this.#storage = new StorageService();
     this.#scoreBoardViewModel = scoreBoardViewModel;
+  }
+
+  setGameViewModel = (viewModel)=> {
+    this.#gameViewModel = viewModel;
   }
 
   initializeView = (score) => {
@@ -177,5 +182,9 @@ export class ScoreViewModel {
     this.setState(newState);
     this.#scoreBoardViewModel.initializeScoreBoardView();    
   };
+
+  playAgain = () => {
+    this.#gameViewModel.startGame();
+  }
 
 }

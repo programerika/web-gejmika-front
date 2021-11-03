@@ -6,11 +6,10 @@ import styles from "./ShowScore.module.css";
 import { useSelector } from "react-redux";
 
 const ShowScore = ({
-  correctView,
-  viewModel,
   scoreViewModel
 }) => {
   const score = useSelector((state) => state.model.score);
+  const correctView = useSelector((state) => state.view.correctView);
   const [state, setState] = useState(scoreViewModel.initializeView(score));
   const confetti = useMemo(() => scoreViewModel.confettiPerScore(score), [score]);
   scoreViewModel.setStateCallback(state, setState);
@@ -72,7 +71,7 @@ const ShowScore = ({
         <div className={styles.buttons}>
           <button
             className={globalStyles.gameBtn}
-            onClick={() => viewModel.startGame()}
+            onClick={() => scoreViewModel.playAgain()}
           >
             Play again!
           </button>

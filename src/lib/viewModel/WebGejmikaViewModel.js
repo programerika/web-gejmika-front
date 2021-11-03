@@ -257,8 +257,16 @@ export class WebGejmikaViewModel {
       newStateView.id
     );
 
+    let correctView = [];
+    if (newStateModel.gameOver) {    
+      correctView = this.prepareAttemptPanelView(
+        this.combToIcon(newStateModel.secretComb)
+      );
+    }
+
     this.dispatchUpdate(newStateModel, {
       ...newStateView,
+      correctView: correctView,
       preparedAttempts: preparedAttempts,
     });
 
@@ -302,7 +310,7 @@ export class WebGejmikaViewModel {
     this.dispatchUpdate(newStateModel, {
       combInProgress: [],
       attemptsView: [],
-      correctView: this.combToIcon(newStateModel.secretComb),
+      correctView: [],
       preparedAttempts: this.prepareGameView([], [], -1),
       gameDifficulty: {
         attemptsLength: this.webGejmikaModel.attemptsLength(),

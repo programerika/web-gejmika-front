@@ -5,7 +5,7 @@ import SVGIndicator from "./SVGIndicator";
 import styles from "./AttemptPanel.module.css";
 
 const GamePanel = () => {
-  const { preparedAttempts } = useSelector((state) => state.view);
+  const preparedAttempts = useSelector((state) => state.view.preparedAttempts);
   return (
     <>
       {preparedAttempts.map((attempt, i) => {

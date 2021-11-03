@@ -67,9 +67,10 @@ export class ScoreBoardViewModel {
   };
 
   #highlightCurrentUser = (topPlayers) => {
+    const playerUsername = this.#storage.getItem("username");
     return topPlayers.map((person, i) => {
       person.currentUserClass =
-        person.username === this.#storage.getItem("username")
+        person.username === playerUsername
           ? scoreBoardStyles.currentPlayerUsername
           : "";
       return person;
@@ -77,13 +78,10 @@ export class ScoreBoardViewModel {
   };
 
   #isUserInTopList = (topPlayers) => {
-    let isUsernameInTopTen = false;
-    topPlayers.forEach((person) => {
-      if (person.username === this.#storage.getItem("username")) {
-        isUsernameInTopTen = true;
-      }
-    });
-    return isUsernameInTopTen;
+    const playerUsername = this.#storage.getItem("username");
+    return (
+        typeof topPlayers.find((person) => (person.username === playerUsername)) !== "undefined"
+    );
   };
 
   deleteButtonClicked = async () => {

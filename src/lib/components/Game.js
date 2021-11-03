@@ -16,27 +16,16 @@ const Game = () => {
   const modelState = useSelector((state) => state.model);
   const viewState = useSelector((state) => state.view);
   const scoreState = useSelector((state) => state.score);
-
-  const { gameOver } = modelState;
-
-  const {
-    correctView,
-    gameDifficulty: { combinationLength },
-  } = viewState;
-
   
   const scoreBoardViewModel = new ScoreBoardViewModel(scoreState, dispatch);
   const scoreViewModel = new ScoreViewModel(scoreBoardViewModel);
-
   const viewModel = new WebGejmikaViewModel(
     modelState,
     viewState,
     scoreViewModel,
     dispatch
   );
-
-  //TODO move to WebGejmikaViewModel
-  const correctView2 = viewModel.prepareAttemptPanelView(correctView);
+  scoreViewModel.setGameViewModel(viewModel);
 
   useEffect(() => {
     viewModel.startGame();
@@ -49,16 +38,13 @@ const Game = () => {
 
   return (
     <>
-      {gameOver ? (
+      {viewState.gameOver ? (
         <div className={styles.wrapper}>
           <div className={styles.container}>
             <Header></Header>
             <GamePanel></GamePanel>
             <ShowScore
-              viewModel={viewModel}
-              correctView={correctView2}
               scoreViewModel={scoreViewModel}
-              scoreBoardViewModel={scoreBoardViewModel}
             ></ShowScore>
           </div>
           <div className={styles.container}>
