@@ -15,14 +15,13 @@ import attemptStyles from "../components/AttemptPanel.module.css";
 
 
 export class WebGejmikaViewModel {
-  constructor(modelState, viewState, scoreViewModel, scoreBoardViewModel, dispatcher) {
+  constructor(modelState, viewState, scoreViewModel, dispatcher) {
     this.modelState = modelState;
     this.viewState = viewState;
     this.dispatcher = dispatcher;
     this.webGejmikaModel = new WebGejmikaModel(modelState);
     this.WebGejmikaService = new WebGejmikaService();
     this.scoreViewModel = scoreViewModel;
-    this.scoreBoardViewModel = scoreBoardViewModel;
   }
 
   /**
@@ -311,7 +310,6 @@ export class WebGejmikaViewModel {
       },
       id: -1,
     });
-    this.scoreBoardViewModel.initializeScoreBoardView();
   }
 
   /**

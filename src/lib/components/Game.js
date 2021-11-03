@@ -32,7 +32,6 @@ const Game = () => {
     modelState,
     viewState,
     scoreViewModel,
-    scoreBoardViewModel,
     dispatch
   );
 
@@ -41,6 +40,7 @@ const Game = () => {
 
   useEffect(() => {
     viewModel.startGame();
+    scoreBoardViewModel.initializeScoreBoardView();
   }, []);
 
   useEffect(() => {
