@@ -135,9 +135,9 @@ test("Testing outcomeToColor() function with 0 guesses", () => {
 
 test("Testing outcomeToColor() function with some in place guesses", () => {
   expect(wgVM2.outcomeToColor(outcomeSomeInPlace)).toStrictEqual([
-    "yellow",
-    "yellow",
     "green",
     "green",
+    "yellow",
+    "yellow",
   ]);
 });

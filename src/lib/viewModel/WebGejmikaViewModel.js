@@ -285,14 +285,7 @@ export class WebGejmikaViewModel {
       colors[k] = "yellow";
     }
 
-    let SVGpieOrder = [2, 3, 0, 1];
-    let colorsRearrangedforSVG = [...colors];
-
-    for (let i = 0; i < colors.length; i++) {
-      colorsRearrangedforSVG[i] = colors[SVGpieOrder[i]];
-    }
-
-    return colorsRearrangedforSVG;
+    return colors;
   };
 
   prepareGameView = (combInProgress, attemptsView, id) => {
@@ -330,6 +323,8 @@ export class WebGejmikaViewModel {
         typeof attemptsView[e] !== "undefined"
           ? attemptsView[e].attemptViewOutcome
           : ["lightgray", "lightgray", "lightgray", "lightgray"],
+      angleShift: 
+        -90,
     };
   };
 

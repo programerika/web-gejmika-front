@@ -12,7 +12,7 @@ const GamePanel = () => {
         return (
           <div key={i} className={styles.flexCont}>
             <AttemptPanel comb={attempt.comb}></AttemptPanel>
-            <SVGIndicator colors={attempt.colors}></SVGIndicator>
+            <SVGIndicator colors={attempt.colors} angleShift={attempt.angleShift}></SVGIndicator>
           </div>
         );
       })}
