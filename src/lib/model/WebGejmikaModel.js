@@ -16,14 +16,12 @@ export class WebGejmikaModel {
   };
 
   /**
-   *
    * @param {Array} attpInProgress
    * @returns {Object} Model state with added attempt and set attemptOutcome
    * This method compares attpInProgress with secretComb and generates attemptOutcome - object with two variables:
    * inPlace - number of guesses in place
    * correctCode - number of correct guesses, but not in place
    */
-
   makeAGuess = (attpInProgress) => {
     var combination = [...this.modelState.secretComb];
     var attempt = [...attpInProgress];
@@ -31,23 +29,25 @@ export class WebGejmikaModel {
       inPlace: 0,
       correctCode: 0,
     };
-
+    // count matching codes in the comb in right place
     for (let index = 0; index < attempt.length; index++) {
       if (attempt[index] === combination[index]) {
         outcome.inPlace += 1;
-        combination[index] = "";
-        attempt[index] = "";
       }
     }
-
+    // count correct codes in the comb in any place
+    combination.sort();
+    attempt.sort();
+    let startFromIndex = 0;
     for (let index = 0; index < attempt.length; index++) {
-      if (attempt[index] === "") continue;
-      if (combination.indexOf(attempt[index]) !== -1) {
-        outcome.correctCode += 1;
-        let ind = combination.indexOf(attempt[index]);
-        combination[ind] = "";
+      const foundIndex = combination.indexOf(attempt[index], startFromIndex);
+      if (foundIndex > -1) {
+        outcome.correctCode += 1;  
+        startFromIndex = foundIndex + 1;
       }
     }
+    // total of inPlace and correctCode is max combination length
+    outcome.correctCode -= outcome.inPlace;
 
     const newModelState = {
       ...this.modelState,
@@ -69,11 +69,9 @@ export class WebGejmikaModel {
   };
 
   /**
-   *
    * @returns {Object} Model state with set secretComb
    * This method generates random secret combination of size 4 from letters K,H,P,T,L,S
    */
-
   generateSecretCode = () => {
     let combArr = ["K", "H", "P", "T", "L", "S"];
     let combination = [];
@@ -92,28 +90,26 @@ export class WebGejmikaModel {
   };
 
   /**
-   *
    * @param {Array} attempts
    * @returns {boolean}
    * This method checks if game end is reached based on number of attempts or attempt outcome
    */
-
   isTargetReached = (attempts) => {
     if (attempts.length === 0) return false;
     var lastAttp = attempts[attempts.length - 1];
     var check = lastAttp.attemptOutcome.inPlace === this.combinationLength();
     if (attempts.length === this.attemptsLength()) {
       return true;
-    } else return check;
+    } else {
+      return check;
+    }
   };
 
   /**
-   *
    * @param {Array} attempts
    * @returns {number} score - 8, 13, 21 or 0
    * This method calculates score based on correct code guess attempt number
    */
-
   calculateScore = (attempts) => {
     var lastAttp = attempts[attempts.length - 1];
     var check = lastAttp.attemptOutcome.inPlace === this.combinationLength();
