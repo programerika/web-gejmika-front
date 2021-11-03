@@ -30,32 +30,17 @@ export class WebGejmikaViewModel {
    * @param {Object} newStateView
    * This method dispatches model and view state updates to reducers
    */
-
   dispatchUpdate = (newStateModel, newStateView) => {
     this.dispatcher(
       allActions.inputActions.update(newStateModel, newStateView)
     );
   };
 
-  // dispatchUpdateView = (newViewState) => {
-  //   console.log("FROM DISPATCH VIEW: " + JSON.stringify(newViewState));
-  //   this.dispatcher(allActions.inputActions.updateViewModel(newViewState));
-  // };
-
-  /**
-   * Methods for each button icon clicked BEGIN
-   *
-   * All methods add the appropriate picture link to combInProgress and dispatch view state update
-   * */
-
-  prepareCombInProgressForView() {}
-
-  heartButtonClicked() {
+  #appendCodeToCombinationInProgress(icon) {
     if (this.isAttemptFull()) {
       return;
     }
-
-    let combInProg = [...this.viewState.combInProgress, heart];
+    let combInProg = [...this.viewState.combInProgress, icon];
 
     const preparedAttempts = this.prepareGameView(
       combInProg,
@@ -71,140 +56,39 @@ export class WebGejmikaViewModel {
         preparedAttempts: preparedAttempts,
       }
     );
+  }
+
+  heartButtonClicked() {
+    this.#appendCodeToCombinationInProgress(heart);
   }
 
   starButtonClicked() {
-    if (this.isAttemptFull()) {
-      return;
-    }
-
-    let combInProg = [...this.viewState.combInProgress, star];
-
-    const preparedAttempts = this.prepareGameView(
-      combInProg,
-      this.viewState.attemptsView,
-      this.viewState.id
-    );
-    this.dispatchUpdate(
-      { ...this.modelState },
-      {
-        ...this.viewState,
-        combInProgress: combInProg,
-        preparedAttempts: preparedAttempts,
-      }
-    );
+    this.#appendCodeToCombinationInProgress(star);
   }
 
   diamondButtonClicked() {
-    if (this.isAttemptFull()) {
-      return;
-    }
-
-    let combInProg = [...this.viewState.combInProgress, diamond];
-
-    const preparedAttempts = this.prepareGameView(
-      combInProg,
-      this.viewState.attemptsView,
-      this.viewState.id
-    );
-    this.dispatchUpdate(
-      { ...this.modelState },
-      {
-        ...this.viewState,
-        combInProgress: combInProg,
-        preparedAttempts: preparedAttempts,
-      }
-    );
+    this.#appendCodeToCombinationInProgress(diamond);
   }
 
   spadesButtonClicked() {
-    if (this.isAttemptFull()) {
-      return;
-    }
-
-    let combInProg = [
-      ...this.viewState.combInProgress,
-      spades,
-    ];
-    const preparedAttempts = this.prepareGameView(
-      combInProg,
-      this.viewState.attemptsView,
-      this.viewState.id
-    );
-
-    this.dispatchUpdate(
-      { ...this.modelState },
-      {
-        ...this.viewState,
-        combInProgress: combInProg,
-        preparedAttempts: preparedAttempts,
-      }
-    );
+    this.#appendCodeToCombinationInProgress(spades);
   }
 
   trafficLightButtonClicked() {
-    if (this.isAttemptFull()) {
-      return;
-    }
-
-    let combInProg = [
-      ...this.viewState.combInProgress,
-      trafficLight,
-    ];
-
-    const preparedAttempts = this.prepareGameView(
-      combInProg,
-      this.viewState.attemptsView,
-      this.viewState.id
-    );
-
-    this.dispatchUpdate(
-      { ...this.modelState },
-      {
-        ...this.viewState,
-        combInProgress: combInProg,
-        preparedAttempts: preparedAttempts,
-      }
-    );
+    this.#appendCodeToCombinationInProgress(trafficLight);
   }
 
   clubsButtonClicked() {
-    if (this.isAttemptFull()) {
-      return;
-    }
-
-    let combInProg = [...this.viewState.combInProgress, clubs];
-
-    const preparedAttempts = this.prepareGameView(
-      combInProg,
-      this.viewState.attemptsView,
-      this.viewState.id
-    );
-    this.dispatchUpdate(
-      { ...this.modelState },
-      {
-        ...this.viewState,
-        combInProgress: combInProg,
-        preparedAttempts: preparedAttempts,
-      }
-    );
+    this.#appendCodeToCombinationInProgress(clubs);
   }
-
-  /**
-   * Methods for each button icon clicked END
-   * */
 
   /**
    *
    * This method updates view state by adding new attemptView, and setting viewOutcome
    * Gets new model state from webGejmikaModel and calls dispatchUpdate function
    */
-
   codeGuessIfReady() {
-    if (
-      this.viewState.combInProgress.length !==
-      this.viewState.gameDifficulty.combinationLength
-    ) {
+    if (!this.isAttemptFull()) {
       // this.setAttemptIncomplete(true);
       return;
     } else {
@@ -215,9 +99,7 @@ export class WebGejmikaViewModel {
 
   isAttemptFull() {
     return this.viewState.combInProgress.length >=
-      this.viewState.gameDifficulty.combinationLength
-      ? true
-      : false;
+      this.viewState.gameDifficulty.combinationLength;
   }
 
   // setAttemptIncomplete(isIncomplete) {
