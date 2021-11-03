@@ -13,12 +13,11 @@ const ShowScore = ({
   const [state, setState] = useState({});
   const [saveStatus, setSaveStatus] = useState();
   const [username, setUsername] = useState("");
-  const [confetti, setConfetti] = useState({});
+  const [confetti] = useState(scoreViewModel.confettiPerScore(score));
 
   useEffect(() => {
-    setConfetti(scoreViewModel.confettiPerScore(score));
     setState(scoreViewModel.initializeView(score));
-  }, []);
+  }, [saveStatus]);
 
   return (
     <div className={styles.score}>
@@ -47,7 +46,7 @@ const ShowScore = ({
         ></AttemptPanel>
       </div>
       <div className={styles.saveScore}>
-        {scoreViewModel.checkStorageAndScore(score) ? (
+        {state.offerToRegisterPlayer ? (
           <>
             <div className={styles.tooltip}>
               <input
@@ -63,7 +62,7 @@ const ShowScore = ({
                 }
                 onChange={async (e) => {
                   setState(
-                    await scoreViewModel.validateUsername(e.target.value)
+                    {...state, ...(await scoreViewModel.validateUsername(e.target.value))}
                   );
                   setUsername(e.target.value);
                 }}
@@ -73,12 +72,12 @@ const ShowScore = ({
                 Username has to have 4 - 6 characters with last two numbers
               </div>
             </div>
-            <p className={state.messageStatus + " " + state.messageColor}>
+            <p className={state.messageColor}>
               {state.message}
             </p>
           </>
         ) : (
-          <p className={state.messageStatus + " " + state.messageColor}>
+          <p className={state.messageColor}>
             {saveStatus}
           </p>
         )}
@@ -86,31 +85,30 @@ const ShowScore = ({
         <div className={styles.buttons}>
           <button
             className={globalStyles.gameBtn}
-            onClick={() => {
-              viewModel.startGame();
-            }}
+            onClick={() => viewModel.startGame()}
           >
             Play again!
           </button>
 
-          <button
-            className={`${globalStyles.gameBtn} ${scoreViewModel.hide(score)}`}
-            disabled={scoreViewModel.disableSaveScoreButton(
-              state.isSaveButtonDisabled,
-              score
-            )}
-            onClick={async () => {
-              let [s1, s2] = await scoreViewModel.saveScoreState(
-                state,
-                username,
-                score
-              );
-              setState(s1);
-              setSaveStatus(s2);        
-            }}
-          >
-            Save score!
-          </button>
+          {
+            state.offerToRegisterPlayer
+            &&
+            <button
+              className={globalStyles.gameBtn}
+              disabled={state.isSaveButtonDisabled}
+              onClick={async () => {
+                let [s1, s2] = await scoreViewModel.saveScoreState(
+                  state,
+                  username,
+                  score
+                );
+                setState(s1);
+                setSaveStatus(s2);
+              }}
+            >
+              Save score!
+            </button>
+          }
         </div>
       </div>
     </div>

@@ -1,10 +1,8 @@
 /**
  * @author Programerika
  */
-import allActions from "../redux/actions";
 import { StorageService } from "../services/StorageService";
 import { WebGejmikaService } from "../services/WebGejmikaService";
-import globalStyles from "../global.module.css";
 import showScoreStyles from "../components/ShowScore.module.css";
 
 export class ScoreViewModel {
@@ -23,6 +21,7 @@ export class ScoreViewModel {
       );
 
       if (resp !== null) {
+        //TODO resp.json() mora da se isprocesira u service sloju i da se uradi error handling pre
         resp.json().then((uid) => this.storage.setItem("uid", uid.id));
         return "Score has been successfully saved";
       } else {
@@ -42,31 +41,26 @@ export class ScoreViewModel {
         message: "Please enter a username",
         isSaveButtonDisabled: true,
         isUsernameValid: "",
-        toolTipStatus: showScoreStyles.toolTipVisible,
-        messageStatus: globalStyles.visible,
         messageColor: showScoreStyles.messageWhite,
       };
     }
-
     let regex = new RegExp("[a-zA-Z0-9]{4,6}[0-9]{2}$");
-    if (regex.test(username) && !this.isUsernameRegistered()) {
-      if (
-        (await this.webGejmikaService.checkIfUsernameExists(username)) === true
-      ) {
+    if (regex.test(username)) {      
+      const usernameExists = await this.webGejmikaService.checkIfUsernameExists(username);
+      if (usernameExists) {
         return {
           message: "*Username already exists",
           isSaveButtonDisabled: true,
           isUsernameValid: showScoreStyles.isNotValidInput,
           messageColor: showScoreStyles.messageRed,
         };
-      } else {
-        return {
-          message: "*Username is correct",
-          isSaveButtonDisabled: false,
-          isUsernameValid: showScoreStyles.isValidInput,
-          messageColor: showScoreStyles.messageGreen,
-        };
       }
+      return {
+        message: "*Username is correct",
+        isSaveButtonDisabled: false,
+        isUsernameValid: showScoreStyles.isValidInput,
+        messageColor: showScoreStyles.messageGreen,
+      };
     } else {
       return {
         message: "*Your username is not in valid format",
@@ -75,44 +69,19 @@ export class ScoreViewModel {
         messageColor: showScoreStyles.messageRed,
       };
     }
-  };
 
-  checkStorageAndScore = (score) => {
-    if (!this.isUsernameRegistered() && score > 0) {
-      return true;
-    } else {
-      return false;
-    }
   };
 
   initializeView = (score) => {
     return {
       toolTipStatus: showScoreStyles.toolTipHidden,
       isUsernameValid: "",
-      isSaveButtonDisabled: !this.isUsernameRegistered(),
-      message: "Please enter an username",
-      messageStatus: globalStyles.visible,
+      isSaveButtonDisabled: true,
+      offerToRegisterPlayer: !this.isUsernameRegistered() && score > 0,
+      message: "Please enter a username",
       messageColor: showScoreStyles.messageWhite,
       scoreMsg: this.calculateScoreMsg(score),
     };
-  };
-
-  hide = (score) => {
-    if (this.isUsernameRegistered() && score >= 0) {
-      console.log("Hide Save Button");
-      return globalStyles.hidden;
-    } else {
-      console.log("Show Save BUTTON");
-      return globalStyles.visible;
-    }
-  };
-
-  disableSaveScoreButton = (isSaveButtonDisabled, score) => {
-    if (isSaveButtonDisabled || score === 0) {
-      return true;
-    } else {
-      return false;
-    }
   };
 
   confettiPerScore = (score) => {
@@ -171,18 +140,14 @@ export class ScoreViewModel {
 
   };
   
-  changeClassesOnSaveButtonClick = (state) => {
-    return {
-      ...state,
-      isSaveButtonDisabled: true,
-      messageColor: showScoreStyles.messageGreen,
-    };
-  };
-
   saveScoreState = async (state, username, score) => {
+    const resultMessage = await this.saveUserScore(username, score);
     const newState =  [
-      this.changeClassesOnSaveButtonClick(state),
-      await this.saveUserScore(username, score),
+      {
+        ...state,
+        isSaveButtonDisabled: true
+      },
+      resultMessage,
     ];
     this.scoreBoardViewModel.initializeScoreBoardView();
     return newState;
