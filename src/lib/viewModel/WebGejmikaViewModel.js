@@ -12,7 +12,6 @@ import clubs from '../icons/clubs.png';
 import circle from '../icons/circle.png';
 import attemptStyles from "../components/AttemptPanel.module.css";
 
-
 export class WebGejmikaViewModel {
   #modelState;
   #viewState;
@@ -28,7 +27,6 @@ export class WebGejmikaViewModel {
   }
 
   /**
-   *
    * @param {Object} newStateModel
    * @param {Object} newStateView
    * This method dispatches model and view state updates to reducers
@@ -99,8 +97,7 @@ export class WebGejmikaViewModel {
   }
 
   isAttemptFull() {
-    return this.#viewState.combInProgress.length >=
-      this.#viewState.gameDifficulty.combinationLength;
+    return this.#viewState.combInProgress.length >= this.#webGejmikaModel.combinationLength();
   }
 
   codeGuess() {
@@ -180,18 +177,15 @@ export class WebGejmikaViewModel {
   /**
    * This method sets  model, view  and score state to default parameters and calls dispatchUpdate function
    */
-
   startGame() {
+    console.log("--------START GAME--------");
     const newStateModel = this.#webGejmikaModel.generateSecretCode();
     this.dispatchUpdate(newStateModel, {
       combInProgress: [],
       attemptsView: [],
       correctView: [],
       preparedAttempts: this.prepareGameView([], [], -1),
-      gameDifficulty: {
-        attemptsLength: this.#webGejmikaModel.attemptsLength(),
-        combinationLength: this.#webGejmikaModel.combinationLength(),
-      },
+      gameOver: false,
       id: -1,
     });
   }
@@ -202,9 +196,8 @@ export class WebGejmikaViewModel {
    * @returns {Array} icons
    * This method takes in array of combination attempt letters and transforms it into icon picture links for view state
    */
-
   combToIcon = (comb) => {
-    var icons = ["", "", "", ""];
+    let icons = [...Array(this.#webGejmikaModel.combinationLength()).keys()];
     for (let index = 0; index < icons.length; index++) {
       switch (comb[index]) {
         case "K":
@@ -239,9 +232,8 @@ export class WebGejmikaViewModel {
    * @returns {Array} comb
    * This method takes in array of icon picture links and transforms it into combination attempt letters for model state
    */
-
   iconToComb = (icons) => {
-    var comb = ["", "", "", ""];
+    let comb = [...Array(this.#webGejmikaModel.combinationLength()).keys()];
     for (let index = 0; index < comb.length; index++) {
       switch (icons[index]) {
         case diamond:
@@ -278,12 +270,11 @@ export class WebGejmikaViewModel {
     green - for in place guess
     yellow - for correct guess
    */
-
   outcomeToColor = (outcome) => {
     let { inPlace, correctCode } = outcome;
 
     let colors = [
-      ...Array(this.#viewState.gameDifficulty.combinationLength).fill("gray", 0),
+      ...Array(this.#webGejmikaModel.combinationLength()).fill("gray", 0),
     ];
 
     for (let i = 0; i < inPlace; i++) {
@@ -306,7 +297,7 @@ export class WebGejmikaViewModel {
 
   prepareGameView = (combInProgress, attemptsView, id) => {
     const preparedAttp = [
-      ...Array(this.#viewState.gameDifficulty.attemptsLength).keys(),
+      ...Array(this.#webGejmikaModel.attemptsLength()).keys(),
     ];
     preparedAttp.forEach((e) => {
       preparedAttp[e] = this.prepareGamePanelView(
@@ -344,7 +335,7 @@ export class WebGejmikaViewModel {
 
   prepareAttemptPanelView = (comb) => {
     const fullComb = [
-      ...Array(this.#viewState.gameDifficulty.combinationLength).keys(),
+      ...Array(this.#webGejmikaModel.combinationLength()).keys(),
     ];
 
     return fullComb.map((index) => {

@@ -7,10 +7,7 @@ const viewReducers = (
     preparedAttempts: [],
     correctView: [],
     attemptIncomplete: "",
-    gameDifficulty: {
-      attemptsLength: 5,
-      combinationLength: 4,
-    },
+    gameOver: false,
     id: -1,
   },
   action

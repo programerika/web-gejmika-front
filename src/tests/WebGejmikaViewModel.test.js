@@ -91,10 +91,6 @@ const viewState = {
   preparedAttempts: [],
   correctView: [],
   attemptIncomplete: false,
-  gameDifficulty: {
-    attemptsLength: 5,
-    combinationLength: 4,
-  },
   id: -1,
   combID: -1,
 };
