@@ -89,7 +89,19 @@ export class WebGejmikaViewModel {
    */
   codeGuessIfReady() {
     if (!this.isAttemptFull()) {
-      // TODO alert player
+      const preparedAttempts = this.prepareGameView(
+        this.#viewState.combInProgress,
+        this.#viewState.attemptsView,
+        this.#viewState.id,
+        attemptStyles.flashColor
+      );
+      this.dispatchUpdate(
+        { ...this.#modelState },
+        {
+          ...this.#viewState,
+          preparedAttempts: preparedAttempts,
+        }
+      );
       return;
     } else {
       this.codeGuess();
@@ -288,7 +300,7 @@ export class WebGejmikaViewModel {
     return colors;
   };
 
-  prepareGameView = (combInProgress, attemptsView, id) => {
+  prepareGameView = (combInProgress, attemptsView, id, attemptIncomplete = "") => {
     const preparedAttp = [
       ...Array(this.#webGejmikaModel.attemptsLength()).keys(),
     ];
@@ -297,7 +309,8 @@ export class WebGejmikaViewModel {
         combInProgress,
         attemptsView,
         id,
-        e
+        e,
+        attemptIncomplete
       );
     });
     return preparedAttp;
@@ -305,7 +318,7 @@ export class WebGejmikaViewModel {
 
   areWeAtAttemptInProgress = (id, e) => id + 1 == e;
 
-  prepareGamePanelView = (combInProgress, attemptsView, id, e) => {
+  prepareGamePanelView = (combInProgress, attemptsView, id, e, attemptIncomplete = "") => {
     return {
       comb: this.prepareAttemptPanelView(
         this.areWeAtAttemptInProgress(id, e)
@@ -317,7 +330,8 @@ export class WebGejmikaViewModel {
               circle,
               circle,
               circle,
-            ]
+            ],
+        attemptIncomplete
       ),
       colors:
         typeof attemptsView[e] !== "undefined"
@@ -328,7 +342,7 @@ export class WebGejmikaViewModel {
     };
   };
 
-  prepareAttemptPanelView = (comb) => {
+  prepareAttemptPanelView = (comb, attemptIncomplete = "") => {
     const fullComb = [
       ...Array(this.#webGejmikaModel.combinationLength()).keys(),
     ];
@@ -337,7 +351,7 @@ export class WebGejmikaViewModel {
       const prepared = {
         imgClassName:
           typeof comb[index] == "undefined"
-            ? attemptStyles.circle + ' ' + this.#viewState.attemptIncomplete
+            ? attemptStyles.circle + ' ' + attemptIncomplete
             : attemptStyles.circle,
         imgSrc:
           typeof comb[index] == "undefined"
