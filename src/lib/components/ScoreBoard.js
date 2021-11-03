@@ -4,10 +4,13 @@ import globalStyles from "../global.module.css";
 import styles from "./ScoreBoard.module.css";
 
 const ScoreBoard = ({ viewModel, scoreViewModel, scoreBoardViewModel }) => {
-  const {
-    topPlayers: { topPlayers, currentPlayer },
-    boardView: { isPlayerRegistered, showPlayerBelowTopList },
-  } = useSelector((state) => state.score);
+  const topPlayers = useSelector((state) => state.score.topPlayers.topPlayers);
+  const isPlayerRegistered = useSelector((state) => state.score.boardView.isPlayerRegistered);
+  const showPlayerBelowTopList = useSelector((state) => state.score.boardView.showPlayerBelowTopList);
+  const username = useSelector((state) => state.score.topPlayers.currentPlayer.username);
+  const score = useSelector((state) => state.score.topPlayers.currentPlayer.score);
+
+  console.log("RERENDER ScoreBoard----------");
 
   return (
     <>
@@ -38,9 +41,9 @@ const ScoreBoard = ({ viewModel, scoreViewModel, scoreBoardViewModel }) => {
           <div className={styles.currentPlayerSeparator}>...</div>
           <div className={styles.currentPlayer}>
             <span className={styles.currentPlayerUsername}>
-              {currentPlayer.username}
+              {username}
             </span> your score is <span className={styles.currentPlayerScore}>
-              {currentPlayer.score}
+              {score}
             </span> 
             <br/>keep playing...
           </div>

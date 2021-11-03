@@ -26,7 +26,7 @@ const Game = () => {
 
   
   const scoreBoardViewModel = new ScoreBoardViewModel(scoreState, dispatch);
-  const scoreViewModel = new ScoreViewModel(scoreState, dispatch, scoreBoardViewModel);
+  const scoreViewModel = new ScoreViewModel(scoreBoardViewModel);
 
   const viewModel = new WebGejmikaViewModel(
     modelState,
@@ -35,7 +35,7 @@ const Game = () => {
     dispatch
   );
   //TODO ukloniti zavisnosti izmedju modela koliko je moguce!
-  scoreBoardViewModel.viewModel = viewModel;
+  scoreBoardViewModel.setViewModel(viewModel);
 
   //TODO move to WebGejmikaViewModel
   const correctView2 = viewModel.prepareAttemptPanelView(correctView);

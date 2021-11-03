@@ -6,26 +6,13 @@ import { StorageService } from "../services/StorageService";
 import { WebGejmikaService } from "../services/WebGejmikaService";
 import globalStyles from "../global.module.css";
 import showScoreStyles from "../components/ShowScore.module.css";
-import scoreBoardStyles from "../components/ScoreBoard.module.css";
 
 export class ScoreViewModel {
-  constructor(scoreState, dispatcher, scoreBoardViewModel) {
+  constructor(scoreBoardViewModel) {
     this.webGejmikaService = new WebGejmikaService();
     this.storage = new StorageService();
-    this.dispatcher = dispatcher;
-    this.scoreState = scoreState;
     this.scoreBoardViewModel = scoreBoardViewModel;
   }
-
-  /**
-   *
-   * @param {Object} newStateBoard
-   * This method dispatches scoreBoard state to reducer
-   */
-
-  dispatchUpdateScoreBoard = (newStateBoard) => {
-    this.dispatcher(allActions.inputActions.updateScoreBoard(newStateBoard));
-  };
 
   saveUserScore = async (username, score) => {
     if (!this.isUsernameRegistered()) {
@@ -169,62 +156,9 @@ export class ScoreViewModel {
     else return `You got ${score} points!!!`;
   };
 
-  /**
-   * @returns {Array} - array of top players
-   */
-
-  getTopPlayers = async () => {
-    const topPlayers = await this.webGejmikaService.getTopPlayers();
-
-    const currentPlayer = await this.webGejmikaService.getCurrentPlayer(
-      localStorage.getItem("username")
-    );
-
-    return {
-      topPlayers: [...topPlayers],
-      currentPlayer: { ...currentPlayer },
-    };
-  };
-
-  isUserInTopList = (topPlayers) => {
-    let isUsernameInTopTen = false;
-    topPlayers.forEach((person) => {
-      if (person.username === this.storage.getItem("username")) {
-        isUsernameInTopTen = true;
-      }
-    });
-    return isUsernameInTopTen;
-  };
-
-  highlightCurrentUser = (topPlayers) => {
-    return topPlayers.map((person, i) => {
-      person.currentUserClass =
-        person.username === this.storage.getItem("username")
-          ? scoreBoardStyles.currentPlayerUsername
-          : "";
-      return person;
-    });
-  };
-
   isUsernameRegistered = () => {
     return !this.storage.isItemInStorageEmpty("username");
   }
-
-  deleteUsername = async () => {
-    if (this.storage.getItem("uid") !== null) {
-      const resp = await this.webGejmikaService.deleteScore(
-        this.storage.getItem("uid")
-      );
-      console.log("STATUS - " + resp);
-      if (resp === 204) {
-        this.storage.removeItem("uid");
-        this.storage.removeItem("username");
-        return "User has been successfully deleted";
-      } else {
-        return "Something went wrong";
-      }
-    }
-  };
 
   addScore = async (score) => {
     if (score === 0) return;
@@ -253,40 +187,10 @@ export class ScoreViewModel {
   };
 
   initializeScoreBoardView = async () => {
-    var topPlayers = {
-      topPlayers: [
-      ],
-      currentPlayer: {username: localStorage.getItem("username"), score: null},
-    };
-    try {
-      topPlayers = await this.getTopPlayers();
-    } catch (error) {
-      //TODO implementirati standardan error handling u WebGejmikaService svim remote pozivima
-      //vracati odgovarajuci rezultat
-      console.log(error);
-    }
-    
-    this.dispatchUpdateScoreBoard({
-      ...this.scoreState,
-      topPlayers: {
-        topPlayers: this.highlightCurrentUser(topPlayers.topPlayers),
-        currentPlayer: topPlayers.currentPlayer,
-      },
-      boardView: {
-        isPlayerRegistered: this.isUsernameRegistered(),
-        showPlayerBelowTopList: this.isUsernameRegistered() && !this.isUserInTopList(topPlayers.topPlayers) 
-      },
-    });
+    this.scoreBoardViewModel.initializeScoreBoardView();
   };
 
   deleteButtonClicked = async (viewModel) => {
-    if (window.confirm("Are you sure you want to delete your username?")) {
-      this.deleteUsername().then(() => {
-        viewModel.startGame();
-      });
-      console.log("Username deleted.");
-    } else {
-      console.log("Username not deleted.");
-    }
+    this.scoreBoardViewModel.deleteButtonClicked();
   };
 }
