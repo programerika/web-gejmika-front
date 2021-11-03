@@ -17,7 +17,7 @@ const Game = () => {
   const viewState = useSelector((state) => state.view);
   const scoreState = useSelector((state) => state.score);
 
-  const { score, gameOver } = modelState;
+  const { gameOver } = modelState;
 
   const {
     correctView,
@@ -55,7 +55,6 @@ const Game = () => {
             <Header></Header>
             <GamePanel></GamePanel>
             <ShowScore
-              score={score}
               viewModel={viewModel}
               correctView={correctView2}
               scoreViewModel={scoreViewModel}

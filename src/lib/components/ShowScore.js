@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Confetti from "react-confetti";
 import AttemptPanel from "./AttemptPanel";
 import globalStyles from "../global.module.css";
 import styles from "./ShowScore.module.css";
+import { useSelector } from "react-redux";
 
 const ShowScore = ({
-  score,
   correctView,
   viewModel,
   scoreViewModel
 }) => {
-  const [state, setState] = useState({});
-  const [saveStatus, setSaveStatus] = useState();
-  const [username, setUsername] = useState("");
-  const [confetti] = useState(scoreViewModel.confettiPerScore(score));
-
-  useEffect(() => {
-    setState(scoreViewModel.initializeView(score));
-  }, [saveStatus]);
+  const score = useSelector((state) => state.model.score);
+  const [state, setState] = useState(scoreViewModel.initializeView(score));
+  const confetti = useMemo(() => scoreViewModel.confettiPerScore(score), [score]);
+  scoreViewModel.setStateCallback(state, setState);
 
   return (
     <div className={styles.score}>
@@ -46,7 +42,8 @@ const ShowScore = ({
         ></AttemptPanel>
       </div>
       <div className={styles.saveScore}>
-        {state.offerToRegisterPlayer ? (
+        {
+        state.offerToRegisterPlayer ? (
           <>
             <div className={styles.tooltip}>
               <input
@@ -54,20 +51,10 @@ const ShowScore = ({
                 className={state.isUsernameValid}
                 maxLength="8"
                 placeholder="Username - eg. MyName12"
-                onMouseLeave={() => {
-                  setState({ ...state, toolTipStatus: styles.toolTipHidden });
-                }}
-                onMouseEnter={() =>
-                  setState({ ...state, toolTipStatus: styles.toolTipVisible })
-                }
-                onChange={async (e) => {
-                  setState(
-                    {...state, ...(await scoreViewModel.validateUsername(e.target.value))}
-                  );
-                  setUsername(e.target.value);
-                }}
+                onMouseLeave={() => scoreViewModel.hideToolTip()}
+                onMouseEnter={() => scoreViewModel.showToolTip()}
+                onChange={async (e) => scoreViewModel.usernameInputOnChange(e.target.value)}
               />
-
               <div className={styles.tooltiptext + " " + state.toolTipStatus}>
                 Username has to have 4 - 6 characters with last two numbers
               </div>
@@ -78,10 +65,10 @@ const ShowScore = ({
           </>
         ) : (
           <p className={state.messageColor}>
-            {saveStatus}
+            {state.saveStatus}
           </p>
-        )}
-
+        )
+        }
         <div className={styles.buttons}>
           <button
             className={globalStyles.gameBtn}
@@ -96,15 +83,7 @@ const ShowScore = ({
             <button
               className={globalStyles.gameBtn}
               disabled={state.isSaveButtonDisabled}
-              onClick={async () => {
-                let [s1, s2] = await scoreViewModel.saveScoreState(
-                  state,
-                  username,
-                  score
-                );
-                setState(s1);
-                setSaveStatus(s2);
-              }}
+              onClick={() => scoreViewModel.saveScoreState(score)}
             >
               Save score!
             </button>
