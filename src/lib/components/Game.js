@@ -8,6 +8,7 @@ import ScoreBoard from "./ScoreBoard";
 import { WebGejmikaViewModel } from "../viewModel/WebGejmikaViewModel";
 import Header from "./Header";
 import { ScoreViewModel } from "../viewModel/ScoreViewModel";
+import { ScoreBoardViewModel } from "../viewModel/ScoreBoardViewModel";
 import styles from "./Game.module.css";
 
 const Game = () => {
@@ -23,14 +24,18 @@ const Game = () => {
     gameDifficulty: { combinationLength },
   } = viewState;
 
-  const scoreViewModel = new ScoreViewModel(scoreState, dispatch);
+  
+  const scoreBoardViewModel = new ScoreBoardViewModel(scoreState, dispatch);
+  const scoreViewModel = new ScoreViewModel(scoreState, dispatch, scoreBoardViewModel);
 
   const viewModel = new WebGejmikaViewModel(
     modelState,
     viewState,
-    scoreState,
+    scoreViewModel,
     dispatch
   );
+  //TODO ukloniti zavisnosti izmedju modela koliko je moguce!
+  scoreBoardViewModel.viewModel = viewModel;
 
   //TODO move to WebGejmikaViewModel
   const correctView2 = viewModel.prepareAttemptPanelView(correctView);
@@ -61,6 +66,7 @@ const Game = () => {
           <div className={styles.container}>
             <ScoreBoard
               scoreViewModel={scoreViewModel}
+              scoreBoardViewModel={scoreBoardViewModel}
               viewModel={viewModel}
             ></ScoreBoard>
           </div>
@@ -75,6 +81,7 @@ const Game = () => {
           <div className={styles.container}>
             <ScoreBoard
               scoreViewModel={scoreViewModel}
+              scoreBoardViewModel={scoreBoardViewModel}
               viewModel={viewModel}
             ></ScoreBoard>
           </div>

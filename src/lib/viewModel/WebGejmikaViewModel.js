@@ -17,14 +17,13 @@ import attemptStyles from "../components/AttemptPanel.module.css";
 
 
 export class WebGejmikaViewModel {
-  constructor(modelState, viewState, scoreState, dispatcher) {
+  constructor(modelState, viewState, scoreViewModel, dispatcher) {
     this.modelState = modelState;
     this.viewState = viewState;
-    this.scoreState = scoreState;
     this.dispatcher = dispatcher;
     this.webGejmikaModel = new WebGejmikaModel(modelState);
     this.WebGejmikaService = new WebGejmikaService();
-    this.scoreViewModel = new ScoreViewModel(scoreState, dispatcher);
+    this.scoreViewModel = scoreViewModel;
     this.storage = new StorageService();
   }
 

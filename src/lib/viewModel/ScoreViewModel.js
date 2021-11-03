@@ -9,11 +9,12 @@ import showScoreStyles from "../components/ShowScore.module.css";
 import scoreBoardStyles from "../components/ScoreBoard.module.css";
 
 export class ScoreViewModel {
-  constructor(scoreState, dispatcher) {
+  constructor(scoreState, dispatcher, scoreBoardViewModel) {
     this.webGejmikaService = new WebGejmikaService();
     this.storage = new StorageService();
     this.dispatcher = dispatcher;
     this.scoreState = scoreState;
+    this.scoreBoardViewModel = scoreBoardViewModel;
   }
 
   /**

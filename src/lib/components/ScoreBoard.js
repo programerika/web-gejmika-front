@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import globalStyles from "../global.module.css";
 import styles from "./ScoreBoard.module.css";
 
-const ScoreBoard = ({ viewModel, scoreViewModel }) => {
+const ScoreBoard = ({ viewModel, scoreViewModel, scoreBoardViewModel }) => {
   const {
     topPlayers: { topPlayers, currentPlayer },
     boardView: { isPlayerRegistered, showPlayerBelowTopList },
