@@ -3,12 +3,9 @@ import { UPDATE, UPDATE_VIEW } from "../types";
 const viewReducers = (
   state = {
     combInProgress: [],
-    attemptsView: [],
     preparedAttempts: [],
     correctView: [],
-    attemptIncomplete: "",
-    gameOver: false,
-    id: -1,
+    gameOver: false
   },
   action
 ) => {

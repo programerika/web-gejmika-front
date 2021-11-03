@@ -18,12 +18,20 @@ export class WebGejmikaViewModel {
   #dispatcher;
   #webGejmikaModel;
   #scoreViewModel;
+  #emptyCombView;
   constructor(modelState, viewState, scoreViewModel, dispatcher) {
     this.#modelState = modelState;
     this.#viewState = viewState;
     this.#dispatcher = dispatcher;
     this.#webGejmikaModel = new WebGejmikaModel(modelState);
     this.#scoreViewModel = scoreViewModel;
+    const initialColors = [...Array(this.#webGejmikaModel.combinationLength()).fill("lightgray")];
+    const emptyComb = [...Array(this.#webGejmikaModel.combinationLength()).fill("_")];
+    this.#emptyCombView  = {
+      comb: this.combToIcon(emptyComb).map(this.#asIconView),
+      colors: initialColors,
+      angleShift: -90
+    };    
   }
 
   /**
@@ -43,11 +51,7 @@ export class WebGejmikaViewModel {
     }
     let combInProg = [...this.#viewState.combInProgress, icon];
 
-    const preparedAttempts = this.prepareGameView(
-      combInProg,
-      this.#viewState.attemptsView,
-      this.#viewState.id
-    );
+    const preparedAttempts = this.#prepareAttemptsView(combInProg, this.#modelState.attempts);
 
     this.dispatchUpdate(
       { ...this.#modelState },
@@ -89,23 +93,25 @@ export class WebGejmikaViewModel {
    */
   codeGuessIfReady() {
     if (!this.isAttemptFull()) {
-      const preparedAttempts = this.prepareGameView(
-        this.#viewState.combInProgress,
-        this.#viewState.attemptsView,
-        this.#viewState.id,
-        attemptStyles.flashColor
-      );
-      this.dispatchUpdate(
-        { ...this.#modelState },
-        {
-          ...this.#viewState,
-          preparedAttempts: preparedAttempts,
-        }
-      );
-      return;
+      this.#alertPlayerVisuallyThatAttemptIsNotComplete();
     } else {
       this.codeGuess();
     }
+  }
+
+  #alertPlayerVisuallyThatAttemptIsNotComplete() {
+    const preparedAttempts = this.#prepareAttemptsView(
+      this.#viewState.combInProgress,
+      this.#modelState.attempts,
+      attemptStyles.flashColor
+    );
+    this.dispatchUpdate(
+      { ...this.#modelState },
+      {
+        ...this.#viewState,
+        preparedAttempts: preparedAttempts,
+      }
+    );
   }
 
   isAttemptFull() {
@@ -117,43 +123,20 @@ export class WebGejmikaViewModel {
       this.iconToComb(this.#viewState.combInProgress)
     );
 
-    const newStateView = {
-      ...this.#viewState,
-
-      attemptsView: [
-        ...this.#viewState.attemptsView,
-        {
-          attemptViewId: this.#viewState.id + 1,
-          attemptViewComb: this.#viewState.combInProgress,
-          attemptViewOutcome: this.outcomeToColor(
-            newStateModel.attempts[newStateModel.attempts.length - 1]
-              .attemptOutcome
-          ),
-        },
-      ],
-      combInProgress: [],
-      id: this.#viewState.id + 1,
-      gameOver: newStateModel.gameOver,
-    };
-
-    const preparedAttempts = this.prepareGameView(
-      newStateView.combInProgress,
-      newStateView.attemptsView,
-      newStateView.id
-    );
+    const preparedAttempts = this.#prepareAttemptsView([], newStateModel.attempts);
 
     let correctView = [];
     if (newStateModel.gameOver) {    
-      correctView = this.prepareAttemptPanelView(
-        this.combToIcon(newStateModel.secretComb)
-      );
+      correctView = this.combToIcon(newStateModel.secretComb).map(this.#asIconView);    
     }
 
     this.dispatchUpdate(newStateModel, {
-      ...newStateView,
+      ...this.#viewState,      
+      combInProgress: [],
       correctView: correctView,
       preparedAttempts: preparedAttempts,
-    });
+      gameOver: newStateModel.gameOver,
+    });    
 
     if (newStateModel.gameOver) {
       this.#scoreViewModel.addScoreIfPlayerIsRegistered(newStateModel.score);
@@ -163,17 +146,12 @@ export class WebGejmikaViewModel {
   /**
    * This method deletes last element in combInProgress array and calls dispatchUpdate function
    */
-
   inputDeleteLast() {
     if (this.#viewState.combInProgress.length > 0) {
       let combInProg = [...this.#viewState.combInProgress];
       combInProg.pop();
 
-      const preparedAttempts = this.prepareGameView(
-        combInProg,
-        this.#viewState.attemptsView,
-        this.#viewState.id
-      );
+      const preparedAttempts = this.#prepareAttemptsView(combInProg, this.#modelState.attempts);
 
       this.dispatchUpdate(
         { ...this.#modelState },
@@ -190,15 +168,12 @@ export class WebGejmikaViewModel {
    * This method sets  model, view  and score state to default parameters and calls dispatchUpdate function
    */
   startGame() {
-    console.log("--------START GAME--------");
     const newStateModel = this.#webGejmikaModel.generateSecretCode();
     this.dispatchUpdate(newStateModel, {
       combInProgress: [],
-      attemptsView: [],
       correctView: [],
-      preparedAttempts: this.prepareGameView([], [], -1),
-      gameOver: false,
-      id: -1,
+      preparedAttempts: this.#prepareAttemptsView([], []),
+      gameOver: false
     });
   }
 
@@ -300,65 +275,51 @@ export class WebGejmikaViewModel {
     return colors;
   };
 
-  prepareGameView = (combInProgress, attemptsView, id, attemptIncomplete = "") => {
-    const preparedAttp = [
-      ...Array(this.#webGejmikaModel.attemptsLength()).keys(),
+
+  #prepareAttemptsView = (combInProgress, attempts, alertPlayerStyle = "") => {
+    const combInProgressView = 
+      attempts.length >= this.#webGejmikaModel.attemptsLength()
+      ? []
+      : [this.#prepareAttemptInProgressView(combInProgress, alertPlayerStyle)];
+
+    return [
+      ...this.#prepareFinishedAttemptsView(attempts),
+      ...combInProgressView,
+      ...Array(this.#webGejmikaModel.attemptsLength() - combInProgressView.length - attempts.length)
+          .fill(this.#emptyCombView)
     ];
-    preparedAttp.forEach((e) => {
-      preparedAttp[e] = this.prepareGamePanelView(
-        combInProgress,
-        attemptsView,
-        id,
-        e,
-        attemptIncomplete
-      );
-    });
-    return preparedAttp;
   };
 
-  areWeAtAttemptInProgress = (id, e) => id + 1 == e;
+  #prepareFinishedAttemptsView = (attempts) => {
+    return attempts.map((attempt) => {
+      return {
+        comb: this.combToIcon(attempt.attemptCode).map(this.#asIconView),
+        colors: this.outcomeToColor(attempt.attemptOutcome),
+        angleShift: this.#emptyCombView.angleShift
+      };
+    });
+  }
 
-  prepareGamePanelView = (combInProgress, attemptsView, id, e, attemptIncomplete = "") => {
+  #asIconView = (icon) => {
     return {
-      comb: this.prepareAttemptPanelView(
-        this.areWeAtAttemptInProgress(id, e)
-          ? combInProgress
-          : typeof attemptsView[e] !== "undefined"
-          ? attemptsView[e].attemptViewComb
-          : [
-              circle,
-              circle,
-              circle,
-              circle,
-            ],
-        attemptIncomplete
-      ),
-      colors:
-        typeof attemptsView[e] !== "undefined"
-          ? attemptsView[e].attemptViewOutcome
-          : ["lightgray", "lightgray", "lightgray", "lightgray"],
-      angleShift: 
-        -90,
+      imgClassName: attemptStyles.circle,
+      imgSrc: icon,
+    };      
+  };
+
+  #prepareAttemptInProgressView = (comb, alertPlayerStyle) => {
+    return {
+      ...this.#emptyCombView,
+      comb: [
+        ...comb.map(this.#asIconView),
+        ...Array(this.#webGejmikaModel.combinationLength() - comb.length).fill(
+          {
+            imgClassName: attemptStyles.circle + ' ' + alertPlayerStyle,
+            imgSrc: circle
+          }
+        )
+      ]
     };
   };
 
-  prepareAttemptPanelView = (comb, attemptIncomplete = "") => {
-    const fullComb = [
-      ...Array(this.#webGejmikaModel.combinationLength()).keys(),
-    ];
-
-    return fullComb.map((index) => {
-      const prepared = {
-        imgClassName:
-          typeof comb[index] == "undefined"
-            ? attemptStyles.circle + ' ' + attemptIncomplete
-            : attemptStyles.circle,
-        imgSrc:
-          typeof comb[index] == "undefined"
-            ? circle
-            : comb[index],
-      };
-      return prepared;
-    });
-  };
 }
