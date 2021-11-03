@@ -3,7 +3,6 @@
  */
 import allActions from "../redux/actions";
 import { WebGejmikaModel } from "../model/WebGejmikaModel";
-import { WebGejmikaService } from "../services/WebGejmikaService";
 import heart from '../icons/heart.png';
 import star from '../icons/star.png';
 import diamond from '../icons/diamond.png';
@@ -15,13 +14,17 @@ import attemptStyles from "../components/AttemptPanel.module.css";
 
 
 export class WebGejmikaViewModel {
+  #modelState;
+  #viewState;
+  #dispatcher;
+  #webGejmikaModel;
+  #scoreViewModel;
   constructor(modelState, viewState, scoreViewModel, dispatcher) {
-    this.modelState = modelState;
-    this.viewState = viewState;
-    this.dispatcher = dispatcher;
-    this.webGejmikaModel = new WebGejmikaModel(modelState);
-    this.WebGejmikaService = new WebGejmikaService();
-    this.scoreViewModel = scoreViewModel;
+    this.#modelState = modelState;
+    this.#viewState = viewState;
+    this.#dispatcher = dispatcher;
+    this.#webGejmikaModel = new WebGejmikaModel(modelState);
+    this.#scoreViewModel = scoreViewModel;
   }
 
   /**
@@ -31,7 +34,7 @@ export class WebGejmikaViewModel {
    * This method dispatches model and view state updates to reducers
    */
   dispatchUpdate = (newStateModel, newStateView) => {
-    this.dispatcher(
+    this.#dispatcher(
       allActions.inputActions.update(newStateModel, newStateView)
     );
   };
@@ -40,18 +43,18 @@ export class WebGejmikaViewModel {
     if (this.isAttemptFull()) {
       return;
     }
-    let combInProg = [...this.viewState.combInProgress, icon];
+    let combInProg = [...this.#viewState.combInProgress, icon];
 
     const preparedAttempts = this.prepareGameView(
       combInProg,
-      this.viewState.attemptsView,
-      this.viewState.id
+      this.#viewState.attemptsView,
+      this.#viewState.id
     );
 
     this.dispatchUpdate(
-      { ...this.modelState },
+      { ...this.#modelState },
       {
-        ...this.viewState,
+        ...this.#viewState,
         combInProgress: combInProg,
         preparedAttempts: preparedAttempts,
       }
@@ -83,45 +86,36 @@ export class WebGejmikaViewModel {
   }
 
   /**
-   *
    * This method updates view state by adding new attemptView, and setting viewOutcome
    * Gets new model state from webGejmikaModel and calls dispatchUpdate function
    */
   codeGuessIfReady() {
     if (!this.isAttemptFull()) {
-      // this.setAttemptIncomplete(true);
+      // TODO alert player
       return;
     } else {
-      // this.setAttemptIncomplete(false);
       this.codeGuess();
     }
   }
 
   isAttemptFull() {
-    return this.viewState.combInProgress.length >=
-      this.viewState.gameDifficulty.combinationLength;
+    return this.#viewState.combInProgress.length >=
+      this.#viewState.gameDifficulty.combinationLength;
   }
 
-  // setAttemptIncomplete(isIncomplete) {
-  //   this.dispatchUpdate(
-  //     { ...this.modelState },
-  //     { ...this.viewState, attemptIncomplete: isIncomplete ? attemptStyles.flashColor : "" }
-  //   );
-  // }
-
   codeGuess() {
-    const newStateModel = this.webGejmikaModel.makeAGuess(
-      this.iconToComb(this.viewState.combInProgress)
+    const newStateModel = this.#webGejmikaModel.makeAGuess(
+      this.iconToComb(this.#viewState.combInProgress)
     );
 
     const newStateView = {
-      ...this.viewState,
+      ...this.#viewState,
 
       attemptsView: [
-        ...this.viewState.attemptsView,
+        ...this.#viewState.attemptsView,
         {
-          attemptViewId: this.viewState.id + 1,
-          attemptViewComb: this.viewState.combInProgress,
+          attemptViewId: this.#viewState.id + 1,
+          attemptViewComb: this.#viewState.combInProgress,
           attemptViewOutcome: this.outcomeToColor(
             newStateModel.attempts[newStateModel.attempts.length - 1]
               .attemptOutcome
@@ -129,7 +123,7 @@ export class WebGejmikaViewModel {
         },
       ],
       combInProgress: [],
-      id: this.viewState.id + 1,
+      id: this.#viewState.id + 1,
       gameOver: newStateModel.gameOver,
     };
 
@@ -153,7 +147,7 @@ export class WebGejmikaViewModel {
     });
 
     if (newStateModel.gameOver) {
-      this.scoreViewModel.addScoreIfPlayerIsRegistered(newStateModel.score);
+      this.#scoreViewModel.addScoreIfPlayerIsRegistered(newStateModel.score);
     }
   }
 
@@ -162,20 +156,20 @@ export class WebGejmikaViewModel {
    */
 
   inputDeleteLast() {
-    if (this.viewState.combInProgress.length > 0) {
-      let combInProg = [...this.viewState.combInProgress];
+    if (this.#viewState.combInProgress.length > 0) {
+      let combInProg = [...this.#viewState.combInProgress];
       combInProg.pop();
 
       const preparedAttempts = this.prepareGameView(
         combInProg,
-        this.viewState.attemptsView,
-        this.viewState.id
+        this.#viewState.attemptsView,
+        this.#viewState.id
       );
 
       this.dispatchUpdate(
-        { ...this.modelState },
+        { ...this.#modelState },
         {
-          ...this.viewState,
+          ...this.#viewState,
           combInProgress: combInProg,
           preparedAttempts: preparedAttempts,
         }
@@ -188,15 +182,15 @@ export class WebGejmikaViewModel {
    */
 
   startGame() {
-    const newStateModel = this.webGejmikaModel.generateSecretCode();
+    const newStateModel = this.#webGejmikaModel.generateSecretCode();
     this.dispatchUpdate(newStateModel, {
       combInProgress: [],
       attemptsView: [],
       correctView: [],
       preparedAttempts: this.prepareGameView([], [], -1),
       gameDifficulty: {
-        attemptsLength: this.webGejmikaModel.attemptsLength(),
-        combinationLength: this.webGejmikaModel.combinationLength(),
+        attemptsLength: this.#webGejmikaModel.attemptsLength(),
+        combinationLength: this.#webGejmikaModel.combinationLength(),
       },
       id: -1,
     });
@@ -289,7 +283,7 @@ export class WebGejmikaViewModel {
     let { inPlace, correctCode } = outcome;
 
     let colors = [
-      ...Array(this.viewState.gameDifficulty.combinationLength).fill("gray", 0),
+      ...Array(this.#viewState.gameDifficulty.combinationLength).fill("gray", 0),
     ];
 
     for (let i = 0; i < inPlace; i++) {
@@ -312,7 +306,7 @@ export class WebGejmikaViewModel {
 
   prepareGameView = (combInProgress, attemptsView, id) => {
     const preparedAttp = [
-      ...Array(this.viewState.gameDifficulty.attemptsLength).keys(),
+      ...Array(this.#viewState.gameDifficulty.attemptsLength).keys(),
     ];
     preparedAttp.forEach((e) => {
       preparedAttp[e] = this.prepareGamePanelView(
@@ -350,14 +344,14 @@ export class WebGejmikaViewModel {
 
   prepareAttemptPanelView = (comb) => {
     const fullComb = [
-      ...Array(this.viewState.gameDifficulty.combinationLength).keys(),
+      ...Array(this.#viewState.gameDifficulty.combinationLength).keys(),
     ];
 
     return fullComb.map((index) => {
       const prepared = {
         imgClassName:
           typeof comb[index] == "undefined"
-            ? attemptStyles.circle + ' ' + this.viewState.attemptIncomplete
+            ? attemptStyles.circle + ' ' + this.#viewState.attemptIncomplete
             : attemptStyles.circle,
         imgSrc:
           typeof comb[index] == "undefined"
