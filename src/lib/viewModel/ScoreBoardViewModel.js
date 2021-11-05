@@ -66,9 +66,11 @@ export class ScoreBoardViewModel {
     }
 
     try {
-      currentPlayer = await this.#webGejmikaService.getPlayerByUsername(
-        this.#storage.getItem("username")
-      );
+      if(!this.#storage.isItemInStorageEmpty("username")){
+        currentPlayer = await this.#webGejmikaService.getPlayerByUsername(
+          this.#storage.getItem("username")
+        );
+      }
     } catch (error) {
       console.log(error.message);
     }
