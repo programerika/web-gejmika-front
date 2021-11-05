@@ -5,12 +5,15 @@ import allActions from "../redux/actions";
 import { WebGejmikaService } from "../services/WebGejmikaService";
 import { StorageService } from "../services/StorageService";
 import scoreBoardStyles from "../components/ScoreBoard.module.css";
+import { tsMethodSignature } from "@babel/types";
 
 export class ScoreBoardViewModel {
   #dispatcher;
   #scoreState;
   #webGejmikaService;
   #storage;
+  state;
+  setState;
   constructor(scoreState, dispatcher) {
     this.#dispatcher = dispatcher;
     this.#scoreState = scoreState;
@@ -22,33 +25,33 @@ export class ScoreBoardViewModel {
     this.#dispatcher(allActions.inputActions.updateScoreBoard(newStateBoard));
   };
 
-  initializeScoreBoardView = async () => {
-    let topPlayers = {
-      topPlayers: [],
-      currentPlayer: {
-        username: this.#storage.getItem("username"),
-        score: null,
-      },
-    };
-    try {
-      topPlayers = await this.#getTopPlayers();
-    } catch (error) {
-      console.log(error);
-    }
+  setStateCallback = (state, setState) => {
+    this.state = state;
+    this.setState = setState;
+  };
 
-    this.#dispatchUpdateScoreBoard({
-      ...this.#scoreState,
-      topPlayers: {
-        topPlayers: this.#highlightCurrentUser(topPlayers.topPlayers),
-        currentPlayer: topPlayers.currentPlayer,
-      },
-      boardView: {
-        isPlayerRegistered: this.#isUsernameRegistered(),
-        showPlayerBelowTopList:
-          this.#isUsernameRegistered() &&
-          !this.#isUserInTopList(topPlayers.topPlayers),
-      },
-    });
+  initializeScoreBoardView = async () => {
+    await this.#getTopPlayers()
+      .then((topPlayers) => {
+        this.#dispatchUpdateScoreBoard({
+          ...this.#scoreState,
+          topPlayers: {
+            topPlayers: this.#highlightCurrentUser(topPlayers.topPlayers),
+            currentPlayer: topPlayers.currentPlayer,
+          },
+          boardView: {
+            isPlayerRegistered: this.#isUsernameRegistered(),
+            showPlayerBelowTopList:
+              this.#isUsernameRegistered() &&
+              !this.#isUserInTopList(topPlayers.topPlayers),
+          },
+        });
+        this.setState(false);
+      })
+      .catch((error) => {
+        this.setState(false);
+        console.log(error.message);
+      });
   };
 
   #isUsernameRegistered = () => {
@@ -56,23 +59,25 @@ export class ScoreBoardViewModel {
   };
 
   #getTopPlayers = async () => {
+    this.setState(true);
+
     let topPlayers = [];
     let currentPlayer = [];
 
     try {
       topPlayers = await this.#webGejmikaService.getTopPlayers();
     } catch (error) {
-      console.log(error.message);
+      throw new Error(error.message);
     }
 
     try {
-      if(!this.#storage.isItemInStorageEmpty("username")){
+      if (!this.#storage.isItemInStorageEmpty("username")) {
         currentPlayer = await this.#webGejmikaService.getPlayerByUsername(
           this.#storage.getItem("username")
         );
       }
     } catch (error) {
-      console.log(error.message);
+      throw new Error(error.message);
     }
 
     return {
