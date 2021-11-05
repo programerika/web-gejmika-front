@@ -10,7 +10,7 @@ export class ScoreBoardViewModel {
   #dispatcher;
   #scoreState;
   #webGejmikaService;
-  #storage;  
+  #storage;
   constructor(scoreState, dispatcher) {
     this.#dispatcher = dispatcher;
     this.#scoreState = scoreState;
@@ -24,15 +24,15 @@ export class ScoreBoardViewModel {
 
   initializeScoreBoardView = async () => {
     let topPlayers = {
-      topPlayers: [
-      ],
-      currentPlayer: { username: this.#storage.getItem("username"), score: null },
+      topPlayers: [],
+      currentPlayer: {
+        username: this.#storage.getItem("username"),
+        score: null,
+      },
     };
     try {
       topPlayers = await this.#getTopPlayers();
     } catch (error) {
-      //TODO implementirati standardan error handling u WebGejmikaService svim remote pozivima
-      //vracati odgovarajuci rezultat
       console.log(error);
     }
 
@@ -44,21 +44,34 @@ export class ScoreBoardViewModel {
       },
       boardView: {
         isPlayerRegistered: this.#isUsernameRegistered(),
-        showPlayerBelowTopList: this.#isUsernameRegistered() && !this.#isUserInTopList(topPlayers.topPlayers)
+        showPlayerBelowTopList:
+          this.#isUsernameRegistered() &&
+          !this.#isUserInTopList(topPlayers.topPlayers),
       },
     });
   };
 
   #isUsernameRegistered = () => {
     return !this.#storage.isItemInStorageEmpty("username");
-  }
+  };
 
   #getTopPlayers = async () => {
-    const topPlayers = await this.#webGejmikaService.getTopPlayers();
+    let topPlayers = [];
+    let currentPlayer = [];
 
-    const currentPlayer = await this.#webGejmikaService.getCurrentPlayer(
-      this.#storage.getItem("username")
-    );
+    try {
+      topPlayers = await this.#webGejmikaService.getTopPlayers();
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    try {
+      currentPlayer = await this.#webGejmikaService.getPlayerByUsername(
+        this.#storage.getItem("username")
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
 
     return {
       topPlayers: [...topPlayers],
@@ -80,7 +93,8 @@ export class ScoreBoardViewModel {
   #isUserInTopList = (topPlayers) => {
     const playerUsername = this.#storage.getItem("username");
     return (
-        typeof topPlayers.find((person) => (person.username === playerUsername)) !== "undefined"
+      typeof topPlayers.find((person) => person.username === playerUsername) !==
+      "undefined"
     );
   };
 
@@ -89,27 +103,24 @@ export class ScoreBoardViewModel {
       this.#deleteUsername().then(() => {
         this.initializeScoreBoardView();
       });
-      console.log("Username deleted.");
     } else {
-      console.log("Username not deleted.");
+      return;
     }
   };
 
   #deleteUsername = async () => {
     if (this.#storage.getItem("uid") !== null) {
-      const resp = await this.#webGejmikaService.deleteScore(
-        this.#storage.getItem("uid")
-      );
-      console.log("STATUS - " + resp);
-      if (resp === 204) {
+      try {
+        const resp = await this.#webGejmikaService.deleteScore(
+          this.#storage.getItem("uid")
+        );
         this.#storage.removeItem("uid");
         this.#storage.removeItem("username");
-        return "User has been successfully deleted";
-      } else {
-        return "Something went wrong";
+      } catch (err) {
+        window.alert(err.message);
       }
+    } else {
+      return;
     }
   };
-
-
 }
