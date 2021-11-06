@@ -1,5 +1,5 @@
 @import "../global.css";
 
-:local(.helpWrapper) {
-  /*TODO*/
+:local(.gameBtn) {
+  margin: 5px;
 }

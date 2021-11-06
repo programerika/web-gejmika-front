@@ -39,17 +39,17 @@ const GameHelp = ({onOpenModal,onCloseModal}) => {
                     The Player tries to guess the right pattern in five steps.<br/>
                     If the guessing is successful in three steps, the score will be 21 points.<br/>
                     The fourth successful attempt will bring 13 and the fifth 8 points.<br/>
-                    There is no points if the fifth attempt is bad.<br/>     
+                    There is no points if the fifth attempt was bad.<br/>     
                 </p>
                 <button 
                     onClick={() => onCloseModal()}
-                    className={globalStyles.gameBtn}
+                    className={`${globalStyles.gameBtn} ${styles.gameBtn}`}
                 >
                     Close
                 </button>
                 <button 
                     onClick={() => onCloseModal()}
-                    className={globalStyles.gameBtn}
+                    className={`${globalStyles.gameBtn} ${styles.gameBtn}`}
                 >
                     Start walkthrough
                 </button>
