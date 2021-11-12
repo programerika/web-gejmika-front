@@ -34,14 +34,14 @@ export class ScoreBoardViewModel {
       this.#dispatchUpdateScoreBoard({
         ...this.#scoreState,
         topPlayers: {
-          topPlayers: this.#highlightCurrentUser(players.topPlayers),
+          topPlayers: this.#highlightCurrentPlayer(players.topPlayers),
           currentPlayer: players.currentPlayer,
         },
         boardView: {
-          isPlayerRegistered: this.#isUsernameRegistered(),
+          isPlayerRegistered: this.#isPlayerRegistered(),
           showPlayerBelowTopList:
-            this.#isUsernameRegistered() &&
-            !this.#isUserInTopList(players.topPlayers),
+            this.#isPlayerRegistered() &&
+            !this.#isPlayerInTopList(players.topPlayers),
         },
       });
 
@@ -56,7 +56,7 @@ export class ScoreBoardViewModel {
     }
   };
 
-  #isUsernameRegistered = () => {
+  #isPlayerRegistered = () => {
     return !this.#storage.isItemInStorageEmpty("username");
   };
 
@@ -65,7 +65,7 @@ export class ScoreBoardViewModel {
 
     const topPlayers = await this.#webGejmikaService.getTopPlayers();
     let currentPlayer = {};
-    if (this.#isUsernameRegistered("username")) {
+    if (this.#isPlayerRegistered("username")) {
       currentPlayer = await this.#webGejmikaService.getPlayerByUsername(
         this.#storage.getItem("username")
       );
@@ -85,7 +85,7 @@ export class ScoreBoardViewModel {
     this.#storage.removeItem("uid");
   };
 
-  #highlightCurrentUser = (topPlayers) => {
+  #highlightCurrentPlayer = (topPlayers) => {
     const playerUsername = this.#storage.getItem("username");
     return topPlayers.map((person, i) => {
       person.currentUserClass =
@@ -96,7 +96,7 @@ export class ScoreBoardViewModel {
     });
   };
 
-  #isUserInTopList = (topPlayers) => {
+  #isPlayerInTopList = (topPlayers) => {
     const playerUsername = this.#storage.getItem("username");
     return (
       typeof topPlayers.find((person) => person.username === playerUsername) !==

@@ -26,7 +26,7 @@ export class ScoreViewModel {
       toolTipStatus: showScoreStyles.toolTipHidden,
       isUsernameValid: "",
       isSaveButtonDisabled: true,
-      offerToRegisterPlayer: !this.isUsernameRegistered() && score > 0,
+      offerToRegisterPlayer: !this.isPlayerRegistered() && score > 0,
       message: "Please enter a username",
       messageColor: showScoreStyles.messageWhite,
       scoreMsg: this.#calculateScoreMsg(score),
@@ -48,7 +48,7 @@ export class ScoreViewModel {
     });
   };
 
-  #checkIfUsernameExists = async (username) => {
+  #checkIfPlayerExists = async (username) => {
     const player = await this.#webGejmikaService.getPlayerByUsername(username);
     return player !== undefined;
   };
@@ -65,7 +65,7 @@ export class ScoreViewModel {
     let regex = new RegExp("[a-zA-Z0-9]{4,6}[0-9]{2}$");
     if (regex.test(username)) {
       try {
-        const usernameExists = await this.#checkIfUsernameExists(username);
+        const usernameExists = await this.#checkIfPlayerExists(username);
 
         if (usernameExists) {
           return {
@@ -152,12 +152,12 @@ export class ScoreViewModel {
     });
   };
 
-  isUsernameRegistered = () => {
+  isPlayerRegistered = () => {
     return !this.#storage.isItemInStorageEmpty("username");
   };
 
   addScoreIfPlayerIsRegistered = async (score) => {
-    if (this.isUsernameRegistered()) {
+    if (this.isPlayerRegistered()) {
       if (score === 0) return;
       try {
         await this.#webGejmikaService.addScore(
