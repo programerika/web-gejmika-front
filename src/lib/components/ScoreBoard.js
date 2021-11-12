@@ -7,7 +7,6 @@ import ReactLoading from "react-loading";
 
 const ScoreBoard = ({ scoreBoardViewModel }) => {
   const topPlayers = useSelector((state) => state.score.topPlayers.topPlayers);
-  const error = useSelector((state) => state.score.error);
   const isPlayerRegistered = useSelector(
     (state) => state.score.boardView.isPlayerRegistered
   );
@@ -20,10 +19,12 @@ const ScoreBoard = ({ scoreBoardViewModel }) => {
   const score = useSelector(
     (state) => state.score.topPlayers.currentPlayer.score
   );
-  const [state, setState] = useState(false);
+  const [state, setState] = useState({
+    isBoardLoading: false,
+    isInError: false,
+    errorMsg: "",
+  });
   scoreBoardViewModel.setStateCallback(state, setState);
-
-  console.log(state);
 
   console.log("RERENDER ScoreBoard----------");
 
@@ -38,7 +39,6 @@ const ScoreBoard = ({ scoreBoardViewModel }) => {
           </tr>
         </thead>
         <tbody>
-          {state && <ReactLoading type={"spokes"} color={"#FFFFFF"} />}
           {topPlayers.map((person, i) => {
             return (
               <tr key={i} className={styles.personScore}>
@@ -62,6 +62,14 @@ const ScoreBoard = ({ scoreBoardViewModel }) => {
           })}
         </tbody>
       </table>
+      {state.isBoardLoading && (
+        <div className={styles.loadingIndicator}>
+          <ReactLoading type={"spokes"} color={"#FFFFFF"} />
+        </div>
+      )}
+      {state.isInError && (
+        <h3 className={styles.scoreBoardError}>{state.errorMsg}</h3>
+      )}
       {showPlayerBelowTopList && (
         <div className={styles.scoreBoard}>
           <div className={styles.currentPlayerSeparator}>...</div>
@@ -78,7 +86,7 @@ const ScoreBoard = ({ scoreBoardViewModel }) => {
         <div className={`${styles.scoreBoard} ${styles.deleteScore}`}>
           <button
             className={`${globalStyles.gameBtn} ${styles.deleteScoreBtn}`}
-            onClick={() => scoreBoardViewModel.deleteButtonClicked()}
+            onClick={() => scoreBoardViewModel.deleteUsername()}
           >
             Delete score!
           </button>

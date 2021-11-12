@@ -3,13 +3,13 @@
  */
 import allActions from "../redux/actions";
 import { WebGejmikaModel } from "../model/WebGejmikaModel";
-import heart from '../icons/heart.png';
-import star from '../icons/star.png';
-import diamond from '../icons/diamond.png';
-import spades from '../icons/symbol-of-spades.png';
-import trafficLight from '../icons/traffic-light.png';
-import clubs from '../icons/clubs.png';
-import circle from '../icons/circle.png';
+import heart from "../icons/heart.png";
+import star from "../icons/star.png";
+import diamond from "../icons/diamond.png";
+import spades from "../icons/symbol-of-spades.png";
+import trafficLight from "../icons/traffic-light.png";
+import clubs from "../icons/clubs.png";
+import circle from "../icons/circle.png";
 import attemptStyles from "../components/AttemptPanel.module.css";
 
 export class WebGejmikaViewModel {
@@ -25,13 +25,17 @@ export class WebGejmikaViewModel {
     this.#dispatcher = dispatcher;
     this.#webGejmikaModel = new WebGejmikaModel(modelState);
     this.#scoreViewModel = scoreViewModel;
-    const initialColors = [...Array(this.#webGejmikaModel.combinationLength()).fill("lightgray")];
-    const emptyComb = [...Array(this.#webGejmikaModel.combinationLength()).fill("_")];
-    this.#emptyCombView  = {
+    const initialColors = [
+      ...Array(this.#webGejmikaModel.combinationLength()).fill("lightgray"),
+    ];
+    const emptyComb = [
+      ...Array(this.#webGejmikaModel.combinationLength()).fill("_"),
+    ];
+    this.#emptyCombView = {
       comb: this.combToIcon(emptyComb).map(this.#asIconView),
       colors: initialColors,
-      angleShift: -90
-    };    
+      angleShift: -90,
+    };
   }
 
   /**
@@ -51,7 +55,10 @@ export class WebGejmikaViewModel {
     }
     let combInProg = [...this.#viewState.combInProgress, icon];
 
-    const preparedAttempts = this.#prepareAttemptsView(combInProg, this.#modelState.attempts);
+    const preparedAttempts = this.#prepareAttemptsView(
+      combInProg,
+      this.#modelState.attempts
+    );
 
     this.dispatchUpdate(
       { ...this.#modelState },
@@ -115,7 +122,10 @@ export class WebGejmikaViewModel {
   }
 
   isAttemptFull() {
-    return this.#viewState.combInProgress.length >= this.#webGejmikaModel.combinationLength();
+    return (
+      this.#viewState.combInProgress.length >=
+      this.#webGejmikaModel.combinationLength()
+    );
   }
 
   codeGuess() {
@@ -123,24 +133,25 @@ export class WebGejmikaViewModel {
       this.iconToComb(this.#viewState.combInProgress)
     );
 
-    const preparedAttempts = this.#prepareAttemptsView([], newStateModel.attempts);
+    const preparedAttempts = this.#prepareAttemptsView(
+      [],
+      newStateModel.attempts
+    );
 
     let correctView = [];
-    if (newStateModel.gameOver) {    
-      correctView = this.combToIcon(newStateModel.secretComb).map(this.#asIconView);    
+    if (newStateModel.gameOver) {
+      correctView = this.combToIcon(newStateModel.secretComb).map(
+        this.#asIconView
+      );
     }
 
     this.dispatchUpdate(newStateModel, {
-      ...this.#viewState,      
+      ...this.#viewState,
       combInProgress: [],
       correctView: correctView,
       preparedAttempts: preparedAttempts,
       gameOver: newStateModel.gameOver,
-    });    
-
-    if (newStateModel.gameOver) {
-      this.#scoreViewModel.addScoreIfPlayerIsRegistered(newStateModel.score);
-    }
+    });
   }
 
   /**
@@ -151,7 +162,10 @@ export class WebGejmikaViewModel {
       let combInProg = [...this.#viewState.combInProgress];
       combInProg.pop();
 
-      const preparedAttempts = this.#prepareAttemptsView(combInProg, this.#modelState.attempts);
+      const preparedAttempts = this.#prepareAttemptsView(
+        combInProg,
+        this.#modelState.attempts
+      );
 
       this.dispatchUpdate(
         { ...this.#modelState },
@@ -173,7 +187,7 @@ export class WebGejmikaViewModel {
       combInProgress: [],
       correctView: [],
       preparedAttempts: this.#prepareAttemptsView([], []),
-      gameOver: false
+      gameOver: false,
     });
   }
 
@@ -275,18 +289,25 @@ export class WebGejmikaViewModel {
     return colors;
   };
 
-
   #prepareAttemptsView = (combInProgress, attempts, alertPlayerStyle = "") => {
-    const combInProgressView = 
+    const combInProgressView =
       attempts.length >= this.#webGejmikaModel.attemptsLength()
-      ? []
-      : [this.#prepareAttemptInProgressView(combInProgress, alertPlayerStyle)];
+        ? []
+        : [
+            this.#prepareAttemptInProgressView(
+              combInProgress,
+              alertPlayerStyle
+            ),
+          ];
 
     return [
       ...this.#prepareFinishedAttemptsView(attempts),
       ...combInProgressView,
-      ...Array(this.#webGejmikaModel.attemptsLength() - combInProgressView.length - attempts.length)
-          .fill(this.#emptyCombView)
+      ...Array(
+        this.#webGejmikaModel.attemptsLength() -
+          combInProgressView.length -
+          attempts.length
+      ).fill(this.#emptyCombView),
     ];
   };
 
@@ -295,16 +316,16 @@ export class WebGejmikaViewModel {
       return {
         comb: this.combToIcon(attempt.attemptCode).map(this.#asIconView),
         colors: this.outcomeToColor(attempt.attemptOutcome),
-        angleShift: this.#emptyCombView.angleShift
+        angleShift: this.#emptyCombView.angleShift,
       };
     });
-  }
+  };
 
   #asIconView = (icon) => {
     return {
       imgClassName: attemptStyles.circle,
       imgSrc: icon,
-    };      
+    };
   };
 
   #prepareAttemptInProgressView = (comb, alertPlayerStyle) => {
@@ -312,14 +333,11 @@ export class WebGejmikaViewModel {
       ...this.#emptyCombView,
       comb: [
         ...comb.map(this.#asIconView),
-        ...Array(this.#webGejmikaModel.combinationLength() - comb.length).fill(
-          {
-            imgClassName: attemptStyles.circle + ' ' + alertPlayerStyle,
-            imgSrc: circle
-          }
-        )
-      ]
+        ...Array(this.#webGejmikaModel.combinationLength() - comb.length).fill({
+          imgClassName: attemptStyles.circle + " " + alertPlayerStyle,
+          imgSrc: circle,
+        }),
+      ],
     };
   };
-
 }

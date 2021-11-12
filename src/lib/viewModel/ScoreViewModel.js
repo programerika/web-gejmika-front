@@ -4,6 +4,7 @@
 import { StorageService } from "../services/StorageService";
 import { WebGejmikaService } from "../services/WebGejmikaService";
 import showScoreStyles from "../components/ShowScore.module.css";
+import notifyError from "../services/ErrorNotificationService";
 
 export class ScoreViewModel {
   #webGejmikaService;
@@ -25,7 +26,7 @@ export class ScoreViewModel {
       toolTipStatus: showScoreStyles.toolTipHidden,
       isUsernameValid: "",
       isSaveButtonDisabled: true,
-      offerToRegisterPlayer: !this.#isUsernameRegistered() && score > 0,
+      offerToRegisterPlayer: !this.isUsernameRegistered() && score > 0,
       message: "Please enter a username",
       messageColor: showScoreStyles.messageWhite,
       scoreMsg: this.#calculateScoreMsg(score),
@@ -48,15 +49,8 @@ export class ScoreViewModel {
   };
 
   #checkIfUsernameExists = async (username) => {
-    try {
-      const player = await this.#webGejmikaService.getPlayerByUsername(
-        username
-      );
-      return true;
-    } catch (error) {
-      console.log(error.message);
-      return false;
-    }
+    const player = await this.#webGejmikaService.getPlayerByUsername(username);
+    return player !== undefined;
   };
 
   #validateUsername = async (username) => {
@@ -70,22 +64,29 @@ export class ScoreViewModel {
     }
     let regex = new RegExp("[a-zA-Z0-9]{4,6}[0-9]{2}$");
     if (regex.test(username)) {
-      const usernameExists = await this.#checkIfUsernameExists(username);
+      try {
+        const usernameExists = await this.#checkIfUsernameExists(username);
 
-      if (usernameExists) {
+        if (usernameExists) {
+          return {
+            message: "*Username already exists",
+            isSaveButtonDisabled: true,
+            isUsernameValid: showScoreStyles.isNotValidInput,
+            messageColor: showScoreStyles.messageRed,
+          };
+        }
         return {
-          message: "*Username already exists",
-          isSaveButtonDisabled: true,
-          isUsernameValid: showScoreStyles.isNotValidInput,
-          messageColor: showScoreStyles.messageRed,
+          message: "*Username is correct",
+          isSaveButtonDisabled: false,
+          isUsernameValid: showScoreStyles.isValidInput,
+          messageColor: showScoreStyles.messageGreen,
         };
+      } catch (error) {
+        notifyError(error.message);
+        return this.#setUpErrorState(
+          "Sorry, we are not able to complete the registration process at the moment."
+        );
       }
-      return {
-        message: "*Username is correct",
-        isSaveButtonDisabled: false,
-        isUsernameValid: showScoreStyles.isValidInput,
-        messageColor: showScoreStyles.messageGreen,
-      };
     } else {
       return {
         message: "*Your username is not in valid format",
@@ -151,58 +152,67 @@ export class ScoreViewModel {
     });
   };
 
-  #isUsernameRegistered = () => {
+  isUsernameRegistered = () => {
     return !this.#storage.isItemInStorageEmpty("username");
   };
 
   addScoreIfPlayerIsRegistered = async (score) => {
-    if (!this.#isUsernameRegistered()) return;
-    if (score === 0) return;
-
-    this.#webGejmikaService
-      .addScore(this.#storage.getItem("username"), score)
-      .then((msg) => {
-        this.#scoreBoardViewModel.initializeScoreBoardView();
-      })
-      .catch((err) => {
-        window.alert(err.message);
-        this.#gameViewModel.startGame();
-      });
-  };
-
-  #saveUserScore = async (username, score) => {
-    if (!this.#isUsernameRegistered()) {
+    if (this.isUsernameRegistered()) {
+      if (score === 0) return;
       try {
-        const uid = await this.#webGejmikaService.saveScore(username, score);
+        await this.#webGejmikaService.addScore(
+          this.#storage.getItem("username"),
+          score
+        );
 
-        //TODO resp.json() mora da se isprocesira u service sloju i da se uradi error handling pre
-        this.#storage.setItem("uid", uid);
-        this.#storage.setItem("username", username);
+        this.#scoreBoardViewModel.initializeScoreBoardView();
       } catch (error) {
-        window.alert(error.message);
-        this.#gameViewModel.startGame();
+        this.setState({
+          ...this.state,
+          ...this.#setUpErrorState(
+            "Sorry we are not able to add your score right now!"
+          ),
+          scoreMsg: this.#calculateScoreMsg(score),
+        });
+
+        notifyError(error.message);
       }
     }
   };
 
+  #setUpErrorState = (errorMsg) => {
+    return {
+      isSaveButtonDisabled: true,
+      offerToRegisterPlayer: false,
+      messageColor: showScoreStyles.messageRed,
+      scoreMsg: "",
+      saveStatus: errorMsg,
+    };
+  };
+
   saveScoreState = async (score) => {
     try {
-      const resultMessage = await this.#saveUserScore(
+      const uid = await this.#webGejmikaService.saveScore(
         this.state.username,
         score
       );
-      const newState = {
+      this.#storage.setItem("uid", uid);
+      this.#storage.setItem("username", this.state.username);
+      this.setState({
         ...this.state,
         toolTipStatus: showScoreStyles.toolTipHidden,
         isSaveButtonDisabled: true,
         offerToRegisterPlayer: false,
-        saveStatus: resultMessage,
-      };
-      this.setState(newState);
+        saveStatus: "Username successfully saved!",
+      });
       this.#scoreBoardViewModel.initializeScoreBoardView();
     } catch (error) {
-      window.alert(error.message);
-      this.#gameViewModel.startGame();
+      console.dir(this);
+      this.setState(
+        this.#setUpErrorState(
+          "Sorry, we are not able to complete the registration process at the moment."
+        )
+      );
     }
   };
 

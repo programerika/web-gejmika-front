@@ -1,18 +1,31 @@
-@import '../global.css';
+@import "../global.css";
 
 /* SCOREBOARD */
 
+:local(.loadingIndicator) {
+  margin: 15% auto auto;
+}
+
+:local(.scoreBoardError) {
+  padding: 20px;
+  font-weight: 300;
+  background-color: rgb(168, 66, 66);
+  width: 230px;
+  margin: 15% auto auto;
+  border-radius: 5%;
+}
+
 :local(.scoreBoardHeader) {
   background-color: var(--wgm-theme-main-color);
-  color:  black;
-  font-size: 1.2rem;  
+  color: black;
+  font-size: 1.2rem;
 }
 
 :local(.scoreBoard) th {
-  padding: 8px 8px;  
+  padding: 8px 8px;
   border: 3px solid var(--wgm-theme-main-color);
 }
-  
+
 :local(.scoreBoard) th:first-child {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
@@ -37,9 +50,9 @@
 }
 
 @media screen and (max-width: 800px) {
-    :local(.scoreBoard) {
-      margin-top: 30px;
-    }
+  :local(.scoreBoard) {
+    margin-top: 30px;
+  }
 }
 
 :local(.personScore) {
@@ -55,27 +68,27 @@
 
 :local(.currentPlayerUsername) {
   font-weight: bold;
-  display: inline-block;  
-  padding: 3px 8px;  
+  display: inline-block;
+  padding: 3px 8px;
   line-height: 1;
   color: black;
   text-align: center;
   vertical-align: middle;
   background-color: orange;
-  border-radius: 10px;  
+  border-radius: 10px;
   margin-right: 5px;
 }
 
 :local(.currentPlayerScore) {
   font-weight: 600;
-  display: inline-block;  
-  padding: 9px;  
+  display: inline-block;
+  padding: 9px;
   line-height: 1;
   color: var(--wgm-theme-main-color);
   text-align: center;
   vertical-align: middle;
   background-color: gray;
-  border-radius: 28px;  
+  border-radius: 28px;
 }
 
 :local(.currentPlayer) {
@@ -87,7 +100,7 @@
 
 :local(.deleteScore) {
   margin-top: 10px;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 
 :local(.deleteScoreBtn) {

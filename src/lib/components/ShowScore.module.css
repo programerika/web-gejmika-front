@@ -1,124 +1,127 @@
-@import '../global.css';
+@import "../global.css";
 
 /* SHOWSCORE */
 
 :local(.score) {
-    background-color: orange;
-    display: flex;
-    flex-direction: column;
-    height: max-content;
-    margin-top: 3px;
-    border-radius: 10px;
+  background-color: orange;
+  display: flex;
+  flex-direction: column;
+  height: max-content;
+  margin-top: 3px;
+  border-radius: 10px;
 }
-  
-:local(.score) > h1, h5 {
-    font-size: 15px;
-    text-align: center;
-    margin: 0px;
-  }
-  
+
+:local(.score) > h1,
+h5 {
+  font-size: 15px;
+  text-align: center;
+  margin: 0px;
+}
+
 :local(.correct) {
-    margin: auto;
-    width: fit-content;
-    height: 80px;
+  margin: auto;
+  width: fit-content;
+  height: 80px;
 }
-  
+
 /* SHOWSCORE STYLES - BUTTONS AND TOOLTIPS */
-    
+
 :local(.saveScore) {
-    width: 100%;
+  width: 100%;
 }
-  
+
 :local(.saveScore) > p {
-    font-size: 13px;
-    margin-top: 0px;
-    text-align: center;
+  font-size: 14px;
+  margin: auto;
+  font-weight: 450px;
+  margin-top: 0px;
+  padding: 5px;
+  text-align: center;
 }
-  
+
 :local(.tooltip) {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 :local(.tooltip) > input {
-    padding: 5px 28px;
-    font: 0.4em sans-serif;
-    border-radius: 10px;
-    border: 1px solid rgb(44, 44, 44);
-    text-align: center;
-    transition-duration: 0.4s;
-    margin-bottom: 10px;
-    font-size: small;
-    width: 76%;
-    margin: 0px auto;
+  padding: 5px 28px;
+  font: 0.4em sans-serif;
+  border-radius: 10px;
+  border: 1px solid rgb(44, 44, 44);
+  text-align: center;
+  transition-duration: 0.4s;
+  margin-bottom: 10px;
+  font-size: small;
+  width: 76%;
+  margin: 0px auto;
 }
-  
+
 :local(.isValidInput) {
-    background-color: greenyellow;
+  background-color: greenyellow;
 }
-  
+
 :local(.isNotValidInput) {
-    background-color: rgb(247, 57, 57);
+  background-color: rgb(247, 57, 57);
 }
 
 :local(.messageGreen) {
-    color: green;
+  color: green;
 }
-  
+
 :local(.messageRed) {
-    color: red;
+  color: rgb(212, 2, 2);
 }
-  
+
 :local(.messageWhite) {
-    color: white;
+  color: white;
 }
 
 :local(.tooltip) :local(.tooltiptext) {
-    width: 93%;
-    background-color: white;
-    text-align: center;
-    border-radius: 10px;
-    padding: 10px;
-    position: absolute;
-    z-index: 1;
-    bottom: 120%;
-    font-size: 11px;
+  width: 93%;
+  background-color: white;
+  text-align: center;
+  border-radius: 10px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 120%;
+  font-size: 11px;
 }
-  
+
 :local(.tooltip) :local(.tooltiptext)::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: white transparent transparent transparent;
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: white transparent transparent transparent;
 }
-  
+
 :local(.toolTipVisible) {
-    visibility: visible;
-    opacity: 1;
-    transition-duration: 0.5s;
+  visibility: visible;
+  opacity: 1;
+  transition-duration: 0.5s;
 }
-  
+
 :local(.toolTipHidden) {
-    visibility: hidden;
-    transition-duration: 0.5s;
-    opacity: 0;
+  visibility: hidden;
+  transition-duration: 0.5s;
+  opacity: 0;
 }
-  
 
 :local(.buttons) {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
-  
 
-
-  
+:local(.saveStatus) {
+  max-width: fit-content;
+}

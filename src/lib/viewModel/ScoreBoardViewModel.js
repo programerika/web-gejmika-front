@@ -5,15 +5,13 @@ import allActions from "../redux/actions";
 import { WebGejmikaService } from "../services/WebGejmikaService";
 import { StorageService } from "../services/StorageService";
 import scoreBoardStyles from "../components/ScoreBoard.module.css";
-import { tsMethodSignature } from "@babel/types";
+import notifyError from "../services/ErrorNotificationService";
 
 export class ScoreBoardViewModel {
   #dispatcher;
   #scoreState;
   #webGejmikaService;
   #storage;
-  state;
-  setState;
   constructor(scoreState, dispatcher) {
     this.#dispatcher = dispatcher;
     this.#scoreState = scoreState;
@@ -31,27 +29,31 @@ export class ScoreBoardViewModel {
   };
 
   initializeScoreBoardView = async () => {
-    await this.#getTopPlayers()
-      .then((topPlayers) => {
-        this.#dispatchUpdateScoreBoard({
-          ...this.#scoreState,
-          topPlayers: {
-            topPlayers: this.#highlightCurrentUser(topPlayers.topPlayers),
-            currentPlayer: topPlayers.currentPlayer,
-          },
-          boardView: {
-            isPlayerRegistered: this.#isUsernameRegistered(),
-            showPlayerBelowTopList:
-              this.#isUsernameRegistered() &&
-              !this.#isUserInTopList(topPlayers.topPlayers),
-          },
-        });
-        this.setState(false);
-      })
-      .catch((error) => {
-        this.setState(false);
-        console.log(error.message);
+    try {
+      const players = await this.#getTopPlayers();
+      this.#dispatchUpdateScoreBoard({
+        ...this.#scoreState,
+        topPlayers: {
+          topPlayers: this.#highlightCurrentUser(players.topPlayers),
+          currentPlayer: players.currentPlayer,
+        },
+        boardView: {
+          isPlayerRegistered: this.#isUsernameRegistered(),
+          showPlayerBelowTopList:
+            this.#isUsernameRegistered() &&
+            !this.#isUserInTopList(players.topPlayers),
+        },
       });
+
+      this.setState({ isBoardLoading: false, isInError: false });
+    } catch (error) {
+      notifyError(error.message);
+      this.setState({
+        isBoardLoading: false,
+        isInError: true,
+        errorMsg: "Sorry, we are not able to get top players at the moment!",
+      });
+    }
   };
 
   #isUsernameRegistered = () => {
@@ -59,31 +61,28 @@ export class ScoreBoardViewModel {
   };
 
   #getTopPlayers = async () => {
-    this.setState(true);
+    this.setState({ isBoardLoading: true, isInError: false });
 
-    let topPlayers = [];
-    let currentPlayer = [];
-
-    try {
-      topPlayers = await this.#webGejmikaService.getTopPlayers();
-    } catch (error) {
-      throw new Error(error.message);
-    }
-
-    try {
-      if (!this.#storage.isItemInStorageEmpty("username")) {
-        currentPlayer = await this.#webGejmikaService.getPlayerByUsername(
-          this.#storage.getItem("username")
-        );
+    const topPlayers = await this.#webGejmikaService.getTopPlayers();
+    let currentPlayer = {};
+    if (this.#isUsernameRegistered("username")) {
+      currentPlayer = await this.#webGejmikaService.getPlayerByUsername(
+        this.#storage.getItem("username")
+      );
+      if (currentPlayer === undefined) {
+        this.#removePlayerFromLocalStorage();
       }
-    } catch (error) {
-      throw new Error(error.message);
     }
 
     return {
       topPlayers: [...topPlayers],
       currentPlayer: { ...currentPlayer },
     };
+  };
+
+  #removePlayerFromLocalStorage = () => {
+    this.#storage.removeItem("username");
+    this.#storage.removeItem("uid");
   };
 
   #highlightCurrentUser = (topPlayers) => {
@@ -105,29 +104,30 @@ export class ScoreBoardViewModel {
     );
   };
 
-  deleteButtonClicked = async () => {
-    if (window.confirm("Are you sure you want to delete your username?")) {
-      this.#deleteUsername().then(() => {
-        this.initializeScoreBoardView();
-      });
-    } else {
-      return;
-    }
-  };
-
-  #deleteUsername = async () => {
+  deleteUsername = async () => {
     if (this.#storage.getItem("uid") !== null) {
-      try {
-        const resp = await this.#webGejmikaService.deleteScore(
-          this.#storage.getItem("uid")
-        );
-        this.#storage.removeItem("uid");
-        this.#storage.removeItem("username");
-      } catch (err) {
-        window.alert(err.message);
+      if (window.confirm("Are you sure you want to delete your username?")) {
+        try {
+          await this.#webGejmikaService.deleteScore(
+            this.#storage.getItem("uid")
+          );
+          this.#removePlayerFromLocalStorage();
+          this.#dispatchUpdateScoreBoard({
+            ...this.#scoreState,
+            boardView: {
+              isPlayerRegistered: false,
+              showPlayerBelowTopList: false,
+            },
+          });
+        } catch (error) {
+          notifyError(
+            error.message,
+            true,
+            "Sorry we are not able to delete your username at the moment!",
+            false
+          );
+        }
       }
-    } else {
-      return;
     }
   };
 }
