@@ -3,36 +3,25 @@
  */
 
 export class WebGejmikaService {
-  networkErrorMsg;
-  serverErrorMsg;
-
-  constructor() {
-    this.networkErrorMsg = "Network error, try again later!";
-    this.serverErrorMsg = "Server error, try again!";
-  }
-
   /**
    *  @param {String} username - passing username we want to check
    *  @returns {Boolean} true if username already exists
    */
 
   getPlayerByUsername = async (username) => {
-    try {
-      const response = await fetch(`/api/v1/player-scores/${username}`, {
-        method: "GET",
-      });
-      if (response.ok) {
-        const resp = await response.json();
-        return resp;
+    const response = await fetch(`/api/v1/player-scores/${username}`, {
+      method: "GET",
+    });
+
+    if (response.ok) {
+      const resp = await response.json();
+      return resp;
+    } else {
+      if (response.status === 404) {
+        return undefined;
       } else {
-        if (response.status == 404) {
-          throw new Error("Player doesn't exist");
-        } else {
-          throw new Error(this.serverErrorMsg);
-        }
+        throw new Error(response.statusText);
       }
-    } catch (error) {
-      throw new Error(error.message);
     }
   };
 
@@ -47,35 +36,31 @@ export class WebGejmikaService {
    */
 
   saveScore = async (username, score) => {
-    try {
-      const response = await fetch("/api/v1/player-scores", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username,
-          score: score,
-        }),
-      });
+    const response = await fetch("/api/v1/player-scores", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        score: score,
+      }),
+    });
 
-      if (response.ok) {
+    if (response.ok) {
+      const resp = await response.json();
+      return resp.id;
+    } else {
+      if (
+        response.status === 400 ||
+        response.status === 406 ||
+        response.status === 409
+      ) {
         const resp = await response.json();
-        return resp.id;
+        throw new Error(resp.detail);
       } else {
-        if (
-          response.status == 400 ||
-          response.status == 406 ||
-          response.status == 409
-        ) {
-          const resp = await response.json();
-          throw new Error(resp.detail);
-        } else {
-          throw new Error(this.serverErrorMsg);
-        }
+        throw new Error(response.statusText);
       }
-    } catch (error) {
-      throw new Error(error.message);
     }
   };
 
@@ -90,30 +75,24 @@ export class WebGejmikaService {
    */
 
   addScore = async (username, score) => {
-    try {
-      const response = await fetch(
-        `/api/v1/player-scores/${username}/add-score`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: score,
-        }
-      );
-
-      if (response.ok) {
-        return;
-      } else {
-        if (response.status == 404 || response.status == 406) {
-          const resp = await response.json();
-          throw new Error(resp.detail);
-        } else {
-          throw new Error(this.serverErrorMsg);
-        }
+    const response = await fetch(
+      `/api/v1/player-scores/${username}/add-score`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: score,
       }
-    } catch (error) {
-      throw new Error(error.message);
+    );
+
+    if (!response.ok) {
+      if (response.status === 404 || response.status === 406) {
+        const resp = await response.json();
+        throw new Error(resp.detail);
+      } else {
+        throw new Error(response.statusText);
+      }
     }
   };
 
@@ -122,22 +101,18 @@ export class WebGejmikaService {
    */
 
   getTopPlayers = async () => {
-    try {
-      const response = await fetch("/api/v1/top-score");
+    const response = await fetch("/api/v1/top-score");
 
-      if (response.ok) {
+    if (response.ok) {
+      const resp = await response.json();
+      return resp;
+    } else {
+      if (response.status === 400) {
         const resp = await response.json();
-        return resp;
+        throw Error(resp.detail);
       } else {
-        if (response.status == 400) {
-          const resp = await response.json();
-          throw new Error(resp.detail);
-        } else {
-          throw new Error(this.serverErrorMsg);
-        }
+        throw Error(response.statusText);
       }
-    } catch (error) {
-      throw new Error(error.message);
     }
   };
 
@@ -146,23 +121,17 @@ export class WebGejmikaService {
    */
 
   deleteScore = async (uid) => {
-    try {
-      const response = await fetch(`/api/v1/player-scores/${uid}`, {
-        method: "DELETE",
-      });
+    const response = await fetch(`/api/v1/player-scores/${uid}`, {
+      method: "DELETE",
+    });
 
-      if (response.ok) {
-        return;
-      } else {
+    if (!response.ok) {
+      if (response.status === 400) {
         const resp = await response.json();
-        if (response.status == 400) {
-          throw new Error(resp.detail);
-        } else {
-          throw new Error(this.serverErrorMsg);
-        }
+        throw new Error(resp.detail);
+      } else {
+        throw new Error(response.statusText);
       }
-    } catch (error) {
-      throw new Error(error.message);
     }
   };
 }
