@@ -11,6 +11,7 @@ import trafficLight from "../icons/traffic-light.png";
 import clubs from "../icons/clubs.png";
 import circle from "../icons/circle.png";
 import attemptStyles from "../components/AttemptPanel.module.css";
+import React from 'react';
 
 export class WebGejmikaViewModel {
   #dispatcher;
@@ -177,6 +178,10 @@ export class WebGejmikaViewModel {
       correctView: [],
       preparedAttempts: this.#prepareAttemptsView([], []),
       gameOver: false,
+      inputPanelRef: React.createRef(),
+      confirmButtonRef: React.createRef(),
+      deleteButtonRef: React.createRef(),
+      outcomeIndicatorRef: React.createRef()
     });
   };
 

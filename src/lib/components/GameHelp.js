@@ -4,15 +4,23 @@ import globalStyles from "../global.module.css";
 import {useState} from 'react';
 import styles from "./GameHelp.module.css";
 import questionMark from '../icons/question-mark.png';
+import { GameHelpViewModel } from '../viewModel/GameHelpViewModel';
+import ReactTooltip from 'react-tooltip';
 
 const GameHelp = ({onOpenModal,onCloseModal}) => {
 
+    const ghvm = new GameHelpViewModel();
+
     const [state, setState] = useState(
-        {open: false}
+        {open: false, isWalkThroughActive: false}
     );
 
+    ghvm.setStateCallback(state, setState)
+
 	onOpenModal = () => {
-		setState({ open: true });
+		setState({ open: true }, () => {
+            ReactTooltip.rebuild();
+        });
     };
 
 	onCloseModal = () => {
@@ -29,7 +37,13 @@ const GameHelp = ({onOpenModal,onCloseModal}) => {
                 onClick={() => onOpenModal()}
                 />
             </div>
-
+            <ReactTooltip 
+                effect='solid' 
+                border={true} 
+                place='top'
+                type='dark'
+                className={styles.walkthroughTooltip} 
+            />
             <Modal open={state.open} onClose={() => onCloseModal()}>
                 <h2>Code guess game</h2>
                 <p>
@@ -48,7 +62,7 @@ const GameHelp = ({onOpenModal,onCloseModal}) => {
                     Close
                 </button>
                 <button 
-                    onClick={() => onCloseModal()}
+                    onClick={() => setState({...state, isWalkThroughActive:true})}
                     className={`${globalStyles.gameBtn} ${styles.gameBtn}`}
                 >
                     Start walkthrough
