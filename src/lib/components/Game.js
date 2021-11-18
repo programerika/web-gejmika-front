@@ -10,15 +10,14 @@ import Header from "./Header";
 import { ScoreViewModel } from "../viewModel/ScoreViewModel";
 import { ScoreBoardViewModel } from "../viewModel/ScoreBoardViewModel";
 import styles from "./Game.module.css";
-import GameHelp from './GameHelp';
+import GameHelp from "./GameHelp";
 
 const Game = () => {
   const dispatch = useDispatch();
   const modelState = useSelector((state) => state.model);
   const viewState = useSelector((state) => state.view);
-  const scoreState = useSelector((state) => state.score);
 
-  const scoreBoardViewModel = new ScoreBoardViewModel(scoreState, dispatch);
+  const scoreBoardViewModel = new ScoreBoardViewModel(dispatch);
   const scoreViewModel = new ScoreViewModel(scoreBoardViewModel);
   const viewModel = new WebGejmikaViewModel(
     modelState,
@@ -41,7 +40,9 @@ const Game = () => {
     <>
       <div className={styles.wrapper}>
         <div className={styles.container}>
-          <Header><GameHelp /></Header>
+          <Header>
+            <GameHelp />
+          </Header>
           <GamePanel></GamePanel>
           {viewState.gameOver ? (
             <ShowScore scoreViewModel={scoreViewModel}></ShowScore>

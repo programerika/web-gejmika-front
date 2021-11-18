@@ -9,12 +9,10 @@ import notifyError from "../services/ErrorNotificationService";
 
 export class ScoreBoardViewModel {
   #dispatcher;
-  #scoreState;
   #webGejmikaService;
   #storage;
-  constructor(scoreState, dispatcher) {
+  constructor(dispatcher) {
     this.#dispatcher = dispatcher;
-    this.#scoreState = scoreState;
     this.#webGejmikaService = new WebGejmikaService();
     this.#storage = new StorageService();
   }
@@ -27,7 +25,6 @@ export class ScoreBoardViewModel {
     try {
       const players = await this.#getTopPlayers();
       this.#dispatchUpdateScoreBoard({
-        ...this.#scoreState,
         topPlayers: {
           topPlayers: this.#highlightCurrentPlayer(players.topPlayers),
           currentPlayer: players.currentPlayer,
@@ -44,7 +41,6 @@ export class ScoreBoardViewModel {
     } catch (error) {
       notifyError(error.message);
       this.#dispatchUpdateScoreBoard({
-        ...this.#scoreState,
         topPlayers: {
           topPlayers: [],
           currentPlayer: {
@@ -120,13 +116,7 @@ export class ScoreBoardViewModel {
     try {
       await this.#webGejmikaService.deleteScore(this.#storage.getItem("uid"));
       this.#removePlayerFromLocalStorage();
-      this.#dispatchUpdateScoreBoard({
-        ...this.#scoreState,
-        boardView: {
-          isPlayerRegistered: false,
-          showPlayerBelowTopList: false,
-        },
-      });
+      this.initializeScoreBoardView();
     } catch (error) {
       notifyError(
         error,
