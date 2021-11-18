@@ -14,10 +14,8 @@ const scoreBoardReducers = (
 ) => {
   switch (action.type) {
     case UPDATE_BOARD:
-      const { newStateScoreBoard } = action.payload;
-      return {
-        ...newStateScoreBoard,
-      };
+      const { newScoreBoardState } = action.payload;
+      return newScoreBoardState;
     default:
       return state;
   }

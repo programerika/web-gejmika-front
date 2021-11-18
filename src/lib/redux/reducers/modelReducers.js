@@ -11,13 +11,10 @@ const modelReducers = (
 ) => {
   switch (action.type) {
     case UPDATE:
-      const { newStateModel } = action.payload;
-      if (newStateModel) {
-        return newStateModel;
-      } else
-        return {
-          ...state,
-        };
+      const { newModelState } = action.payload;
+      if (newModelState) {
+        return newModelState;
+      }
     default:
       return state;
   }

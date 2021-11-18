@@ -20,7 +20,7 @@ export class ScoreBoardViewModel {
   }
 
   #dispatchUpdateScoreBoard = (newStateBoard) => {
-    this.#dispatcher(allActions.inputActions.updateScoreBoard(newStateBoard));
+    this.#dispatcher(allActions.updateScoreBoard(newStateBoard));
   };
 
   initializeScoreBoardView = async () => {
@@ -111,7 +111,7 @@ export class ScoreBoardViewModel {
   deletePlayer = async () => {
     if (this.#storage.getItem("uid") === null) {
       throw new Error(
-        "Illegal state: not expected to call deletePlayer withou uid in local storage!"
+        "Illegal state: not expected to call deletePlayer without uid in local storage!"
       );
     }
     if (!window.confirm("Are you sure you want to delete your username?"))

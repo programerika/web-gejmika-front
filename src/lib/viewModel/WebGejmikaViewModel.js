@@ -44,9 +44,11 @@ export class WebGejmikaViewModel {
    * This method dispatches model and view state updates to reducers
    */
   #dispatchUpdate = (newStateModel, newStateView) => {
-    this.#dispatcher(
-      allActions.inputActions.update(newStateModel, newStateView)
-    );
+    this.#dispatcher(allActions.update(newStateModel, newStateView));
+  };
+
+  #dispatchViewUpdate = (newStateView) => {
+    this.#dispatcher(allActions.updateViewModel(newStateView));
   };
 
   #appendCodeToCombinationInProgress = (icon) => {
@@ -60,14 +62,11 @@ export class WebGejmikaViewModel {
       this.#modelState.attempts
     );
 
-    this.#dispatchUpdate(
-      { ...this.#modelState },
-      {
-        ...this.#viewState,
-        combInProgress: combInProg,
-        preparedAttempts: preparedAttempts,
-      }
-    );
+    this.#dispatchViewUpdate({
+      ...this.#viewState,
+      combInProgress: combInProg,
+      preparedAttempts: preparedAttempts,
+    });
   };
 
   heartButtonClicked = () => {
@@ -96,7 +95,7 @@ export class WebGejmikaViewModel {
 
   /**
    * This method updates view state by adding new attemptView, and setting viewOutcome
-   * Gets new model state from webGejmikaModel and calls dispatchUpdate function
+   * Gets new model state from webGejmikaModel
    */
   codeGuessIfReady = () => {
     if (!this.#isAttemptFull()) {
@@ -112,13 +111,10 @@ export class WebGejmikaViewModel {
       this.#modelState.attempts,
       attemptStyles.flashColor
     );
-    this.#dispatchUpdate(
-      { ...this.#modelState },
-      {
-        ...this.#viewState,
-        preparedAttempts: preparedAttempts,
-      }
-    );
+    this.#dispatchViewUpdate({
+      ...this.#viewState,
+      preparedAttempts: preparedAttempts,
+    });
   };
 
   #isAttemptFull = () => {
@@ -143,6 +139,7 @@ export class WebGejmikaViewModel {
       correctView = this.combToIcon(newStateModel.secretComb).map(
         this.#asIconView
       );
+      this.#scoreViewModel.addScoreIfPlayerIsRegistered(newStateModel.score);
     }
 
     this.#dispatchUpdate(newStateModel, {
@@ -152,14 +149,10 @@ export class WebGejmikaViewModel {
       preparedAttempts: preparedAttempts,
       gameOver: newStateModel.gameOver,
     });
-
-    if (newStateModel.gameOver) {
-      this.#scoreViewModel.addScoreIfPlayerIsRegistered(newStateModel.score);
-    }
   };
 
   /**
-   * This method deletes last element in combInProgress array and calls dispatchUpdate function
+   * This method deletes last element in combInProgress array
    */
   inputDeleteLast = () => {
     if (this.#viewState.combInProgress.length > 0) {
@@ -171,19 +164,16 @@ export class WebGejmikaViewModel {
         this.#modelState.attempts
       );
 
-      this.#dispatchUpdate(
-        { ...this.#modelState },
-        {
-          ...this.#viewState,
-          combInProgress: combInProg,
-          preparedAttempts: preparedAttempts,
-        }
-      );
+      this.#dispatchViewUpdate({
+        ...this.#viewState,
+        combInProgress: combInProg,
+        preparedAttempts: preparedAttempts,
+      });
     }
   };
 
   /**
-   * This method sets  model, view  and score state to default parameters and calls dispatchUpdate function
+   * This method sets  model, view  and score state to default parameters
    */
   startGame = () => {
     const newStateModel = this.#webGejmikaModel.generateSecretCode();

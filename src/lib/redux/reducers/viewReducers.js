@@ -5,22 +5,17 @@ const viewReducers = (
     combInProgress: [],
     preparedAttempts: [],
     correctView: [],
-    gameOver: false
+    gameOver: false,
   },
   action
 ) => {
   switch (action.type) {
-    case UPDATE: {
-      const { newStateView } = action.payload;
-      if (!newStateView) {
-        return { ...state };
-      } else return newStateView;
-    }
-    case UPDATE_VIEW: {
-      const { newStateView } = action.payload;
-      if (!newStateView) return { ...state };
-      else return newStateView;
-    }
+    case UPDATE:
+    case UPDATE_VIEW:
+      const { newViewState } = action.payload;
+      if (newViewState) {
+        return newViewState;
+      }
     default: {
       return state;
     }

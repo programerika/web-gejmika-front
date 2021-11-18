@@ -52,7 +52,7 @@ const ShowScore = ({ scoreViewModel }) => {
                 placeholder="Username - eg. MyName12"
                 onMouseLeave={() => scoreViewModel.hideToolTip()}
                 onMouseEnter={() => scoreViewModel.showToolTip()}
-                onChange={async (e) =>
+                onChange={(e) =>
                   scoreViewModel.usernameInputOnChange(e.target.value)
                 }
               />

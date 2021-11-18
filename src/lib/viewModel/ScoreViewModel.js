@@ -40,10 +40,10 @@ export class ScoreViewModel {
     this.setState = setState;
   };
 
-  usernameInputOnChange = async (username) => {
+  usernameInputOnChange = (username) => {
     let validationResult;
     if (username && username.length > 2) {
-      validationResult = await this.#validateUsername(username);
+      validationResult = this.#validateUsername(username);
     }
     this.setState({
       ...this.state,
@@ -52,7 +52,7 @@ export class ScoreViewModel {
     });
   };
 
-  #validateUsername = async (username) => {
+  #validateUsername = (username) => {
     if (username.length === 0) {
       return {
         message: "Please enter a username",
@@ -176,7 +176,7 @@ export class ScoreViewModel {
 
   saveScoreState = async (score) => {
     if (this.#isPlayerRegistered()) {
-      throw new Error("Illegal state: Player is alredy registered!");
+      throw new Error("Illegal state: Player is already registered!");
     }
 
     this.setState({

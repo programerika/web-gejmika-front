@@ -1,23 +1,23 @@
 import { UPDATE, UPDATE_BOARD, UPDATE_VIEW } from "../types";
 
-const update = (newStateModel, newStateView) => {
+const update = (newModelState, newViewState) => {
   return {
     type: UPDATE,
-    payload: { newStateModel, newStateView },
+    payload: { newModelState, newViewState },
   };
 };
 
-const updateScoreBoard = (newStateScoreBoard) => {
+const updateScoreBoard = (newScoreBoardState) => {
   return {
     type: UPDATE_BOARD,
-    payload: { newStateScoreBoard },
+    payload: { newScoreBoardState },
   };
 };
 
-const updateViewModel = (newViewModelState) => {
+const updateViewModel = (newViewState) => {
   return {
     type: UPDATE_VIEW,
-    payload: { newViewModelState },
+    payload: { newViewState },
   };
 };
 

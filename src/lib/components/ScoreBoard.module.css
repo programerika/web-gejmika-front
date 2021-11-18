@@ -3,7 +3,7 @@
 /* SCOREBOARD */
 
 :local(.loadingIndicator) {
-  margin: 15% auto auto;
+  margin: 50px auto auto;
 }
 
 :local(.scoreBoardError) {
