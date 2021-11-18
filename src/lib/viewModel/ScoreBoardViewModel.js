@@ -91,19 +91,19 @@ export class ScoreBoardViewModel {
 
   #highlightCurrentPlayer = (topPlayers) => {
     const playerUsername = this.#currentPlayerUsername();
-    return topPlayers.map((person, i) => {
-      person.currentUserClass =
-        person.username === playerUsername
+    return topPlayers.map((player) => {
+      player.currentUserClass =
+        player.username === playerUsername
           ? scoreBoardStyles.currentPlayerUsername
           : "";
-      return person;
+      return player;
     });
   };
 
   #isPlayerInTopList = (topPlayers) => {
     const playerUsername = this.#currentPlayerUsername();
     return (
-      typeof topPlayers.find((person) => person.username === playerUsername) !==
+      typeof topPlayers.find((player) => player.username === playerUsername) !==
       "undefined"
     );
   };
