@@ -48,7 +48,7 @@ export class ScoreBoardViewModel {
         topPlayers: {
           topPlayers: [],
           currentPlayer: {
-            username: this.#storage.getItem("username"),
+            username: this.#currentPlayerUsername(),
             score: null,
           },
         },
@@ -69,9 +69,9 @@ export class ScoreBoardViewModel {
   #getTopPlayers = async () => {
     const topPlayers = await this.#webGejmikaService.getTopPlayers();
     let currentPlayer = {};
-    if (this.#isPlayerRegistered("username")) {
+    if (this.#isPlayerRegistered()) {
       currentPlayer = await this.#webGejmikaService.getPlayerByUsername(
-        this.#storage.getItem("username")
+        this.#currentPlayerUsername()
       );
       if (currentPlayer === undefined) {
         this.#removePlayerFromLocalStorage();
@@ -90,7 +90,7 @@ export class ScoreBoardViewModel {
   };
 
   #highlightCurrentPlayer = (topPlayers) => {
-    const playerUsername = this.#storage.getItem("username");
+    const playerUsername = this.#currentPlayerUsername();
     return topPlayers.map((person, i) => {
       person.currentUserClass =
         person.username === playerUsername
@@ -101,7 +101,7 @@ export class ScoreBoardViewModel {
   };
 
   #isPlayerInTopList = (topPlayers) => {
-    const playerUsername = this.#storage.getItem("username");
+    const playerUsername = this.#currentPlayerUsername();
     return (
       typeof topPlayers.find((person) => person.username === playerUsername) !==
       "undefined"
@@ -134,4 +134,8 @@ export class ScoreBoardViewModel {
       }
     }
   };
+
+  #currentPlayerUsername() {
+    return this.#storage.getItem("username");
+  }
 }

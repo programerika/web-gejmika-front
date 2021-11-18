@@ -26,7 +26,7 @@ export class ScoreViewModel {
       toolTipStatus: showScoreStyles.toolTipHidden,
       isUsernameValid: "",
       isSaveButtonDisabled: true,
-      offerToRegisterPlayer: !this.isPlayerRegistered() && score > 0,
+      offerToRegisterPlayer: !this.#isPlayerRegistered() && score > 0,
       message: "Please enter a username",
       messageColor: showScoreStyles.messageWhite,
       scoreMsg: this.#calculateScoreMsg(score),
@@ -152,12 +152,12 @@ export class ScoreViewModel {
     });
   };
 
-  isPlayerRegistered = () => {
+  #isPlayerRegistered = () => {
     return !this.#storage.isItemInStorageEmpty("username");
   };
 
   addScoreIfPlayerIsRegistered = async (score) => {
-    if (this.isPlayerRegistered()) {
+    if (this.#isPlayerRegistered()) {
       if (score === 0) return;
       try {
         await this.#webGejmikaService.addScore(
