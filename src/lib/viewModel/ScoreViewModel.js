@@ -21,23 +21,39 @@ export class ScoreViewModel {
     this.#gameViewModel = viewModel;
   };
 
-  initializeView = (score) => {
-    return {
-      toolTipStatus: showScoreStyles.toolTipHidden,
-      isUsernameValid: "",
-      isSaveButtonDisabled: true,
-      offerToRegisterPlayer: !this.#isPlayerRegistered() && score > 0,
-      message: "Please enter a username",
-      messageColor: showScoreStyles.messageWhite,
-      scoreMsg: this.#calculateScoreMsg(score),
-      username: "",
-      saveButtonText: "Save score!",
-    };
+  reducer = (state, action) => {
+    switch (action.type) {
+      case "update":
+        return { ...state, ...action.payload };
+      default:
+        throw new Error();
+    }
   };
 
-  setStateCallback = (state, setState) => {
+  initializeView = (score) => {
+    return [
+      this.reducer,
+      {
+        toolTipStatus: showScoreStyles.toolTipHidden,
+        isUsernameValid: "",
+        isSaveButtonDisabled: true,
+        offerToRegisterPlayer: !this.#isPlayerRegistered() && score > 0,
+        message: "Please enter a username",
+        messageColor: showScoreStyles.messageWhite,
+        scoreMsg: this.#calculateScoreMsg(score),
+        username: "",
+        saveButtonText: "Save score!",
+      },
+    ];
+  };
+
+  setStateCallback = (state, dispatch) => {
     this.state = state;
-    this.setState = setState;
+    this.dispatch = dispatch;
+  };
+
+  #dispatchUpdate = (newState) => {
+    this.dispatch({ type: "update", payload: newState });
   };
 
   usernameInputOnChange = (username) => {
@@ -45,8 +61,7 @@ export class ScoreViewModel {
     if (username && username.length > 2) {
       validationResult = this.#validateUsername(username);
     }
-    this.setState({
-      ...this.state,
+    this.#dispatchUpdate({
       ...validationResult,
       username: username,
     });
@@ -121,15 +136,13 @@ export class ScoreViewModel {
   };
 
   hideToolTip = () => {
-    this.setState({
-      ...this.state,
+    this.#dispatchUpdate({
       toolTipStatus: showScoreStyles.toolTipHidden,
     });
   };
 
   showToolTip = () => {
-    this.setState({
-      ...this.state,
+    this.#dispatchUpdate({
       toolTipStatus: showScoreStyles.toolTipVisible,
     });
   };
@@ -162,8 +175,7 @@ export class ScoreViewModel {
     const player = await this.#webGejmikaService.getPlayerByUsername(username);
     const usernameExists = player !== undefined;
     if (usernameExists) {
-      this.setState({
-        ...this.state,
+      this.#dispatchUpdate({
         message: "*Username already exists",
         isSaveButtonDisabled: true,
         saveButtonText: "Save score!",
@@ -179,8 +191,7 @@ export class ScoreViewModel {
       throw new Error("Illegal state: Player is already registered!");
     }
 
-    this.setState({
-      ...this.state,
+    this.#dispatchUpdate({
       isSaveButtonDisabled: true,
       saveButtonText: "Checking...",
     });
@@ -191,9 +202,7 @@ export class ScoreViewModel {
       );
       if (usernameExists) return;
 
-      this.setState({
-        ...this.state,
-        isSaveButtonDisabled: true,
+      this.#dispatchUpdate({
         saveButtonText: "Saving...",
       });
 
@@ -203,8 +212,7 @@ export class ScoreViewModel {
       );
       this.#storage.setItem("uid", uid);
       this.#storage.setItem("username", this.state.username);
-      this.setState({
-        ...this.state,
+      this.#dispatchUpdate({
         offerToRegisterPlayer: false,
       });
       this.#scoreBoardViewModel.initializeScoreBoardView();
@@ -215,8 +223,7 @@ export class ScoreViewModel {
         "Sorry, we are not able to complete the registration process at the moment.",
         true
       );
-      this.setState({
-        ...this.state,
+      this.#dispatchUpdate({
         isSaveButtonDisabled: false,
         saveButtonText: "Save score!",
       });

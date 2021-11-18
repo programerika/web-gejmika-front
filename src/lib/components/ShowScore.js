@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useReducer } from "react";
 import Confetti from "react-confetti";
 import AttemptPanel from "./AttemptPanel";
 import globalStyles from "../global.module.css";
@@ -8,12 +8,12 @@ import { useSelector } from "react-redux";
 const ShowScore = ({ scoreViewModel }) => {
   const score = useSelector((state) => state.model.score);
   const correctView = useSelector((state) => state.view.correctView);
-  const [state, setState] = useState(scoreViewModel.initializeView(score));
+  const [state, dispatch] = useReducer(...scoreViewModel.initializeView(score));
   const confetti = useMemo(
     () => scoreViewModel.confettiPerScore(score),
     [score]
   );
-  scoreViewModel.setStateCallback(state, setState);
+  scoreViewModel.setStateCallback(state, dispatch);
 
   return (
     <div className={styles.score}>
