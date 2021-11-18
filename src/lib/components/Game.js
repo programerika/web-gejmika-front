@@ -16,7 +16,7 @@ const Game = () => {
   const modelState = useSelector((state) => state.model);
   const viewState = useSelector((state) => state.view);
   const scoreState = useSelector((state) => state.score);
-  
+
   const scoreBoardViewModel = new ScoreBoardViewModel(scoreState, dispatch);
   const scoreViewModel = new ScoreViewModel(scoreBoardViewModel);
   const viewModel = new WebGejmikaViewModel(
@@ -38,35 +38,20 @@ const Game = () => {
 
   return (
     <>
-      {viewState.gameOver ? (
-        <div className={styles.wrapper}>
-          <div className={styles.container}>
-            <Header></Header>
-            <GamePanel></GamePanel>
-            <ShowScore
-              scoreViewModel={scoreViewModel}
-            ></ShowScore>
-          </div>
-          <div className={styles.container}>
-            <ScoreBoard
-              scoreBoardViewModel={scoreBoardViewModel}
-            ></ScoreBoard>
-          </div>
-        </div>
-      ) : (
-        <div className={styles.wrapper}>
-          <div className={styles.container}>
-            <Header></Header>
-            <GamePanel></GamePanel>
+      <div className={styles.wrapper}>
+        <div className={styles.container}>
+          <Header></Header>
+          <GamePanel></GamePanel>
+          {viewState.gameOver ? (
+            <ShowScore scoreViewModel={scoreViewModel}></ShowScore>
+          ) : (
             <InputPanel viewModel={viewModel}></InputPanel>
-          </div>
-          <div className={styles.container}>
-            <ScoreBoard
-              scoreBoardViewModel={scoreBoardViewModel}
-            ></ScoreBoard>
-          </div>
+          )}
         </div>
-      )}
+        <div className={styles.container}>
+          <ScoreBoard scoreBoardViewModel={scoreBoardViewModel}></ScoreBoard>
+        </div>
+      </div>
     </>
   );
 };
