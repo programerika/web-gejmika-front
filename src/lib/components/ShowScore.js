@@ -77,7 +77,7 @@ const ShowScore = ({ scoreViewModel }) => {
               disabled={state.isSaveButtonDisabled}
               onClick={() => scoreViewModel.saveScoreState(score)}
             >
-              Save score!
+              {state.saveButtonText}
             </button>
           )}
         </div>

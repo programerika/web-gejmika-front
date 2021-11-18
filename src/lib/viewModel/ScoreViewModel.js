@@ -31,6 +31,7 @@ export class ScoreViewModel {
       messageColor: showScoreStyles.messageWhite,
       scoreMsg: this.#calculateScoreMsg(score),
       username: "",
+      saveButtonText: "Save score!",
     };
   };
 
@@ -51,11 +52,6 @@ export class ScoreViewModel {
     });
   };
 
-  #checkIfPlayerExists = async (username) => {
-    const player = await this.#webGejmikaService.getPlayerByUsername(username);
-    return player !== undefined;
-  };
-
   #validateUsername = async (username) => {
     if (username.length === 0) {
       return {
@@ -72,27 +68,6 @@ export class ScoreViewModel {
         isSaveButtonDisabled: true,
         isUsernameValid: showScoreStyles.isNotValidInput,
         messageColor: showScoreStyles.messageRed,
-      };
-    }
-    try {
-      const usernameExists = await this.#checkIfPlayerExists(username);
-      if (usernameExists) {
-        return {
-          message: "*Username already exists",
-          isSaveButtonDisabled: true,
-          isUsernameValid: showScoreStyles.isNotValidInput,
-          messageColor: showScoreStyles.messageRed,
-        };
-      }
-    } catch (error) {
-      notifyError(
-        error,
-        true,
-        "Sorry, we are not able to complete the registration process at the moment.",
-        true
-      );
-      return {
-        offerToRegisterPlayer: false,
       };
     }
 
@@ -183,19 +158,45 @@ export class ScoreViewModel {
     }
   };
 
+  #checkIfPlayerExists = async (username) => {
+    const player = await this.#webGejmikaService.getPlayerByUsername(username);
+    const usernameExists = player !== undefined;
+    if (usernameExists) {
+      this.setState({
+        ...this.state,
+        message: "*Username already exists",
+        isSaveButtonDisabled: true,
+        saveButtonText: "Save score!",
+        isUsernameValid: showScoreStyles.isNotValidInput,
+        messageColor: showScoreStyles.messageRed,
+      });
+    }
+    return usernameExists;
+  };
+
   saveScoreState = async (score) => {
     if (this.#isPlayerRegistered()) {
       throw new Error("Illegal state: Player is alredy registered!");
     }
 
-    const newState = {
+    this.setState({
       ...this.state,
-      toolTipStatus: showScoreStyles.toolTipHidden,
       isSaveButtonDisabled: true,
-    };
-    this.setState(newState);
+      saveButtonText: "Checking...",
+    });
 
     try {
+      const usernameExists = await this.#checkIfPlayerExists(
+        this.state.username
+      );
+      if (usernameExists) return;
+
+      this.setState({
+        ...this.state,
+        isSaveButtonDisabled: true,
+        saveButtonText: "Saving...",
+      });
+
       const uid = await this.#webGejmikaService.saveScore(
         this.state.username,
         score
@@ -216,7 +217,8 @@ export class ScoreViewModel {
       );
       this.setState({
         ...this.state,
-        offerToRegisterPlayer: false,
+        isSaveButtonDisabled: false,
+        saveButtonText: "Save score!",
       });
     }
   };
