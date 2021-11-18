@@ -108,30 +108,32 @@ export class ScoreBoardViewModel {
     );
   };
 
-  deleteUsername = async () => {
-    if (this.#storage.getItem("uid") !== null) {
-      if (window.confirm("Are you sure you want to delete your username?")) {
-        try {
-          await this.#webGejmikaService.deleteScore(
-            this.#storage.getItem("uid")
-          );
-          this.#removePlayerFromLocalStorage();
-          this.#dispatchUpdateScoreBoard({
-            ...this.#scoreState,
-            boardView: {
-              isPlayerRegistered: false,
-              showPlayerBelowTopList: false,
-            },
-          });
-        } catch (error) {
-          notifyError(
-            error.message,
-            true,
-            "Sorry we are not able to delete your username at the moment!",
-            false
-          );
-        }
-      }
+  deletePlayer = async () => {
+    if (this.#storage.getItem("uid") === null) {
+      throw new Error(
+        "Illegal state: not expected to call deletePlayer withou uid in local storage!"
+      );
+    }
+    if (!window.confirm("Are you sure you want to delete your username?"))
+      return;
+
+    try {
+      await this.#webGejmikaService.deleteScore(this.#storage.getItem("uid"));
+      this.#removePlayerFromLocalStorage();
+      this.#dispatchUpdateScoreBoard({
+        ...this.#scoreState,
+        boardView: {
+          isPlayerRegistered: false,
+          showPlayerBelowTopList: false,
+        },
+      });
+    } catch (error) {
+      notifyError(
+        error,
+        true,
+        "Sorry we are not able to delete your username at the moment!",
+        true
+      );
     }
   };
 

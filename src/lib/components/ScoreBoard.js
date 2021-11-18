@@ -86,7 +86,7 @@ const ScoreBoard = ({ scoreBoardViewModel }) => {
         <div className={`${styles.scoreBoard} ${styles.deleteScore}`}>
           <button
             className={`${globalStyles.gameBtn} ${styles.deleteScoreBtn}`}
-            onClick={() => scoreBoardViewModel.deleteUsername()}
+            onClick={() => scoreBoardViewModel.deletePlayer()}
           >
             Delete score!
           </button>
