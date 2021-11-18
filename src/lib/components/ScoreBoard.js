@@ -65,11 +65,17 @@ const ScoreBoard = ({ scoreBoardViewModel }) => {
         </tbody>
       </table>
       {isBoardLoading && (
-        <div className={styles.loadingIndicator}>
-          <ReactLoading type={"spokes"} color={"#FFFFFF"} />
+        <div className={styles.scoreBoard}>
+          <div className={styles.loadingIndicator}>
+            <ReactLoading type={"spokes"} color={"#FFFFFF"} />
+          </div>
         </div>
       )}
-      {errorMsg && <h3 className={styles.scoreBoardError}>{errorMsg}</h3>}
+      {errorMsg && (
+        <div className={styles.scoreBoard}>
+          <h3 className={styles.scoreBoardError}>{errorMsg}</h3>
+        </div>
+      )}
       {showPlayerBelowTopList && (
         <div className={styles.scoreBoard}>
           <div className={styles.currentPlayerSeparator}>...</div>
