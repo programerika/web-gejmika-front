@@ -14,9 +14,6 @@ const ShowScore = ({ scoreViewModel }) => {
     [score]
   );
   scoreViewModel.setStateCallback(state, setState);
-  useEffect(() => {
-    scoreViewModel.addScoreIfPlayerIsRegistered(score);
-  }, []);
 
   return (
     <div className={styles.score}>

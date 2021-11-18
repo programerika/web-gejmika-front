@@ -43,14 +43,14 @@ export class WebGejmikaViewModel {
    * @param {Object} newStateView
    * This method dispatches model and view state updates to reducers
    */
-  dispatchUpdate = (newStateModel, newStateView) => {
+  #dispatchUpdate = (newStateModel, newStateView) => {
     this.#dispatcher(
       allActions.inputActions.update(newStateModel, newStateView)
     );
   };
 
-  #appendCodeToCombinationInProgress(icon) {
-    if (this.isAttemptFull()) {
+  #appendCodeToCombinationInProgress = (icon) => {
+    if (this.#isAttemptFull()) {
       return;
     }
     let combInProg = [...this.#viewState.combInProgress, icon];
@@ -60,7 +60,7 @@ export class WebGejmikaViewModel {
       this.#modelState.attempts
     );
 
-    this.dispatchUpdate(
+    this.#dispatchUpdate(
       { ...this.#modelState },
       {
         ...this.#viewState,
@@ -68,67 +68,67 @@ export class WebGejmikaViewModel {
         preparedAttempts: preparedAttempts,
       }
     );
-  }
+  };
 
-  heartButtonClicked() {
+  heartButtonClicked = () => {
     this.#appendCodeToCombinationInProgress(heart);
-  }
+  };
 
-  starButtonClicked() {
+  starButtonClicked = () => {
     this.#appendCodeToCombinationInProgress(star);
-  }
+  };
 
-  diamondButtonClicked() {
+  diamondButtonClicked = () => {
     this.#appendCodeToCombinationInProgress(diamond);
-  }
+  };
 
-  spadesButtonClicked() {
+  spadesButtonClicked = () => {
     this.#appendCodeToCombinationInProgress(spades);
-  }
+  };
 
-  trafficLightButtonClicked() {
+  trafficLightButtonClicked = () => {
     this.#appendCodeToCombinationInProgress(trafficLight);
-  }
+  };
 
-  clubsButtonClicked() {
+  clubsButtonClicked = () => {
     this.#appendCodeToCombinationInProgress(clubs);
-  }
+  };
 
   /**
    * This method updates view state by adding new attemptView, and setting viewOutcome
    * Gets new model state from webGejmikaModel and calls dispatchUpdate function
    */
-  codeGuessIfReady() {
-    if (!this.isAttemptFull()) {
+  codeGuessIfReady = () => {
+    if (!this.#isAttemptFull()) {
       this.#alertPlayerVisuallyThatAttemptIsNotComplete();
     } else {
       this.codeGuess();
     }
-  }
+  };
 
-  #alertPlayerVisuallyThatAttemptIsNotComplete() {
+  #alertPlayerVisuallyThatAttemptIsNotComplete = () => {
     const preparedAttempts = this.#prepareAttemptsView(
       this.#viewState.combInProgress,
       this.#modelState.attempts,
       attemptStyles.flashColor
     );
-    this.dispatchUpdate(
+    this.#dispatchUpdate(
       { ...this.#modelState },
       {
         ...this.#viewState,
         preparedAttempts: preparedAttempts,
       }
     );
-  }
+  };
 
-  isAttemptFull() {
+  #isAttemptFull = () => {
     return (
       this.#viewState.combInProgress.length >=
       this.#webGejmikaModel.combinationLength()
     );
-  }
+  };
 
-  codeGuess() {
+  codeGuess = () => {
     const newStateModel = this.#webGejmikaModel.makeAGuess(
       this.iconToComb(this.#viewState.combInProgress)
     );
@@ -145,19 +145,23 @@ export class WebGejmikaViewModel {
       );
     }
 
-    this.dispatchUpdate(newStateModel, {
+    this.#dispatchUpdate(newStateModel, {
       ...this.#viewState,
       combInProgress: [],
       correctView: correctView,
       preparedAttempts: preparedAttempts,
       gameOver: newStateModel.gameOver,
     });
-  }
+
+    if (newStateModel.gameOver) {
+      this.#scoreViewModel.addScoreIfPlayerIsRegistered(newStateModel.score);
+    }
+  };
 
   /**
    * This method deletes last element in combInProgress array and calls dispatchUpdate function
    */
-  inputDeleteLast() {
+  inputDeleteLast = () => {
     if (this.#viewState.combInProgress.length > 0) {
       let combInProg = [...this.#viewState.combInProgress];
       combInProg.pop();
@@ -167,7 +171,7 @@ export class WebGejmikaViewModel {
         this.#modelState.attempts
       );
 
-      this.dispatchUpdate(
+      this.#dispatchUpdate(
         { ...this.#modelState },
         {
           ...this.#viewState,
@@ -176,20 +180,20 @@ export class WebGejmikaViewModel {
         }
       );
     }
-  }
+  };
 
   /**
    * This method sets  model, view  and score state to default parameters and calls dispatchUpdate function
    */
-  startGame() {
+  startGame = () => {
     const newStateModel = this.#webGejmikaModel.generateSecretCode();
-    this.dispatchUpdate(newStateModel, {
+    this.#dispatchUpdate(newStateModel, {
       combInProgress: [],
       correctView: [],
       preparedAttempts: this.#prepareAttemptsView([], []),
       gameOver: false,
     });
-  }
+  };
 
   /**
    *
