@@ -80,11 +80,21 @@ const ScoreBoard = ({ scoreBoardViewModel }) => {
         <div className={styles.scoreBoard}>
           <div className={styles.currentPlayerSeparator}>...</div>
           <div className={styles.currentPlayer}>
-            <span className={styles.currentPlayerUsername}>{username}</span>{" "}
-            your score is{" "}
-            <span className={styles.currentPlayerScore}>{score}</span>
-            <br />
-            keep playing...
+            {score ? (
+              <>
+                <span className={styles.currentPlayerUsername}>{username}</span>{" "}
+                your score is{" "}
+                <span className={styles.currentPlayerScore}>{score}</span>
+                <br />
+                keep playing...{" "}
+              </>
+            ) : (
+              <>
+                Wellcome!
+                <br />
+                <span className={styles.currentPlayerUsername}>{username}</span>
+              </>
+            )}
           </div>
         </div>
       )}
