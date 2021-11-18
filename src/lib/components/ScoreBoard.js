@@ -6,9 +6,11 @@ import styles from "./ScoreBoard.module.css";
 import ReactLoading from "react-loading";
 
 const ScoreBoard = ({ scoreBoardViewModel }) => {
-  const topPlayers = useSelector((state) => state.score.topPlayers.topPlayers);
-  const isPlayerRegistered = useSelector(
-    (state) => state.score.boardView.isPlayerRegistered
+  const topPlayers = useSelector(
+    (state) => state.score.topPlayers.topPlayers
+  ); // prettier-ignore
+  const showDeletePlayer = useSelector(
+    (state) => state.score.boardView.showDeletePlayer
   );
   const showPlayerBelowTopList = useSelector(
     (state) => state.score.boardView.showPlayerBelowTopList
@@ -19,12 +21,12 @@ const ScoreBoard = ({ scoreBoardViewModel }) => {
   const score = useSelector(
     (state) => state.score.topPlayers.currentPlayer.score
   );
-  const [state, setState] = useState({
-    isBoardLoading: false,
-    isInError: false,
-    errorMsg: "",
-  });
-  scoreBoardViewModel.setStateCallback(state, setState);
+  const isBoardLoading = useSelector(
+    (state) => state.score.isBoardLoading
+  ); // prettier-ignore
+  const errorMsg = useSelector(
+    (state) => state.score.errorMsg
+  ); // prettier-ignore
 
   console.log("RERENDER ScoreBoard----------");
 
@@ -62,14 +64,12 @@ const ScoreBoard = ({ scoreBoardViewModel }) => {
           })}
         </tbody>
       </table>
-      {state.isBoardLoading && (
+      {isBoardLoading && (
         <div className={styles.loadingIndicator}>
           <ReactLoading type={"spokes"} color={"#FFFFFF"} />
         </div>
       )}
-      {state.isInError && (
-        <h3 className={styles.scoreBoardError}>{state.errorMsg}</h3>
-      )}
+      {errorMsg && <h3 className={styles.scoreBoardError}>{errorMsg}</h3>}
       {showPlayerBelowTopList && (
         <div className={styles.scoreBoard}>
           <div className={styles.currentPlayerSeparator}>...</div>
@@ -82,7 +82,7 @@ const ScoreBoard = ({ scoreBoardViewModel }) => {
           </div>
         </div>
       )}
-      {isPlayerRegistered && (
+      {showDeletePlayer && (
         <div className={`${styles.scoreBoard} ${styles.deleteScore}`}>
           <button
             className={`${globalStyles.gameBtn} ${styles.deleteScoreBtn}`}

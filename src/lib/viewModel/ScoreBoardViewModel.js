@@ -23,11 +23,6 @@ export class ScoreBoardViewModel {
     this.#dispatcher(allActions.inputActions.updateScoreBoard(newStateBoard));
   };
 
-  setStateCallback = (state, setState) => {
-    this.state = state;
-    this.setState = setState;
-  };
-
   initializeScoreBoardView = async () => {
     try {
       const players = await this.#getTopPlayers();
@@ -38,19 +33,30 @@ export class ScoreBoardViewModel {
           currentPlayer: players.currentPlayer,
         },
         boardView: {
-          isPlayerRegistered: this.#isPlayerRegistered(),
+          showDeletePlayer: this.#isPlayerRegistered(),
           showPlayerBelowTopList:
             this.#isPlayerRegistered() &&
             !this.#isPlayerInTopList(players.topPlayers),
         },
+        isBoardLoading: false,
+        errorMsg: null,
       });
-
-      this.setState({ isBoardLoading: false, isInError: false });
     } catch (error) {
       notifyError(error.message);
-      this.setState({
+      this.#dispatchUpdateScoreBoard({
+        ...this.#scoreState,
+        topPlayers: {
+          topPlayers: [],
+          currentPlayer: {
+            username: this.#storage.getItem("username"),
+            score: null,
+          },
+        },
+        boardView: {
+          showDeletePlayer: false,
+          showPlayerBelowTopList: this.#isPlayerRegistered(),
+        },
         isBoardLoading: false,
-        isInError: true,
         errorMsg: "Sorry, we are not able to get top players at the moment!",
       });
     }
@@ -61,8 +67,6 @@ export class ScoreBoardViewModel {
   };
 
   #getTopPlayers = async () => {
-    this.setState({ isBoardLoading: true, isInError: false });
-
     const topPlayers = await this.#webGejmikaService.getTopPlayers();
     let currentPlayer = {};
     if (this.#isPlayerRegistered("username")) {

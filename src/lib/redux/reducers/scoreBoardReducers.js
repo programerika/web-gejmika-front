@@ -7,6 +7,8 @@ const scoreBoardReducers = (
       currentPlayer: {},
     },
     boardView: {},
+    isBoardLoading: true,
+    errorMsg: null,
   },
   action
 ) => {
