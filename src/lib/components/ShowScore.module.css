@@ -121,7 +121,3 @@ h5 {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-
-:local(.saveStatus) {
-  max-width: fit-content;
-}

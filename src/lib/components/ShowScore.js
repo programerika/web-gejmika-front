@@ -33,6 +33,8 @@ const ShowScore = ({ scoreViewModel }) => {
         confettiSource={{
           x: confetti.x,
           y: confetti.y,
+          w: confetti.width,
+          h: confetti.height,
         }}
         initialVelocityX={confetti.initialVelocityX}
         initialVelocityY={confetti.initialVelocityY}
@@ -43,7 +45,7 @@ const ShowScore = ({ scoreViewModel }) => {
         <AttemptPanel comb={correctView}></AttemptPanel>
       </div>
       <div className={styles.saveScore}>
-        {state.offerToRegisterPlayer ? (
+        {state.offerToRegisterPlayer && (
           <>
             <div className={styles.tooltip}>
               <input
@@ -63,10 +65,6 @@ const ShowScore = ({ scoreViewModel }) => {
             </div>
             <p className={state.messageColor}>{state.message}</p>
           </>
-        ) : (
-          <p className={state.messageColor + " " + styles.saveStatus}>
-            {state.saveStatus}
-          </p>
         )}
         <div className={styles.buttons}>
           <button

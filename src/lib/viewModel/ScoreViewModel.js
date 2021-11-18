@@ -30,7 +30,6 @@ export class ScoreViewModel {
       message: "Please enter a username",
       messageColor: showScoreStyles.messageWhite,
       scoreMsg: this.#calculateScoreMsg(score),
-      saveStatus: "",
       username: "",
     };
   };
@@ -41,9 +40,13 @@ export class ScoreViewModel {
   };
 
   usernameInputOnChange = async (username) => {
+    let validationResult;
+    if (username && username.length > 2) {
+      validationResult = await this.#validateUsername(username);
+    }
     this.setState({
       ...this.state,
-      ...(await this.#validateUsername(username)),
+      ...validationResult,
       username: username,
     });
   };
@@ -63,31 +66,7 @@ export class ScoreViewModel {
       };
     }
     let regex = new RegExp("[a-zA-Z0-9]{4,6}[0-9]{2}$");
-    if (regex.test(username)) {
-      try {
-        const usernameExists = await this.#checkIfPlayerExists(username);
-
-        if (usernameExists) {
-          return {
-            message: "*Username already exists",
-            isSaveButtonDisabled: true,
-            isUsernameValid: showScoreStyles.isNotValidInput,
-            messageColor: showScoreStyles.messageRed,
-          };
-        }
-        return {
-          message: "*Username is correct",
-          isSaveButtonDisabled: false,
-          isUsernameValid: showScoreStyles.isValidInput,
-          messageColor: showScoreStyles.messageGreen,
-        };
-      } catch (error) {
-        notifyError(error);
-        return this.#setUpErrorState(
-          "Sorry, we are not able to complete the registration process at the moment."
-        );
-      }
-    } else {
+    if (!regex.test(username)) {
       return {
         message: "*Your username is not in valid format",
         isSaveButtonDisabled: true,
@@ -95,6 +74,34 @@ export class ScoreViewModel {
         messageColor: showScoreStyles.messageRed,
       };
     }
+    try {
+      const usernameExists = await this.#checkIfPlayerExists(username);
+      if (usernameExists) {
+        return {
+          message: "*Username already exists",
+          isSaveButtonDisabled: true,
+          isUsernameValid: showScoreStyles.isNotValidInput,
+          messageColor: showScoreStyles.messageRed,
+        };
+      }
+    } catch (error) {
+      notifyError(
+        error,
+        true,
+        "Sorry, we are not able to complete the registration process at the moment.",
+        true
+      );
+      return {
+        offerToRegisterPlayer: false,
+      };
+    }
+
+    return {
+      message: "*Username is correct",
+      isSaveButtonDisabled: false,
+      isUsernameValid: showScoreStyles.isValidInput,
+      messageColor: showScoreStyles.messageGreen,
+    };
   };
 
   confettiPerScore = (score) => {
@@ -176,17 +183,18 @@ export class ScoreViewModel {
     }
   };
 
-  #setUpErrorState = (errorMsg) => {
-    return {
-      isSaveButtonDisabled: true,
-      offerToRegisterPlayer: false,
-      messageColor: showScoreStyles.messageRed,
-      scoreMsg: "",
-      saveStatus: errorMsg,
-    };
-  };
-
   saveScoreState = async (score) => {
+    if (this.#isPlayerRegistered()) {
+      throw new Error("Illegal state: Player is alredy registered!");
+    }
+
+    const newState = {
+      ...this.state,
+      toolTipStatus: showScoreStyles.toolTipHidden,
+      isSaveButtonDisabled: true,
+    };
+    this.setState(newState);
+
     try {
       const uid = await this.#webGejmikaService.saveScore(
         this.state.username,
@@ -196,20 +204,20 @@ export class ScoreViewModel {
       this.#storage.setItem("username", this.state.username);
       this.setState({
         ...this.state,
-        toolTipStatus: showScoreStyles.toolTipHidden,
-        isSaveButtonDisabled: true,
         offerToRegisterPlayer: false,
-        saveStatus: "Username successfully saved!",
       });
       this.#scoreBoardViewModel.initializeScoreBoardView();
     } catch (error) {
-      notifyError(error.message);
-
-      this.setState(
-        this.#setUpErrorState(
-          "Sorry, we are not able to complete the registration process at the moment."
-        )
+      notifyError(
+        error,
+        true,
+        "Sorry, we are not able to complete the registration process at the moment.",
+        true
       );
+      this.setState({
+        ...this.state,
+        offerToRegisterPlayer: false,
+      });
     }
   };
 
