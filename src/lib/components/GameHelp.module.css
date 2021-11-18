@@ -1,0 +1,5 @@
+@import "../global.css";
+
+:local(.gameBtn) {
+  margin: 5px;
+}
