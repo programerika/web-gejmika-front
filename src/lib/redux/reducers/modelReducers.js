@@ -13,8 +13,12 @@ const modelReducers = (
     case UPDATE:
       const { newModelState } = action.payload;
       if (newModelState) {
-        return newModelState;
+        return {
+          ...state,
+          ...newModelState,
+        };
       }
+      return state;
     default:
       return state;
   }

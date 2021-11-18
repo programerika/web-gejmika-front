@@ -1,9 +1,9 @@
 import { UPDATE, UPDATE_BOARD, UPDATE_VIEW } from "../types";
 
-const update = (newModelState, newViewState) => {
+const update = (newModelState) => {
   return {
     type: UPDATE,
-    payload: { newModelState, newViewState },
+    payload: { newModelState },
   };
 };
 

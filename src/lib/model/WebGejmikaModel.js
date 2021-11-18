@@ -1,11 +1,19 @@
 /**
  * @author Programerika
  */
+import allActions from "../redux/actions";
 
 export class WebGejmikaModel {
-  constructor(modelState) {
-    this.modelState = modelState;
+  #modelState;
+  #dispatcher;
+  constructor(modelState, dispatcher = () => {}) {
+    this.#modelState = modelState;
+    this.#dispatcher = dispatcher;
   }
+
+  #dispatchUpdate = (newModelState) => {
+    this.#dispatcher(allActions.update(newModelState));
+  };
 
   combinationLength = () => {
     return 4;
@@ -22,8 +30,8 @@ export class WebGejmikaModel {
    * inPlace - number of guesses in place
    * correctCode - number of correct guesses, but not in place
    */
-  makeAGuess = (attpInProgress) => {
-    var combination = [...this.modelState.secretComb];
+  makeAGuess = async (attpInProgress) => {
+    var combination = [...this.#modelState.secretComb];
     var attempt = [...attpInProgress];
     let outcome = {
       inPlace: 0,
@@ -42,37 +50,45 @@ export class WebGejmikaModel {
     for (let index = 0; index < attempt.length; index++) {
       const foundIndex = combination.indexOf(attempt[index], startFromIndex);
       if (foundIndex > -1) {
-        outcome.correctCode += 1;  
+        outcome.correctCode += 1;
         startFromIndex = foundIndex + 1;
       }
     }
     // total of inPlace and correctCode is max combination length
     outcome.correctCode -= outcome.inPlace;
 
-    const newModelState = {
-      ...this.modelState,
-      attempts: [
-        ...this.modelState.attempts,
-        {
-          attemptCode: [...attpInProgress],
-          attemptOutcome: outcome,
-        },
-      ],
+    const newAttempts = [
+      ...this.#modelState.attempts,
+      {
+        attemptCode: [...attpInProgress],
+        attemptOutcome: outcome,
+      },
+    ];
+
+    let newModelState = {
+      attempts: newAttempts,
+      gameOver: false,
     };
 
-    if (this.isTargetReached(newModelState.attempts)) {
-      newModelState.score = this.calculateScore(newModelState.attempts);
-      newModelState.gameOver = true;
+    if (this.isTargetReached(newAttempts)) {
+      newModelState = {
+        ...newModelState,
+        score: this.calculateScore(newAttempts),
+        gameOver: true,
+        secretComb: this.#modelState.secretComb,
+      };
     }
+
+    this.#dispatchUpdate(newModelState);
 
     return newModelState;
   };
 
   /**
-   * @returns {Object} Model state with set secretComb
+   * Generates new game state
    * This method generates random secret combination of size 4 from letters K,H,P,T,L,S
    */
-  generateSecretCode = () => {
+  generateSecretCode = async () => {
     let combArr = ["K", "H", "P", "T", "L", "S"];
     let combination = [];
     for (let index = 0; index < this.combinationLength(); index++) {
@@ -80,13 +96,12 @@ export class WebGejmikaModel {
       combination[index] = combArr[rand];
     }
     const newModelState = {
-      ...this.modelState,
       attempts: [],
       score: -1,
       secretComb: combination,
       gameOver: false,
     };
-    return newModelState;
+    this.#dispatchUpdate(newModelState);
   };
 
   /**

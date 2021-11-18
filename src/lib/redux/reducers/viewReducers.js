@@ -1,4 +1,4 @@
-import { UPDATE, UPDATE_VIEW } from "../types";
+import { UPDATE_VIEW } from "../types";
 
 const viewReducers = (
   state = {
@@ -10,12 +10,15 @@ const viewReducers = (
   action
 ) => {
   switch (action.type) {
-    case UPDATE:
     case UPDATE_VIEW:
       const { newViewState } = action.payload;
       if (newViewState) {
-        return newViewState;
+        return {
+          ...state,
+          ...newViewState,
+        };
       }
+      return state;
     default: {
       return state;
     }

@@ -25,7 +25,7 @@ const wgmt = new WebGejmikaModel(test21Points);
  */
 
 test("testing makeAGuess() with correct combination in first attempt", () => {
-  expect(wgmt.makeAGuess(["H", "K", "T", "T"])).toStrictEqual({
+  expect(wgmt.makeAGuess(["H", "K", "T", "T"])).resolves.toStrictEqual({
     attempts: [
       {
         attemptCode: ["H", "K", "T", "T"],
@@ -33,8 +33,8 @@ test("testing makeAGuess() with correct combination in first attempt", () => {
       },
     ],
     score: 21,
-    secretComb: ["H", "K", "T", "T"],
     gameOver: true,
+    secretComb: ["H", "K", "T", "T"],
   });
 });
 
@@ -47,15 +47,13 @@ test("testing makeAGuess() with correct combination in first attempt", () => {
  *  current attempt in progress object with attempt outcome will be placed in attempts array
  */
 test("testing makeAGuess() with incorect combination in first attempt", () => {
-  expect(wgmt.makeAGuess(["H", "K", "T", "S"])).toStrictEqual({
+  expect(wgmt.makeAGuess(["H", "K", "T", "S"])).resolves.toStrictEqual({
     attempts: [
       {
         attemptCode: ["H", "K", "T", "S"],
         attemptOutcome: { inPlace: 3, correctCode: 0 },
       },
     ],
-    score: -1,
-    secretComb: ["H", "K", "T", "T"],
     gameOver: false,
   });
 });
@@ -94,7 +92,7 @@ const test13Points = {
 const wgmtTest13 = new WebGejmikaModel(test13Points);
 
 test("testing makeAGuess() with correct combination in fourth attempt", () => {
-  expect(wgmtTest13.makeAGuess(["H", "K", "T", "T"])).toStrictEqual({
+  expect(wgmtTest13.makeAGuess(["H", "K", "T", "T"])).resolves.toStrictEqual({
     attempts: [
       {
         attemptCode: ["H", "K", "T", "K"],
@@ -114,8 +112,8 @@ test("testing makeAGuess() with correct combination in fourth attempt", () => {
       },
     ],
     score: 13,
-    secretComb: ["H", "K", "T", "T"],
     gameOver: true,
+    secretComb: ["H", "K", "T", "T"],
   });
 });
 
@@ -157,7 +155,9 @@ const test8Points = {
 const wgmtTest8Points = new WebGejmikaModel(test8Points);
 
 test("testing makeAGuess() with correct combination in fifth attempt", () => {
-  expect(wgmtTest8Points.makeAGuess(["H", "K", "T", "T"])).toStrictEqual({
+  expect(
+    wgmtTest8Points.makeAGuess(["H", "K", "T", "T"])
+  ).resolves.toStrictEqual({
     attempts: [
       {
         attemptCode: ["H", "K", "T", "K"],
@@ -181,8 +181,8 @@ test("testing makeAGuess() with correct combination in fifth attempt", () => {
       },
     ],
     score: 8,
-    secretComb: ["H", "K", "T", "T"],
     gameOver: true,
+    secretComb: ["H", "K", "T", "T"],
   });
 });
 
@@ -224,7 +224,9 @@ const test0Points = {
 const wgmtTest0Points = new WebGejmikaModel(test0Points);
 
 test("testing makeAGuess() with missed all combinations in all attempts", () => {
-  expect(wgmtTest0Points.makeAGuess(["H", "K", "T", "S"])).toStrictEqual({
+  expect(
+    wgmtTest0Points.makeAGuess(["H", "K", "T", "S"])
+  ).resolves.toStrictEqual({
     attempts: [
       {
         attemptCode: ["H", "K", "T", "S"],
@@ -248,8 +250,8 @@ test("testing makeAGuess() with missed all combinations in all attempts", () => 
       },
     ],
     score: 0,
-    secretComb: ["H", "K", "T", "T"],
     gameOver: true,
+    secretComb: ["H", "K", "T", "T"],
   });
 });
 
@@ -260,15 +262,13 @@ test("testing makeAGuess() with missed all combinations in all attempts", () => 
  */
 
 test("testing makeAGuess() if a sign is inside a secret code but in a wrong place ", () => {
-  expect(wgmt.makeAGuess(["S", "K", "T", "H"])).toStrictEqual({
+  expect(wgmt.makeAGuess(["S", "K", "T", "H"])).resolves.toStrictEqual({
     attempts: [
       {
         attemptCode: ["S", "K", "T", "H"],
         attemptOutcome: { inPlace: 2, correctCode: 1 },
       },
     ],
-    score: -1,
-    secretComb: ["H", "K", "T", "T"],
     gameOver: false,
   });
 });
@@ -319,7 +319,7 @@ const wgmtIsTargetReached5Attemtps = new WebGejmikaModel(
 test("testing isTargetReached() with five wrong attempts ", () => {
   expect(
     wgmtIsTargetReached5Attemtps.isTargetReached(
-      wgmtIsTargetReached5Attemtps.modelState.attempts
+      isTargetReached5Attempts.attempts
     )
   ).toBe(true);
 });
@@ -362,7 +362,7 @@ const wgmtIsTargetReached4Attemtps = new WebGejmikaModel(
 test("testing isTargetReached() with four wrong attempts ", () => {
   expect(
     wgmtIsTargetReached4Attemtps.isTargetReached(
-      wgmtIsTargetReached4Attemtps.modelState.attempts
+      isTargetReached4Attempts.attempts
     )
   ).toBe(false);
 });
@@ -405,7 +405,7 @@ const wgmtIsTargetReachedCorrectCombination = new WebGejmikaModel(
 test("testing isTargetReached() with code guess in fourth attempt", () => {
   expect(
     wgmtIsTargetReachedCorrectCombination.isTargetReached(
-      wgmtIsTargetReachedCorrectCombination.modelState.attempts
+      isTargetReachedCorrectCombination.attempts
     )
   ).toBe(true);
 });
@@ -431,7 +431,7 @@ const wgmtIsTargetReachedEmptyArray = new WebGejmikaModel(
 test("testing isTargetReached() with empty attempts array ", () => {
   expect(
     wgmtIsTargetReachedEmptyArray.isTargetReached(
-      wgmtIsTargetReachedEmptyArray.modelState.attempts
+      isTargetReachedEmptyArray.attempts
     )
   ).toBe(false);
 });
@@ -467,7 +467,7 @@ const wgmtScore21Points = new WebGejmikaModel(score21Points);
 
 test("testing calculateScore() - 21 points 2 attempt", () => {
   expect(
-    wgmtScore21Points.calculateScore(wgmtScore21Points.modelState.attempts)
+    wgmtScore21Points.calculateScore(score21Points.attempts)
   ).toStrictEqual(21);
 });
 
@@ -506,7 +506,7 @@ const wgmtScore13Points = new WebGejmikaModel(score13Points);
 
 test("testing calculateScore() - 13 points 4 attempt", () => {
   expect(
-    wgmtScore13Points.calculateScore(wgmtScore13Points.modelState.attempts)
+    wgmtScore13Points.calculateScore(score13Points.attempts)
   ).toStrictEqual(13);
 });
 
@@ -548,9 +548,9 @@ const score8Points = {
 const wgmtScore8Points = new WebGejmikaModel(score8Points);
 
 test("testing calculateScore() - 8 points 5 attempt", () => {
-  expect(
-    wgmtScore8Points.calculateScore(wgmtScore8Points.modelState.attempts)
-  ).toStrictEqual(8);
+  expect(wgmtScore8Points.calculateScore(score8Points.attempts)).toStrictEqual(
+    8
+  );
 });
 
 /**
@@ -591,22 +591,30 @@ const score0Points = {
 const wgmtScore0Points = new WebGejmikaModel(score0Points);
 
 test("testing calculateScore() - 0 points 5 attempt", () => {
-  expect(
-    wgmtScore0Points.calculateScore(wgmtScore0Points.modelState.attempts)
-  ).toStrictEqual(0);
+  expect(wgmtScore0Points.calculateScore(score0Points.attempts)).toStrictEqual(
+    0
+  );
 });
 
 // END of testing calculateScore() function
 
 // BEGIN of testing generateSecretCode()
 
-/**
- * @returns {number} - length of an array
- * Testing if function generateSecretCode returns secret combination array with length 4
- */
+// customized object for testing purposes
+let testGenerateSecretCode = {};
 
-test("testing generateSecretCode() ", () => {
-  expect(wgmt.generateSecretCode().secretComb.length).toBe(4);
+const wgmtGenerateSecretCode = new WebGejmikaModel(
+  testGenerateSecretCode,
+  ({ payload: { newModelState } }) => {
+    testGenerateSecretCode = { ...newModelState };
+  }
+);
+
+test("testing if function generateSecretCode returns secret combination array with correct length", () => {
+  wgmtGenerateSecretCode.generateSecretCode();
+  expect(testGenerateSecretCode.secretComb.length).toBe(
+    wgmtGenerateSecretCode.combinationLength()
+  );
 });
 
 // END of testing generateSecretCode()
