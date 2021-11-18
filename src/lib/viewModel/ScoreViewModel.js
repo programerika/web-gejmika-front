@@ -82,7 +82,7 @@ export class ScoreViewModel {
           messageColor: showScoreStyles.messageGreen,
         };
       } catch (error) {
-        notifyError(error.message);
+        notifyError(error);
         return this.#setUpErrorState(
           "Sorry, we are not able to complete the registration process at the moment."
         );
@@ -157,25 +157,21 @@ export class ScoreViewModel {
   };
 
   addScoreIfPlayerIsRegistered = async (score) => {
+    if (score === 0) return;
     if (this.#isPlayerRegistered()) {
-      if (score === 0) return;
       try {
         await this.#webGejmikaService.addScore(
           this.#storage.getItem("username"),
           score
         );
-
         this.#scoreBoardViewModel.initializeScoreBoardView();
       } catch (error) {
-        this.setState({
-          ...this.state,
-          ...this.#setUpErrorState(
-            "Sorry we are not able to add your score right now!"
-          ),
-          scoreMsg: this.#calculateScoreMsg(score),
-        });
-
-        notifyError(error.message);
+        notifyError(
+          error,
+          true,
+          "Sorry we are not able to add your score right now!",
+          true
+        );
       }
     }
   };
@@ -207,7 +203,8 @@ export class ScoreViewModel {
       });
       this.#scoreBoardViewModel.initializeScoreBoardView();
     } catch (error) {
-      console.dir(this);
+      notifyError(error.message);
+
       this.setState(
         this.#setUpErrorState(
           "Sorry, we are not able to complete the registration process at the moment."
