@@ -2,8 +2,8 @@
   "name": "web-gejmika-front",
   "version": "0.1.0",
   "main": "./dist/WebGejmika.js",
+  "prettier": "@programerika/prettier-config",
   "dependencies": {
-    "@programerika/prettier-config": "^1.0.0",
     "react": "^17.0.2",
     "react-confetti": "^6.0.1",
     "react-dom": "^17.0.2",
@@ -48,7 +48,7 @@
     "@testing-library/user-event": "^12.8.3",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.2",
-    "webpack-cli": "^4.9.1"
-  },
-  "prettier": "@programerika/prettier-config"
+    "webpack-cli": "^4.9.1",
+    "@programerika/prettier-config": "^1.0.0"
+  }
 }
