@@ -13,17 +13,15 @@ import circle from "../icons/circle.png";
 import attemptStyles from "../components/AttemptPanel.module.css";
 
 export class WebGejmikaViewModel {
-  #modelState;
-  #viewState;
   #dispatcher;
   #webGejmikaModel;
   #scoreViewModel;
   #emptyCombView;
-  constructor(modelState, viewState, scoreViewModel, dispatcher) {
-    this.#modelState = modelState;
-    this.#viewState = viewState;
+  #store;
+  constructor(store, scoreViewModel, dispatcher) {
+    this.#store = store;
     this.#dispatcher = dispatcher;
-    this.#webGejmikaModel = new WebGejmikaModel(modelState, dispatcher);
+    this.#webGejmikaModel = new WebGejmikaModel(store, dispatcher);
     this.#scoreViewModel = scoreViewModel;
     const initialColors = [
       ...Array(this.#webGejmikaModel.combinationLength()).fill("lightgray"),
@@ -38,6 +36,14 @@ export class WebGejmikaViewModel {
     };
   }
 
+  #getModelState = () => {
+    return this.#store.getState().model;
+  };
+
+  #getViewState = () => {
+    return this.#store.getState().view;
+  };
+
   #dispatchViewUpdate = (newViewState) => {
     this.#dispatcher(allActions.updateViewModel(newViewState));
   };
@@ -46,11 +52,11 @@ export class WebGejmikaViewModel {
     if (this.#isAttemptFull()) {
       return;
     }
-    let combInProg = [...this.#viewState.combInProgress, icon];
+    let combInProg = [...this.#getViewState().combInProgress, icon];
 
     const preparedAttempts = this.#prepareAttemptsView(
       combInProg,
-      this.#modelState.attempts
+      this.#getModelState().attempts
     );
 
     this.#dispatchViewUpdate({
@@ -97,8 +103,8 @@ export class WebGejmikaViewModel {
 
   #alertPlayerVisuallyThatAttemptIsNotComplete = () => {
     const preparedAttempts = this.#prepareAttemptsView(
-      this.#viewState.combInProgress,
-      this.#modelState.attempts,
+      this.#getViewState().combInProgress,
+      this.#getModelState().attempts,
       attemptStyles.flashColor
     );
     this.#dispatchViewUpdate({
@@ -108,14 +114,14 @@ export class WebGejmikaViewModel {
 
   #isAttemptFull = () => {
     return (
-      this.#viewState.combInProgress.length >=
+      this.#getViewState().combInProgress.length >=
       this.#webGejmikaModel.combinationLength()
     );
   };
 
   codeGuess = async () => {
     const makeAGuessOutcome = await this.#webGejmikaModel.makeAGuess(
-      this.iconToComb(this.#viewState.combInProgress)
+      this.iconToComb(this.#getViewState().combInProgress)
     );
 
     const preparedAttempts = this.#prepareAttemptsView(
@@ -145,13 +151,13 @@ export class WebGejmikaViewModel {
    * This method deletes last element in combInProgress array
    */
   inputDeleteLast = () => {
-    if (this.#viewState.combInProgress.length > 0) {
-      let combInProg = [...this.#viewState.combInProgress];
+    if (this.#getViewState().combInProgress.length > 0) {
+      let combInProg = [...this.#getViewState().combInProgress];
       combInProg.pop();
 
       const preparedAttempts = this.#prepareAttemptsView(
         combInProg,
-        this.#modelState.attempts
+        this.#getModelState().attempts
       );
 
       this.#dispatchViewUpdate({

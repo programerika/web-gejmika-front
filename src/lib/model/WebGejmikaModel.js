@@ -4,12 +4,29 @@
 import allActions from "../redux/actions";
 
 export class WebGejmikaModel {
-  #modelState;
   #dispatcher;
-  constructor(modelState, dispatcher = () => {}) {
-    this.#modelState = modelState;
+  #store;
+  constructor(store, dispatcher = () => {}) {
+    this.#store = store;
     this.#dispatcher = dispatcher;
   }
+
+  #getModelState = () => {
+    return this.#store.getState().model;
+  };
+
+  static CreateFrom = (modelState, dispatcher = () => {}) => {
+    return new WebGejmikaModel(
+      {
+        getState: () => {
+          return {
+            model: modelState,
+          };
+        },
+      },
+      dispatcher
+    );
+  };
 
   #dispatchUpdate = (newModelState) => {
     this.#dispatcher(allActions.update(newModelState));
@@ -31,7 +48,7 @@ export class WebGejmikaModel {
    * correctCode - number of correct guesses, but not in place
    */
   makeAGuess = async (attpInProgress) => {
-    var combination = [...this.#modelState.secretComb];
+    var combination = [...this.#getModelState().secretComb];
     var attempt = [...attpInProgress];
     let outcome = {
       inPlace: 0,
@@ -58,7 +75,7 @@ export class WebGejmikaModel {
     outcome.correctCode -= outcome.inPlace;
 
     const newAttempts = [
-      ...this.#modelState.attempts,
+      ...this.#getModelState().attempts,
       {
         attemptCode: [...attpInProgress],
         attemptOutcome: outcome,
@@ -75,7 +92,7 @@ export class WebGejmikaModel {
         ...newModelState,
         score: this.calculateScore(newAttempts),
         gameOver: true,
-        secretComb: this.#modelState.secretComb,
+        secretComb: this.#getModelState().secretComb,
       };
     }
 

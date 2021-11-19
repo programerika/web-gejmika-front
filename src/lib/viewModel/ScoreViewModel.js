@@ -128,6 +128,7 @@ export class ScoreViewModel {
         ...defaultSettings,
       };
     }
+    return defaultSettings;
   };
 
   #calculateScoreMsg = (score) => {

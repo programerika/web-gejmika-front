@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect } from "react";
 import globalStyles from "../global.module.css";
 import styles from "./ScoreBoard.module.css";
 import ReactLoading from "react-loading";
@@ -28,7 +28,9 @@ const ScoreBoard = ({ scoreBoardViewModel }) => {
     (state) => state.score.errorMsg
   ); // prettier-ignore
 
-  console.log("RERENDER ScoreBoard----------");
+  useEffect(() => {
+    scoreBoardViewModel.initializeScoreBoardView();
+  }, [scoreBoardViewModel]);
 
   return (
     <>

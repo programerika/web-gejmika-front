@@ -11,7 +11,7 @@ const ShowScore = ({ scoreViewModel }) => {
   const [state, dispatch] = useReducer(...scoreViewModel.initializeView(score));
   const confetti = useMemo(
     () => scoreViewModel.confettiPerScore(score),
-    [score]
+    [score, scoreViewModel]
   );
   scoreViewModel.setStateCallback(state, dispatch);
 

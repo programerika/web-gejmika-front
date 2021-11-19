@@ -13,7 +13,7 @@ const test21Points = {
   gameOver: false,
 };
 
-const wgmt = new WebGejmikaModel(test21Points);
+const wgmt = WebGejmikaModel.CreateFrom(test21Points);
 
 /**
  * @param {Array} Strings of code combination letters (H,K,S,L,T,P)
@@ -89,7 +89,7 @@ const test13Points = {
   gameOver: false,
 };
 
-const wgmtTest13 = new WebGejmikaModel(test13Points);
+const wgmtTest13 = WebGejmikaModel.CreateFrom(test13Points);
 
 test("testing makeAGuess() with correct combination in fourth attempt", () => {
   expect(wgmtTest13.makeAGuess(["H", "K", "T", "T"])).resolves.toStrictEqual({
@@ -152,7 +152,7 @@ const test8Points = {
   gameOver: false,
 };
 
-const wgmtTest8Points = new WebGejmikaModel(test8Points);
+const wgmtTest8Points = WebGejmikaModel.CreateFrom(test8Points);
 
 test("testing makeAGuess() with correct combination in fifth attempt", () => {
   expect(
@@ -221,7 +221,7 @@ const test0Points = {
   gameOver: false,
 };
 
-const wgmtTest0Points = new WebGejmikaModel(test0Points);
+const wgmtTest0Points = WebGejmikaModel.CreateFrom(test0Points);
 
 test("testing makeAGuess() with missed all combinations in all attempts", () => {
   expect(
@@ -312,7 +312,7 @@ const isTargetReached5Attempts = {
   gameOver: false,
 };
 
-const wgmtIsTargetReached5Attemtps = new WebGejmikaModel(
+const wgmtIsTargetReached5Attemtps = WebGejmikaModel.CreateFrom(
   isTargetReached5Attempts
 );
 
@@ -355,7 +355,7 @@ const isTargetReached4Attempts = {
   gameOver: false,
 };
 
-const wgmtIsTargetReached4Attemtps = new WebGejmikaModel(
+const wgmtIsTargetReached4Attemtps = WebGejmikaModel.CreateFrom(
   isTargetReached4Attempts
 );
 
@@ -398,7 +398,7 @@ const isTargetReachedCorrectCombination = {
   gameOver: false,
 };
 
-const wgmtIsTargetReachedCorrectCombination = new WebGejmikaModel(
+const wgmtIsTargetReachedCorrectCombination = WebGejmikaModel.CreateFrom(
   isTargetReachedCorrectCombination
 );
 
@@ -424,7 +424,7 @@ const isTargetReachedEmptyArray = {
   gameOver: false,
 };
 
-const wgmtIsTargetReachedEmptyArray = new WebGejmikaModel(
+const wgmtIsTargetReachedEmptyArray = WebGejmikaModel.CreateFrom(
   isTargetReachedEmptyArray
 );
 
@@ -463,7 +463,7 @@ const score21Points = {
   gameOver: false,
 };
 
-const wgmtScore21Points = new WebGejmikaModel(score21Points);
+const wgmtScore21Points = WebGejmikaModel.CreateFrom(score21Points);
 
 test("testing calculateScore() - 21 points 2 attempt", () => {
   expect(
@@ -502,7 +502,7 @@ const score13Points = {
   gameOver: false,
 };
 
-const wgmtScore13Points = new WebGejmikaModel(score13Points);
+const wgmtScore13Points = WebGejmikaModel.CreateFrom(score13Points);
 
 test("testing calculateScore() - 13 points 4 attempt", () => {
   expect(
@@ -545,7 +545,7 @@ const score8Points = {
   gameOver: false,
 };
 
-const wgmtScore8Points = new WebGejmikaModel(score8Points);
+const wgmtScore8Points = WebGejmikaModel.CreateFrom(score8Points);
 
 test("testing calculateScore() - 8 points 5 attempt", () => {
   expect(wgmtScore8Points.calculateScore(score8Points.attempts)).toStrictEqual(
@@ -588,7 +588,7 @@ const score0Points = {
   gameOver: false,
 };
 
-const wgmtScore0Points = new WebGejmikaModel(score0Points);
+const wgmtScore0Points = WebGejmikaModel.CreateFrom(score0Points);
 
 test("testing calculateScore() - 0 points 5 attempt", () => {
   expect(wgmtScore0Points.calculateScore(score0Points.attempts)).toStrictEqual(
@@ -603,7 +603,7 @@ test("testing calculateScore() - 0 points 5 attempt", () => {
 // customized object for testing purposes
 let testGenerateSecretCode = {};
 
-const wgmtGenerateSecretCode = new WebGejmikaModel(
+const wgmtGenerateSecretCode = WebGejmikaModel.CreateFrom(
   testGenerateSecretCode,
   ({ payload: { newModelState } }) => {
     testGenerateSecretCode = { ...newModelState };

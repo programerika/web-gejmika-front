@@ -8,6 +8,7 @@
   text-align: center;
   transition-duration: 0.4s;
   font-size: large;
+  min-width: 140px;
 }
 
 :local(.gameBtn):hover:enabled {

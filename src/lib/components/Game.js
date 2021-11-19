@@ -1,6 +1,6 @@
 import React from "react";
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useMemo } from "react";
+import { useSelector, useDispatch, useStore } from "react-redux";
 import InputPanel from "./InputPanel";
 import GamePanel from "./GamePanel";
 import ShowScore from "./ShowScore";
@@ -14,27 +14,32 @@ import GameHelp from "./GameHelp";
 
 const Game = () => {
   const dispatch = useDispatch();
-  const modelState = useSelector((state) => state.model);
-  const viewState = useSelector((state) => state.view);
+  const store = useStore();
+  const gameOver = useSelector((state) => state.view.gameOver);
 
-  const scoreBoardViewModel = new ScoreBoardViewModel(dispatch);
-  const scoreViewModel = new ScoreViewModel(scoreBoardViewModel);
-  const viewModel = new WebGejmikaViewModel(
-    modelState,
-    viewState,
-    scoreViewModel,
-    dispatch
+  const scoreBoardViewModel = useMemo(
+    () => new ScoreBoardViewModel(dispatch),
+    [dispatch]
   );
-  scoreViewModel.setGameViewModel(viewModel);
+  const scoreViewModel = useMemo(
+    () => new ScoreViewModel(scoreBoardViewModel),
+    [scoreBoardViewModel]
+  );
+  const viewModel = useMemo(() => {
+    const wgvm = new WebGejmikaViewModel(store, scoreViewModel, dispatch);
+    scoreViewModel.setGameViewModel(wgvm);
+    return wgvm;
+  }, [store, scoreViewModel, dispatch]);
 
   useEffect(() => {
     viewModel.startGame();
-    scoreBoardViewModel.initializeScoreBoardView();
-  }, []);
+  }, [viewModel]);
 
   useEffect(() => {
-    console.log("SECRET: " + JSON.stringify(modelState.secretComb));
-  }, [modelState]);
+    console.log(
+      "SECRET: " + JSON.stringify(store.getState().model?.secretComb)
+    );
+  });
 
   return (
     <>
@@ -44,7 +49,7 @@ const Game = () => {
             <GameHelp />
           </Header>
           <GamePanel></GamePanel>
-          {viewState.gameOver ? (
+          {gameOver ? (
             <ShowScore scoreViewModel={scoreViewModel}></ShowScore>
           ) : (
             <InputPanel viewModel={viewModel}></InputPanel>
