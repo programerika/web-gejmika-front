@@ -21,7 +21,7 @@ const GameHelp = () => {
     const ghvm = new GameHelpViewModel();
 
     const [state, setState] = useState(
-        {open: false, isWalkThroughActive: false, currentStep: 'step-1'}
+        {open: false, isWalkThroughActive: false, currentStep: 'step-0'}
     );
 
     ghvm.setStateCallback(state, setState)
@@ -47,7 +47,6 @@ const GameHelp = () => {
                 border={true} 
                 place='top'
                 type='dark'
-                className={styles.walkthroughTooltip} 
                 getContent={()=>{return ghvm.getCurrentStepContent()}}
                 eventOff='none'
                 event='none'
