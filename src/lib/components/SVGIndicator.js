@@ -16,10 +16,10 @@ function createPie(cx, cy, r, colors, angleShift) {
   });
 }
 
-const SVGIndicator = ({ colors, angleShift = 0 }) => {
+const SVGIndicator = ({ colors, angleShift = 0, order }) => {
   const outcomeIndicatorRef = useSelector((state)=>state.view.outcomeIndicatorRef);
   return (
-    <div ref={outcomeIndicatorRef} className={styles.indicator}>
+    <div ref={order == 0 ? outcomeIndicatorRef : undefined} data-tip className={styles.indicator}>
       <svg viewBox="-5 -5 120 120" >
         {createPie(55, 55, 50, colors, angleShift)}        
       </svg>

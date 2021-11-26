@@ -1,10 +1,13 @@
-export class GameHelpViewModel {
+import ReactTooltip from "react-tooltip";
 
+export class GameHelpViewModel {
+    #steps;
     constructor() {
-        this.steps = this.initialArray();
+        this.#steps = this.getSteps();
+        // this.data = this.#steps.filter((step)=>step.selector==='step-1');
     }
 
-    initialArray = () => {
+    getSteps = () => {
         return [
             {
                 selector: 'step-1',
@@ -26,14 +29,84 @@ export class GameHelpViewModel {
             },
         ]
     }
+    
+    onOpenModal = () => {
+		this.setState({...this.state, open: true });
+    };
+
+	onCloseModal = () => {
+		this.setState({...this.state, open: false });
+    };
+
 
     setStateCallback = (state, setState) => {
         this.state = state;
         this.setState = setState;
     }
 
-    getCurrentStepContent = () => { 
-        return this.steps.find((step)=>step.selector===this.state.currentStep).content
+    startWalkthrough = () => {
+        this.setState({...this.state, isWalkThroughActive: true, open: false});
     }
+
+    showWalkthrough = (combInProgress,inputPanelRef,deleteButtonRef,confirmButtonRef,attemptConfirmed,outcomeIndicatorRef) => {
+        if (!this.state.isWalkThroughActive) {
+            // ReactTooltip.hide();
+            return;
+        }
+        const combLenght = combInProgress.length;
+        switch(combLenght) {
+            case 0:
+                if (attemptConfirmed) {
+                    // if (this.state.currentStep === 'step-4') {
+                    //     ReactTooltip.hide();
+                    //     this.setState({...this.state,currentStep: 'step-1', isWalkThroughActive: false})
+                    // }else {
+                        
+                    // }
+                    ReactTooltip.hide();
+                    ReactTooltip.show(outcomeIndicatorRef?.current);
+                    this.setState({...this.state, currentStep: 'step-4'});
+                } else {
+                    ReactTooltip.hide();
+                    ReactTooltip.show(inputPanelRef?.current);
+                    this.setState({...this.state, currentStep: 'step-1'});
+                }
+                break;
+            case 1:
+                if (this.state.currentStep === 'step-2') {
+                    ReactTooltip.hide();
+                }
+                break;
+            case 2:
+                if (this.state.currentStep === 'step-2') {
+                    ReactTooltip.hide();
+                } 
+                break;    
+            case 3:
+                ReactTooltip.hide();
+                ReactTooltip.show(deleteButtonRef?.current);
+                this.setState({...this.state, currentStep: 'step-2'});  
+                break;
+            case 4:
+                ReactTooltip.hide();
+                ReactTooltip.show(confirmButtonRef?.current);
+                this.setState({...this.state, currentStep: 'step-3'});  
+                break;
+            default:
+                break;
+        }
+        
+        
+        
+    }
+
+    getCurrentStepContent = () => { 
+        // console.log(this.#steps);
+        // console.log(this.#steps.find((step)=>step.selector === this.state.currentStep));
+        // console.log(this.state);
+        return this.#steps.find((step)=>step.selector === this.state.currentStep).content;
+    }
+
+    
     
 }

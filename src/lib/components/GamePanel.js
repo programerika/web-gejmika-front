@@ -15,6 +15,7 @@ const GamePanel = () => {
             <SVGIndicator
               colors={attempt.colors}
               angleShift={attempt.angleShift}
+              order={i}
             ></SVGIndicator>
           </div>
         );

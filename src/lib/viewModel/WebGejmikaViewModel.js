@@ -145,6 +145,7 @@ export class WebGejmikaViewModel {
       correctView: correctView,
       preparedAttempts: preparedAttempts,
       gameOver: makeAGuessOutcome.gameOver,
+      attemptConfirmed: true
     });
   };
 
@@ -181,7 +182,8 @@ export class WebGejmikaViewModel {
       inputPanelRef: React.createRef(),
       confirmButtonRef: React.createRef(),
       deleteButtonRef: React.createRef(),
-      outcomeIndicatorRef: React.createRef()
+      outcomeIndicatorRef: React.createRef(),
+      attemptConfirmed: false
     });
   };
 

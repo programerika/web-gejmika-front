@@ -10,19 +10,23 @@ import close from '../icons/close.png';
 import styles from "./InputPanel.module.css";
 import globalStyles from "../global.module.css";
 import {useSelector} from 'react-redux'
-import ReactTooltip from "react-tooltip";
 
 const InputPanel = ({ viewModel }) => {
   const inputPanelRef = useSelector((state)=>state.view.inputPanelRef);
   const deleteButtonRef = useSelector((state)=>state.view.deleteButtonRef);
   const confirmButtonRef = useSelector((state)=>state.view.confirmButtonRef);
+ 
   return (
     <div className={styles.inputPanel}>
-      <div data-tip ref={inputPanelRef} data-for='input' className={styles.inputIconsWrapper}>
+      <div 
+        className={styles.inputIconsWrapper}
+        ref = {inputPanelRef}
+        data-tip
+      >
         <img
           className={globalStyles.inputBtn}
           src={clubs}
-          onClick={() => viewModel.clubsButtonClicked()}
+          onClick={() => viewModel.clubsButtonClicked()} 
           alt="clubs"
         />
         <img
@@ -56,11 +60,10 @@ const InputPanel = ({ viewModel }) => {
           alt="traffic light"
         />
       </div>
-
       <div className={styles.confirmCancelWrapper} >
         <img
-          ref={confirmButtonRef}
-          data-tip data-for='confirm'
+          ref = {confirmButtonRef}
+          data-tip
           className={globalStyles.inputBtn}
           src={checked}
           alt="confirm"
@@ -70,8 +73,8 @@ const InputPanel = ({ viewModel }) => {
         />
 
         <img
-          ref={deleteButtonRef}
-          data-tip data-for='delete'
+          ref = {deleteButtonRef}
+          data-tip
           className={globalStyles.inputBtn}
           src={close}
           alt="delete"
@@ -80,15 +83,7 @@ const InputPanel = ({ viewModel }) => {
           }}
         />
       </div>
-      <ReactTooltip id='input' place="top" effect="solid" border={true}>
-        <p> Insert combination by clicking on icons.</p>
-      </ReactTooltip>
-      <ReactTooltip id='delete' place="top" effect="solid" border={true}>
-        <p> If you want to change last input press delete button.</p>
-      </ReactTooltip>
-      <ReactTooltip id='confirm' place="top" effect="solid" border={true}>
-        <p> After choosing your combination press confirm button.</p>
-      </ReactTooltip>
+      
   </div>
   );
 };
