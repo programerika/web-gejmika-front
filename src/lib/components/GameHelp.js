@@ -1,7 +1,7 @@
 import { Modal } from "react-responsive-modal";
 import modalStyles from "react-responsive-modal/styles.css";
 import globalStyles from "../global.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styles from "./GameHelp.module.css";
 import questionMark from "../icons/question-mark.png";
 import { GameHelpViewModel } from "../viewModel/GameHelpViewModel";
@@ -14,7 +14,7 @@ const GameHelp = () => {
   const attemptFull = useSelector((state) => state.view.attemptFull);
   const combInProgress = useSelector((state) => state.view.combInProgress);
 
-  const ghvm = new GameHelpViewModel();
+  const ghvm = useMemo(() => new GameHelpViewModel(), []);
 
   const [state, setState] = useState({
     open: false,
@@ -34,6 +34,7 @@ const GameHelp = () => {
     isWalkthroughActive,
     attemptConfirmed,
     attemptFull,
+    ghvm,
   ]);
 
   return (

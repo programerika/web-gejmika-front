@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./SVGIndicator.module.css";
-import { useSelector } from "react-redux";
 
 function createPie(cx, cy, r, colors, angleShift) {
   const slices = colors.length;
@@ -16,16 +15,9 @@ function createPie(cx, cy, r, colors, angleShift) {
   });
 }
 
-const SVGIndicator = ({ colors, angleShift = 0, order }) => {
-  const outcomeIndicatorRef = useSelector(
-    (state) => state.view.refs.outcomeIndicatorRef
-  );
+const SVGIndicator = ({ colors, angleShift = 0 }) => {
   return (
-    <div
-      ref={order == 0 ? outcomeIndicatorRef : undefined}
-      data-tip
-      className={styles.indicator}
-    >
+    <div className={styles.indicator}>
       <svg viewBox="-5 -5 120 120">
         {createPie(55, 55, 50, colors, angleShift)}
       </svg>
