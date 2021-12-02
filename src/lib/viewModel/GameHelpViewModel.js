@@ -9,22 +9,24 @@ export class GameHelpViewModel {
   getSteps = () => {
     return [
       {
-        selector: "step-1",
+        selector: "initial-step",
         content: <p> Insert combination by clicking on icons.</p>,
         forRef: "inputPanelRef",
       },
       {
-        selector: "step-2",
+        selector: "step-when-in-middle-attempt",
         content: <p> If you want to change last input press delete button.</p>,
         forRef: "deleteButtonRef",
+        condition: (ctx) => ctx.combInProgress.length === 3,
       },
       {
-        selector: "step-3",
+        selector: "indicate-confirm-button",
         content: <p> After choosing your combination press confirm button.</p>,
         forRef: "confirmButtonRef",
+        condition: (ctx) => ctx.attemptFull,
       },
       {
-        selector: "step-4",
+        selector: "explain-outcome-indicator",
         content: (
           <p>
             <span style={{ color: "green" }}>Green</span> color indicates that
@@ -36,6 +38,7 @@ export class GameHelpViewModel {
           </p>
         ),
         forRef: "outcomeIndicatorRef",
+        condition: (ctx) => ctx.attemptConfirmed,
         lastStep: true,
       },
     ];
@@ -76,21 +79,24 @@ export class GameHelpViewModel {
         currentStep: null,
       });
     }
-    let nextStep;
 
-    if (attemptConfirmed) {
-      nextStep = "step-4";
-    } else if (attemptFull) {
-      nextStep = "step-3";
-    } else if (combInProgress.length === 3) {
-      nextStep = "step-2";
-    } else if (this.state.currentStep === null) {
-      nextStep = "step-1";
+    const ctx = {
+      attemptConfirmed,
+      attemptFull,
+      combInProgress,
+    };
+
+    let nextStep = this.#steps.find(
+      (step) => step.condition && step.condition(ctx)
+    );
+
+    if (!nextStep && this.state.currentStep === null) {
+      nextStep = this.#steps[0];
     }
 
     if (nextStep) {
-      ReactTooltip.show(refs[this.#getStep(nextStep).forRef]?.current);
-      this.setState({ ...this.state, currentStep: nextStep });
+      ReactTooltip.show(refs[nextStep.forRef]?.current);
+      this.setState({ ...this.state, currentStep: nextStep.selector });
     }
   };
 

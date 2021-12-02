@@ -169,6 +169,7 @@ export class WebGejmikaViewModel {
       this.#dispatchViewUpdate({
         combInProgress: combInProg,
         preparedAttempts: preparedAttempts,
+        attemptFull: false,
       });
     }
   };
