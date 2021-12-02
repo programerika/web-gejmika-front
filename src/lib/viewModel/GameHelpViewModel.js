@@ -11,14 +11,17 @@ export class GameHelpViewModel {
       {
         selector: "step-1",
         content: <p> Insert combination by clicking on icons.</p>,
+        forRef: "inputPanelRef",
       },
       {
         selector: "step-2",
         content: <p> If you want to change last input press delete button.</p>,
+        forRef: "deleteButtonRef",
       },
       {
         selector: "step-3",
         content: <p> After choosing your combination press confirm button.</p>,
+        forRef: "confirmButtonRef",
       },
       {
         selector: "step-4",
@@ -32,6 +35,8 @@ export class GameHelpViewModel {
             have missed your guess.
           </p>
         ),
+        forRef: "outcomeIndicatorRef",
+        lastStep: true,
       },
     ];
   };
@@ -64,49 +69,36 @@ export class GameHelpViewModel {
     }
     ReactTooltip.hide();
 
-    if (this.state.currentStep === "step-4") {
+    if (this.#getStep(this.state.currentStep)?.lastStep) {
       this.setState({
         ...this.state,
         isWalkThroughActive: false,
         currentStep: null,
       });
     }
-    const combLenght = combInProgress.length;
+    let nextStep;
 
     if (attemptConfirmed) {
-      ReactTooltip.show(refs.outcomeIndicatorRef?.current);
-      this.setState({ ...this.state, currentStep: "step-4" });
-      return;
-    }
-    if (attemptFull) {
-      ReactTooltip.show(refs.confirmButtonRef?.current);
-      this.setState({ ...this.state, currentStep: "step-3" });
-      return;
+      nextStep = "step-4";
+    } else if (attemptFull) {
+      nextStep = "step-3";
+    } else if (combInProgress.length === 3) {
+      nextStep = "step-2";
+    } else if (this.state.currentStep === null) {
+      nextStep = "step-1";
     }
 
-    switch (combLenght) {
-      case 0:
-        ReactTooltip.show(refs.inputPanelRef?.current);
-        this.setState({ ...this.state, currentStep: "step-1" });
-        break;
-      case 1:
-      case 2:
-        if (this.state.currentStep === null) {
-          ReactTooltip.show(refs.inputPanelRef?.current);
-          this.setState({ ...this.state, currentStep: "step-1" });
-        }
-        break;
-      case 3:
-        ReactTooltip.show(refs.deleteButtonRef?.current);
-        this.setState({ ...this.state, currentStep: "step-2" });
-        break;
-      default:
-        break;
+    if (nextStep) {
+      ReactTooltip.show(refs[this.#getStep(nextStep).forRef]?.current);
+      this.setState({ ...this.state, currentStep: nextStep });
     }
   };
 
+  #getStep = (selector) => {
+    return this.#steps.find((step) => step.selector === selector);
+  };
+
   getCurrentStepContent = () => {
-    return this.#steps.find((step) => step.selector === this.state.currentStep)
-      ?.content;
+    return this.#getStep(this.state.currentStep)?.content;
   };
 }
