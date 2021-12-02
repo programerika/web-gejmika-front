@@ -77,7 +77,7 @@ const ScoreBoard = ({ scoreBoardViewModel }) => {
       )}
       {errorMsg && (
         <div className={styles.scoreBoard}>
-          <h3 className={styles.scoreBoardError}>{errorMsg}</h3>
+          <div className={styles.scoreBoardError}>{errorMsg}</div>
         </div>
       )}
       {showPlayerBelowTopList && (

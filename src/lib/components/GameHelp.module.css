@@ -3,3 +3,7 @@
 :local(.gameBtn) {
   margin: 5px;
 }
+
+:local(.helpText) {
+  color: black;
+}

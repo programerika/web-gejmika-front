@@ -9,7 +9,9 @@
 :local(.scoreBoardError) {
   padding: 20px;
   font-weight: 300;
+  font-size: large;
   background-color: rgb(168, 66, 66);
+  color: black;
   max-width: fit-content;
   border-radius: 10px;
   margin-top: 20px;

@@ -7,6 +7,7 @@ import questionMark from "../icons/question-mark.png";
 import { GameHelpViewModel } from "../viewModel/GameHelpViewModel";
 import ReactTooltip from "react-tooltip";
 import { useSelector } from "react-redux";
+import React from "react";
 
 const GameHelp = () => {
   const refs = useSelector((state) => state.view.refs);
@@ -60,24 +61,27 @@ const GameHelp = () => {
         />
       )}
       <Modal open={state.open} onClose={() => ghvm.onCloseModal()}>
-        <h2>Code guess game</h2>
-        <p>
-          Code guess game is code-breaking single player game.
-          <br />
-          You have to guess the right four icons combination, out of six others.
-          <br />
-          Winning combination is already predefined.
-          <br />
-          The Player tries to guess the right pattern in five steps.
-          <br />
-          If the guessing is successful in three steps, the score will be 21
-          points.
-          <br />
-          The fourth successful attempt will bring 13 and the fifth 8 points.
-          <br />
-          There is no points if the fifth attempt was bad.
-          <br />
-        </p>
+        <div className={styles.helpText}>
+          <h2>Code guess game</h2>
+          <p>
+            Code guess game is code-breaking single player game.
+            <br />
+            You have to guess the right four icons combination, out of six
+            others.
+            <br />
+            Winning combination is already predefined.
+            <br />
+            The Player tries to guess the right pattern in five steps.
+            <br />
+            If the guessing is successful in three steps, the score will be 21
+            points.
+            <br />
+            The fourth successful attempt will bring 13 and the fifth 8 points.
+            <br />
+            There is no points if the fifth attempt was bad.
+            <br />
+          </p>
+        </div>
         <button
           onClick={() => ghvm.onCloseModal()}
           className={`${globalStyles.gameBtn} ${styles.gameBtn}`}

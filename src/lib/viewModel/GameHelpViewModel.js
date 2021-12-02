@@ -1,4 +1,5 @@
 import ReactTooltip from "react-tooltip";
+import React from "react";
 
 export class GameHelpViewModel {
   #steps;
@@ -71,7 +72,6 @@ export class GameHelpViewModel {
       return;
     }
     ReactTooltip.hide();
-
     if (this.#getStep(this.state.currentStep)?.lastStep) {
       this.setState({
         ...this.state,
@@ -79,21 +79,17 @@ export class GameHelpViewModel {
         currentStep: null,
       });
     }
-
     const ctx = {
       attemptConfirmed,
       attemptFull,
       combInProgress,
     };
-
     let nextStep = this.#steps.find(
       (step) => step.condition && step.condition(ctx)
     );
-
     if (!nextStep && this.state.currentStep === null) {
       nextStep = this.#steps[0];
     }
-
     if (nextStep) {
       ReactTooltip.show(refs[nextStep.forRef]?.current);
       this.setState({ ...this.state, currentStep: nextStep.selector });
