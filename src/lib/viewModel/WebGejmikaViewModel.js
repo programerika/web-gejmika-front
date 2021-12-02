@@ -64,7 +64,8 @@ export class WebGejmikaViewModel {
       combInProgress: combInProg,
       preparedAttempts: preparedAttempts,
       attemptConfirmed: false,
-      attemptFull: this.#isAttemptFull(),
+      attemptFull:
+        combInProg.length >= this.#webGejmikaModel.combinationLength(),
     });
   };
 

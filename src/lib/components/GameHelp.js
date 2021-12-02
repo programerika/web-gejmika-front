@@ -19,7 +19,6 @@ const GameHelp = () => {
   const [state, setState] = useState({
     open: false,
     isWalkThroughActive: false,
-    currentStep: "step-0",
   });
 
   ghvm.setStateCallback(state, setState);
