@@ -6,6 +6,7 @@ const viewReducers = (
     preparedAttempts: [],
     correctView: [],
     gameOver: false,
+    refs: {},
   },
   action
 ) => {
