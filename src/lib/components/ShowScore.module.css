@@ -9,6 +9,7 @@
   height: max-content;
   margin-top: 3px;
   border-radius: 10px;
+  color: black;
 }
 
 :local(.score) > h1,

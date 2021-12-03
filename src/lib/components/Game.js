@@ -35,12 +35,6 @@ const Game = () => {
     viewModel.startGame();
   }, [viewModel]);
 
-  useEffect(() => {
-    console.log(
-      "SECRET: " + JSON.stringify(store.getState().model?.secretComb)
-    );
-  });
-
   return (
     <>
       <div className={styles.wrapper}>
