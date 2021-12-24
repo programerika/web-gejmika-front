@@ -12,8 +12,13 @@
   color: black;
 }
 
-:local(.score) > h1,
-h5 {
+:local(.score) > h1 {
+  font-size: 15px;
+  text-align: center;
+  margin: 0px;
+}
+
+:local(.correct) > h5 {
   font-size: 15px;
   text-align: center;
   margin: 0px;
