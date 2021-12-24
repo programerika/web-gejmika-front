@@ -52,9 +52,12 @@ const ShowScore = ({ scoreViewModel }) => {
                 placeholder="Username - eg. MyName12"
                 onMouseLeave={() => scoreViewModel.hideToolTip()}
                 onMouseEnter={() => scoreViewModel.showToolTip()}
-                onChange={(e) =>
-                  scoreViewModel.usernameInputOnChange(e.target.value)
-                }
+                onChange={(e) => {
+                  scoreViewModel.usernameInputOnChange(e.target.value);
+                }}
+                onInput={(e) => {
+                  e.target.value = e.target.value.slice(0, e.target.maxLength);
+                }}
               />
               <div className={styles.tooltiptext + " " + state.toolTipStatus}>
                 Username has to have 4 - 6 characters with last two numbers

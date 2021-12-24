@@ -76,7 +76,7 @@ export class ScoreViewModel {
         messageColor: showScoreStyles.messageWhite,
       };
     }
-    let regex = new RegExp("[a-zA-Z0-9]{4,6}[0-9]{2}$");
+    let regex = new RegExp("^[^-s][a-zA-Z0-9]{4,6}[0-9]{2}$");
     if (!regex.test(username)) {
       return {
         message: "*Your username is not in valid format",
