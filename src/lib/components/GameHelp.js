@@ -59,6 +59,7 @@ const GameHelp = () => {
           }}
           eventOff="none"
           event="none"
+          clickable={true}
         />
       )}
       <Modal open={state.open} onClose={() => ghvm.onCloseModal()}>

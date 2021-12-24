@@ -1,5 +1,6 @@
 import ReactTooltip from "react-tooltip";
 import React from "react";
+import styles from "./GameHelpViewModel.module.css"
 
 export class GameHelpViewModel {
   #steps;
@@ -11,25 +12,66 @@ export class GameHelpViewModel {
     return [
       {
         selector: "initial-step",
-        content: <p> Insert combination by clicking on icons.</p>,
+        content: 
+          <p className={styles.paragraph}>
+            <span 
+              className={styles.span}
+              onClick={() => {
+                this.closeWalkthrough();
+              }}
+            >
+              <b>x</b>
+            </span>
+            Insert combination by clicking on icons.
+          </p>,
         forRef: "inputPanelRef",
       },
       {
         selector: "step-when-in-middle-attempt",
-        content: <p> If you want to change last input press delete button.</p>,
+        content: 
+          <p className={styles.paragraph}>
+            <span 
+              className={styles.paragraph}
+              onClick={() => {
+                this.closeWalkthrough();
+              }}
+            >
+              <b>x</b>
+            </span> 
+            If you want to change last input press delete button.
+          </p>,
         forRef: "deleteButtonRef",
         condition: (ctx) => ctx.combInProgress.length === 3,
       },
       {
         selector: "indicate-confirm-button",
-        content: <p> After choosing your combination press confirm button.</p>,
+        content: 
+          <p className={styles.paragraph}>
+            <span 
+              className={styles.span}
+              onClick={() => {
+                this.closeWalkthrough();
+              }}
+            >
+              <b>x</b>
+            </span>
+            After choosing your combination press confirm button.
+          </p>,
         forRef: "confirmButtonRef",
         condition: (ctx) => ctx.attemptFull,
       },
       {
         selector: "explain-outcome-indicator",
         content: (
-          <p>
+          <p className={styles.paragraph}>
+            <span 
+              className={styles.span}
+              onClick={() => {
+                this.closeWalkthrough();
+              }}        
+            >
+              <b>x</b>
+            </span>
             <span style={{ color: "green" }}>Green</span> color indicates that
             you have guessed the icon and position. <br />
             <span style={{ color: "yellow" }}>Yellow</span> color indicates that
@@ -60,22 +102,30 @@ export class GameHelpViewModel {
 
   toggleWalkthrough = () => {
     if (this.state.isWalkThroughActive === false) {
-      this.setState({
-        ...this.state,
-        isWalkThroughActive: true,
-        open: false,
-        currentStep: null,
-        walkthroughBtn: "Close walkthrough"
-      });
+      this.startWalkthrough();
     } else {
-      this.setState({
-        ...this.state,
-        isWalkThroughActive: false,
-        open: false,
-        currentStep: null,
-        walkthroughBtn: "Start walkthrough"
-      });
+      this.closeWalkthrough();
     }
+  }
+
+  startWalkthrough = () => {
+    this.setState({
+      ...this.state,
+      isWalkThroughActive: true,
+      open: false,
+      currentStep: null,
+      walkthroughBtn: "Close walkthrough"
+    });
+  }
+
+  closeWalkthrough = () => {
+    this.setState({
+      ...this.state,
+      isWalkThroughActive: false,
+      open: false,
+      currentStep: null,
+      walkthroughBtn: "Start walkthrough"
+    });
   }
 
   showWalkthrough = (combInProgress, refs, attemptConfirmed, attemptFull) => {
@@ -84,11 +134,7 @@ export class GameHelpViewModel {
     }
     ReactTooltip.hide();
     if (this.#getStep(this.state.currentStep)?.lastStep) {
-      this.setState({
-        ...this.state,
-        isWalkThroughActive: false,
-        currentStep: null,
-      });
+      this.closeWalkthrough();
     }
     const ctx = {
       attemptConfirmed,
