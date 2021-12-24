@@ -58,14 +58,25 @@ export class GameHelpViewModel {
     this.setState = setState;
   };
 
-  startWalkthrough = () => {
-    this.setState({
-      ...this.state,
-      isWalkThroughActive: true,
-      open: false,
-      currentStep: null,
-    });
-  };
+  toggleWalkthrough = () => {
+    if (this.state.isWalkThroughActive === false) {
+      this.setState({
+        ...this.state,
+        isWalkThroughActive: true,
+        open: false,
+        currentStep: null,
+        walkthroughBtn: "Close walkthrough"
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        isWalkThroughActive: false,
+        open: false,
+        currentStep: null,
+        walkthroughBtn: "Start walkthrough"
+      });
+    }
+  }
 
   showWalkthrough = (combInProgress, refs, attemptConfirmed, attemptFull) => {
     if (!this.state.isWalkThroughActive) {

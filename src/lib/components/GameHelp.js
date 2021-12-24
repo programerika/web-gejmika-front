@@ -20,6 +20,7 @@ const GameHelp = () => {
   const [state, setState] = useState({
     open: false,
     isWalkThroughActive: false,
+    walkthroughBtn: "Start walkthrough"
   });
 
   ghvm.setStateCallback(state, setState);
@@ -90,11 +91,11 @@ const GameHelp = () => {
         </button>
         <button
           onClick={() => {
-            ghvm.startWalkthrough();
+            ghvm.toggleWalkthrough();
           }}
           className={`${globalStyles.gameBtn} ${styles.gameBtn}`}
         >
-          Start walkthrough
+          {state.walkthroughBtn}
         </button>
       </Modal>
     </div>
