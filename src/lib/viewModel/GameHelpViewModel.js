@@ -31,7 +31,7 @@ export class GameHelpViewModel {
         content: 
           <p className={styles.paragraph}>
             <span 
-              className={styles.paragraph}
+              className={styles.span}
               onClick={() => {
                 this.closeWalkthrough();
               }}
