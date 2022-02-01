@@ -7,3 +7,15 @@
 :local(.helpText) {
   color: black;
 }
+
+:local(.paragraph) {
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+:local(.span) {
+  display: flex;
+  justify-content: flex-end;
+  color: black;
+  cursor: pointer;
+}
