@@ -1,6 +1,6 @@
 import ReactTooltip from "react-tooltip";
 import React from "react";
-import styles from "./GameHelpViewModel.module.css"
+import styles from "../components/GameHelp.module.css";
 
 export class GameHelpViewModel {
   #steps;
@@ -12,9 +12,9 @@ export class GameHelpViewModel {
     return [
       {
         selector: "initial-step",
-        content: 
+        content: (
           <p className={styles.paragraph}>
-            <span 
+            <span
               className={styles.span}
               onClick={() => {
                 this.closeWalkthrough();
@@ -23,31 +23,33 @@ export class GameHelpViewModel {
               <b>x</b>
             </span>
             Insert combination by clicking on icons.
-          </p>,
+          </p>
+        ),
         forRef: "inputPanelRef",
       },
       {
         selector: "step-when-in-middle-attempt",
-        content: 
+        content: (
           <p className={styles.paragraph}>
-            <span 
+            <span
               className={styles.span}
               onClick={() => {
                 this.closeWalkthrough();
               }}
             >
               <b>x</b>
-            </span> 
+            </span>
             If you want to change last input press delete button.
-          </p>,
+          </p>
+        ),
         forRef: "deleteButtonRef",
         condition: (ctx) => ctx.combInProgress.length === 3,
       },
       {
         selector: "indicate-confirm-button",
-        content: 
+        content: (
           <p className={styles.paragraph}>
-            <span 
+            <span
               className={styles.span}
               onClick={() => {
                 this.closeWalkthrough();
@@ -56,7 +58,8 @@ export class GameHelpViewModel {
               <b>x</b>
             </span>
             After choosing your combination press confirm button.
-          </p>,
+          </p>
+        ),
         forRef: "confirmButtonRef",
         condition: (ctx) => ctx.attemptFull,
       },
@@ -64,11 +67,11 @@ export class GameHelpViewModel {
         selector: "explain-outcome-indicator",
         content: (
           <p className={styles.paragraph}>
-            <span 
+            <span
               className={styles.span}
               onClick={() => {
                 this.closeWalkthrough();
-              }}        
+              }}
             >
               <b>x</b>
             </span>
@@ -106,7 +109,7 @@ export class GameHelpViewModel {
     } else {
       this.closeWalkthrough();
     }
-  }
+  };
 
   startWalkthrough = () => {
     this.setState({
@@ -114,9 +117,9 @@ export class GameHelpViewModel {
       isWalkThroughActive: true,
       open: false,
       currentStep: null,
-      walkthroughBtn: "Close walkthrough"
+      walkthroughBtn: "Close walkthrough",
     });
-  }
+  };
 
   closeWalkthrough = () => {
     this.setState({
@@ -124,9 +127,9 @@ export class GameHelpViewModel {
       isWalkThroughActive: false,
       open: false,
       currentStep: null,
-      walkthroughBtn: "Start walkthrough"
+      walkthroughBtn: "Start walkthrough",
     });
-  }
+  };
 
   showWalkthrough = (combInProgress, refs, attemptConfirmed, attemptFull) => {
     if (!this.state.isWalkThroughActive) {
