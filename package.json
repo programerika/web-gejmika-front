@@ -1,6 +1,6 @@
 {
   "name": "web-gejmika-front",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "./dist/WebGejmika.js",
   "prettier": "@programerika/prettier-config",
   "dependencies": {
