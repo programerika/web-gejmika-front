@@ -77,7 +77,7 @@ export class ScoreViewModel {
       };
     }
     // prettier-ignore
-    let regex = new RegExp("^[^-\s][a-zA-Z0-9]{3,5}[0-9]{2}$");
+    let regex = new RegExp("^[^-\\s][a-zA-Z0-9]{3,5}[0-9]{2}$");
     if (!regex.test(username)) {
       return {
         message: "*Your username is not in valid format",
